@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClipboardCheck, Plus, X, AlertTriangle } from 'lucide-react';
+import { ClipboardCheck, X, AlertTriangle } from 'lucide-react';
 import { Card, Input, Button } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 import { DanoVehiculo } from '../../types';

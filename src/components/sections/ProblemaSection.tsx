@@ -1,0 +1,62 @@
+import React from 'react';
+import { FileText, Stethoscope } from 'lucide-react';
+import { Card } from '../ui';
+import { usePresupuestoStore } from '../../store/usePresupuestoStore';
+
+export const ProblemaSection: React.FC = () => {
+  const { presupuesto } = usePresupuestoStore();
+
+  const handleChange = (field: 'problemaReportado' | 'diagnosticoTecnico') => (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const store = usePresupuestoStore.getState();
+    store.presupuesto[field] = e.target.value;
+    usePresupuestoStore.setState({ presupuesto: { ...store.presupuesto } });
+  };
+
+  return (
+    <Card
+      title="Problema y Diagnóstico"
+      subtitle="Descripción del problema reportado por el cliente y diagnóstico técnico"
+      className="p-6"
+    >
+      <div className="space-y-6">
+        {/* Problema reportado */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+            <FileText size={18} className="text-primary-600" />
+            Problema Reportado por el Cliente
+          </label>
+          <textarea
+            value={presupuesto.problemaReportado}
+            onChange={handleChange('problemaReportado')}
+            rows={4}
+            placeholder="Describe el problema que reporta el cliente con sus propias palabras..."
+            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none"
+          />
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Registra exactamente lo que el cliente menciona sobre el problema del vehículo.
+          </p>
+        </div>
+
+        {/* Diagnóstico técnico */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+            <Stethoscope size={18} className="text-primary-600" />
+            Diagnóstico Técnico
+          </label>
+          <textarea
+            value={presupuesto.diagnosticoTecnico}
+            onChange={handleChange('diagnosticoTecnico')}
+            rows={5}
+            placeholder="Describe el diagnóstico técnico realizado, incluyendo pruebas, verificaciones y conclusiones..."
+            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none"
+          />
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Incluye el resultado de la inspección técnica, las causas identificadas y las reparaciones necesarias.
+          </p>
+        </div>
+      </div>
+    </Card>
+  );
+};

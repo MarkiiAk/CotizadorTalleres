@@ -1,0 +1,134 @@
+// Tipos principales del sistema de presupuestos SAG Garage
+
+export interface TallerInfo {
+  nombre: string;
+  encargado: string;
+  telefono: string;
+  direccion: string;
+  logo?: string;
+}
+
+export interface ClienteInfo {
+  nombreCompleto: string;
+  telefono: string;
+  email: string;
+  domicilio: string;
+}
+
+export interface VehiculoInfo {
+  marca: string;
+  modelo: string;
+  color: string;
+  placas: string;
+  kilometrajeEntrada: string;
+  kilometrajeSalida: string;
+  nivelGasolina: number; // 0-100 (porcentaje)
+}
+
+export interface InspeccionVehiculo {
+  exteriores: {
+    lucesFrontales: boolean;
+    cuartoLuces: boolean;
+    antena: boolean;
+    espejosLaterales: boolean;
+    cristales: boolean;
+    emblemas: boolean;
+    llantas: boolean;
+    taponRuedas: boolean;
+    moldurasCompletas: boolean;
+    taponGasolina: boolean;
+    limpiadores: boolean;
+  };
+  interiores: {
+    instrumentoTablero: boolean;
+    calefaccion: boolean;
+    sistemaSonido: boolean;
+    bocinas: boolean;
+    espejoRetrovisor: boolean;
+    cinturones: boolean;
+    botoniaGeneral: boolean;
+    manijas: boolean;
+    tapetes: boolean;
+    vestiduras: boolean;
+    otros: boolean;
+  };
+  danosAdicionales: DanoVehiculo[];
+}
+
+export interface DanoVehiculo {
+  id: string;
+  ubicacion: string; // ej: "Puerta delantera izquierda"
+  tipo: string; // ej: "Rayón", "Golpe", "Abolladura"
+  descripcion: string;
+}
+
+export interface Servicio {
+  id: string;
+  descripcion: string;
+  precio: number;
+}
+
+export interface Refaccion {
+  id: string;
+  nombre: string;
+  cantidad: number;
+  costoUnitario: number;
+  total: number;
+}
+
+export interface ManoDeObra {
+  id: string;
+  descripcion: string;
+  precio: number;
+}
+
+export interface ResumenFinanciero {
+  servicios: number;
+  refacciones: number;
+  manoDeObra: number;
+  subtotal: number;
+  anticipo: number;
+  restante: number;
+}
+
+export interface Presupuesto {
+  id: string;
+  folio: string;
+  fecha: Date;
+  fechaEntrada: Date;
+  fechaSalida?: Date;
+  taller: TallerInfo;
+  cliente: ClienteInfo;
+  vehiculo: VehiculoInfo;
+  inspeccion: InspeccionVehiculo;
+  problemaReportado: string;
+  diagnosticoTecnico: string;
+  servicios: Servicio[];
+  refacciones: Refaccion[];
+  manoDeObra: ManoDeObra[];
+  resumen: ResumenFinanciero;
+}
+
+export interface PolizaGarantia {
+  cobertura: string;
+  lugarGarantia: string;
+  exclusiones: string[];
+  responsabilidadCliente: string;
+  tiempoRevision: string;
+  alcance: string;
+  horarios: string;
+  traslado: string;
+  responsabilidadLimitada: string[];
+  ajustesSinCosto: string;
+  revisionInmediata: string;
+  aceptacion: string;
+}
+
+export type ThemeMode = 'light' | 'dark';
+
+export interface AppState {
+  presupuesto: Presupuesto;
+  themeMode: ThemeMode;
+  autoSave: boolean;
+  lastSaved: Date | null;
+}

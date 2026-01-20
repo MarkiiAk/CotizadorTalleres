@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Sun, Moon, FileText, Download, RotateCcw, Save } from 'lucide-react';
 import { pdf } from '@react-pdf/renderer';
 import { usePresupuestoStore } from './store/usePresupuestoStore';
@@ -18,7 +18,6 @@ import { PDFDocument } from './components/PDFDocument';
 
 function App() {
   const { presupuesto, themeMode, toggleTheme, resetPresupuesto, autoSave, lastSaved } = usePresupuestoStore();
-  const printRef = useRef<HTMLDivElement>(null);
 
   // Aplicar el tema al documento
   useEffect(() => {

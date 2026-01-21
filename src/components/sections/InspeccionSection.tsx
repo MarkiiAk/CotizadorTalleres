@@ -170,7 +170,7 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
         {/* Exteriores */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <ClipboardCheck size={20} className="text-primary-600" />
+            <ClipboardCheck size={20} className="text-green-600" />
             Accesorios Exteriores
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -235,7 +235,7 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
         {/* Interiores */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <ClipboardCheck size={20} className="text-primary-600" />
+            <ClipboardCheck size={20} className="text-green-600" />
             Accesorios Interiores
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">

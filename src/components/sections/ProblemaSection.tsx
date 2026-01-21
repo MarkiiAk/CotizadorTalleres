@@ -28,7 +28,7 @@ export const ProblemaSection: React.FC<ProblemaSectionProps> = ({ disabled = fal
         {/* Problema reportado */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-            <FileText size={18} className="text-primary-600" />
+            <FileText size={18} className="text-green-600" />
             Problema Reportado por el Cliente
           </label>
           <textarea
@@ -47,7 +47,7 @@ export const ProblemaSection: React.FC<ProblemaSectionProps> = ({ disabled = fal
         {/* Diagnóstico técnico */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-            <Stethoscope size={18} className="text-primary-600" />
+            <Stethoscope size={18} className="text-green-600" />
             Diagnóstico Técnico
           </label>
           <textarea

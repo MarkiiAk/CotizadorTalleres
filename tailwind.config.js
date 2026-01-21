@@ -4,6 +4,41 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    // Colores de texto para íconos
+    'text-primary-600',
+    'text-success-600',
+    'text-warning-600',
+    'text-error-600',
+    'text-info-600',
+    'text-accent-600',
+    'text-sag-600',
+    // Colores de fondo
+    'bg-primary-600',
+    'bg-success-600',
+    'bg-warning-600',
+    'bg-error-600',
+    'bg-info-600',
+    'bg-accent-600',
+    'bg-sag-600',
+    // Colores de borde
+    'border-primary-600',
+    'border-success-600',
+    'border-warning-600',
+    'border-error-600',
+    'border-info-600',
+    'border-accent-600',
+    'border-sag-600',
+    // Variantes de hover
+    'hover:text-primary-700',
+    'hover:text-success-700',
+    'hover:text-warning-700',
+    'hover:text-error-700',
+    'hover:bg-primary-700',
+    'hover:bg-success-700',
+    'hover:bg-warning-700',
+    'hover:bg-error-700',
+  ],
   darkMode: 'class',
   theme: {
     extend: {

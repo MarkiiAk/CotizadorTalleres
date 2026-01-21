@@ -114,7 +114,7 @@ export const NuevaOrden = () => {
                 className="!p-3"
                 title="Volver al Dashboard"
               />
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#4ae600] to-[#3ab500] rounded-xl flex items-center justify-center shadow-lg shadow-[#4ae600]/20">
                 <FileText className="text-white" size={24} />
               </div>
               <div>

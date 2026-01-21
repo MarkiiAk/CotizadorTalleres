@@ -1,198 +1,328 @@
-# 🚗 SAG Garage - Sistema de Presupuestos
+# 🚗 SAG Garage - Sistema de Presupuestos y Órdenes de Servicio
 
-Sistema moderno de generación de presupuestos para taller mecánico SAG Garage, desarrollado con las mejores prácticas de UX y tecnologías web modernas.
+Sistema profesional de gestión de presupuestos y órdenes de servicio para talleres mecánicos, desarrollado con tecnologías modernas y diseño UX de primer nivel.
 
-## ✨ Características
+## 🌟 Características Principales
 
-- 🎨 **Diseño Moderno**: Interfaz hermosa y profesional inspirada en los mejores UX de Silicon Valley
-- 🌓 **Tema Oscuro/Claro**: Cambia entre modos según tu preferencia
-- 💾 **Autoguardado**: Tus datos se guardan automáticamente en el navegador
-- 📱 **Responsive**: Funciona perfectamente en móviles, tablets y desktop
-- ⚡ **Performance**: Optimizado para cargar rápidamente
-- 🔒 **TypeScript**: Código robusto y mantenible con tipado estático
-- 📄 **Gestión de Garantía**: Sistema completo de póliza de garantía integrado
+### ✨ Interfaz de Usuario
+- **Diseño Moderno**: Interfaz limpia y profesional inspirada en los mejores estándares de Silicon Valley
+- **Responsive**: Totalmente adaptable a dispositivos móviles, tablets y desktop
+- **Animaciones Suaves**: Transiciones y micro-interacciones que mejoran la experiencia
+- **Tema Profesional**: Paleta de colores corporativa azul/gris con acentos modernos
 
-## 🛠️ Tecnologías
+### 📋 Gestión de Órdenes
+- **Formulario Multi-Sección**: Organizado en secciones claras y lógicas
+- **Inspección Visual del Vehículo**: Sistema interactivo para marcar daños en diferentes vistas
+- **Medidor de Combustible**: Indicador visual tipo dashboard automotriz
+- **Cálculos Automáticos**: Totales, IVA y subtotales calculados en tiempo real
+- **Impresión Profesional**: Generación de presupuestos en formato PDF y para impresión
 
-- **React 18** - Framework UI moderno
-- **TypeScript** - Tipado estático
+### 🔐 Sistema de Autenticación
+- **Login Seguro**: Autenticación con JWT (JSON Web Tokens)
+- **Rutas Protegidas**: Control de acceso a páginas según autenticación
+- **Sesión Persistente**: Mantiene la sesión del usuario
+- **Credenciales de Prueba**:
+  - Usuario: `admin@saggarage.com`
+  - Contraseña: `admin123`
+
+### 📊 Dashboard Administrativo
+- **Vista de Todas las Órdenes**: Tabla completa con paginación
+- **Búsqueda Avanzada**: Busca por cliente, vehículo, folio, o estado
+- **Filtros por Estado**: Pendiente, En Proceso, Completado
+- **Acciones Rápidas**: Ver, editar, imprimir y eliminar órdenes
+- **Estadísticas en Tiempo Real**: Contadores de órdenes por estado
+
+### 📄 Gestión de Garantías
+- **Póliza Integrada**: Términos y condiciones de garantía predefinidos
+- **Impresión Automática**: Incluida en el presupuesto final
+- **30 Días de Cobertura**: Según estándar del taller
+
+## 🛠️ Tecnologías Utilizadas
+
+### Frontend
+- **React 18** con TypeScript
 - **Vite** - Build tool ultra rápido
 - **Tailwind CSS** - Framework CSS utility-first
-- **Zustand** - State management ligero
-- **Lucide React** - Iconos modernos
-- **React PDF** - Generación de PDFs (próximamente)
+- **Zustand** - State management ligero y moderno
+- **React Router DOM** - Navegación y rutas
+- **Lucide React** - Iconos modernos y elegantes
+- **jsPDF** & **html2canvas** - Generación de PDFs
 
-## 📋 Requisitos
+### Backend
+- **Node.js** con Express
+- **TypeScript** - Type safety en el backend
+- **JWT** - Autenticación segura
+- **bcryptjs** - Hash de contraseñas
+- **CORS** - Cross-Origin Resource Sharing
+- **JSON Database** - Base de datos simple en archivo
 
-- Node.js 18 o superior
+## 📁 Estructura del Proyecto
+
+```
+sag-garage-presupuestos/
+├── backend/                    # Servidor Node.js/Express
+│   ├── src/
+│   │   ├── controllers/       # Controladores de rutas
+│   │   │   ├── authController.ts
+│   │   │   └── ordenesController.ts
+│   │   ├── middleware/        # Middlewares (auth, etc.)
+│   │   │   └── auth.ts
+│   │   ├── models/           # Modelos y DB
+│   │   │   └── database.ts
+│   │   ├── routes/           # Definición de rutas
+│   │   │   ├── auth.ts
+│   │   │   └── ordenes.ts
+│   │   ├── types/            # Tipos TypeScript
+│   │   │   └── index.ts
+│   │   └── index.ts          # Servidor principal
+│   ├── data/                 # Base de datos JSON
+│   │   └── ordenes.json
+│   ├── .env                  # Variables de entorno
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── src/                      # Frontend React
+│   ├── components/
+│   │   ├── sections/        # Secciones del formulario
+│   │   │   ├── ClienteSection.tsx
+│   │   │   ├── VehiculoSection.tsx
+│   │   │   ├── InspeccionSection.tsx
+│   │   │   ├── ProblemaSection.tsx
+│   │   │   ├── ServiciosSection.tsx
+│   │   │   ├── ManoObraSection.tsx
+│   │   │   ├── RefaccionesSection.tsx
+│   │   │   ├── GarantiaSection.tsx
+│   │   │   ├── ResumenSection.tsx
+│   │   │   └── index.ts
+│   │   ├── ui/              # Componentes reutilizables
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── FuelGauge.tsx
+│   │   │   └── index.ts
+│   │   ├── PDFDocument.tsx
+│   │   ├── PrintablePresupuesto.tsx
+│   │   └── ProtectedRoute.tsx
+│   ├── contexts/            # Context API
+│   │   └── AuthContext.tsx
+│   ├── pages/               # Páginas principales
+│   │   ├── Login.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── NuevaOrden.tsx
+│   │   └── index.ts
+│   ├── services/            # Servicios API
+│   │   └── api.ts
+│   ├── store/               # State management
+│   │   └── usePresupuestoStore.ts
+│   ├── types/               # Tipos TypeScript
+│   │   └── index.ts
+│   ├── constants/           # Constantes
+│   │   ├── servicios.ts
+│   │   └── garantia.ts
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+│
+├── start-dev.bat            # Script de inicio desarrollo
+├── start.bat                # Script de inicio simple
+├── package.json
+├── vite.config.ts
+├── tailwind.config.js
+├── tsconfig.json
+└── README.md
+```
+
+## 🚀 Instalación y Uso
+
+### Requisitos Previos
+- Node.js 18+ instalado
 - npm o yarn
 
-## 🚀 Instalación
+### Instalación Rápida
 
-1. **Navega al directorio del proyecto:**
-   ```bash
-   cd sag-garage-presupuestos
-   ```
+1. **Clonar o descargar el proyecto**
 
-2. **Instala las dependencias:**
+2. **Instalar dependencias del Frontend**:
    ```bash
    npm install
    ```
 
-3. **Inicia el servidor de desarrollo:**
+3. **Instalar dependencias del Backend**:
    ```bash
-   npm run dev
+   cd backend
+   npm install
+   cd ..
    ```
 
-4. **Abre tu navegador en:**
-   ```
-   http://localhost:5173
-   ```
+### Ejecución en Desarrollo
 
-## 📦 Scripts Disponibles
-
+#### Opción 1: Script Automático (Windows)
 ```bash
-# Desarrollo - Inicia servidor local con hot reload
+# Ejecuta este archivo .bat y todo se iniciará automáticamente
+start-dev.bat
+```
+
+Este script:
+- ✅ Verifica Node.js instalado
+- ✅ Instala dependencias automáticamente si faltan
+- ✅ Inicia el backend en `http://localhost:3001`
+- ✅ Inicia el frontend en `http://localhost:5173`
+- ✅ Abre dos ventanas de terminal independientes
+
+#### Opción 2: Manual
+
+**Terminal 1 - Backend**:
+```bash
+cd backend
 npm run dev
-
-# Build - Genera versión optimizada para producción
-npm run build
-
-# Preview - Previsualiza la build de producción
-npm run preview
-
-# Lint - Verifica el código
-npm run lint
 ```
 
-## 🏗️ Estructura del Proyecto
-
-```
-sag-garage-presupuestos/
-├── public/                 # Archivos estáticos
-├── src/
-│   ├── components/         # Componentes React
-│   │   ├── ui/            # Componentes UI reutilizables
-│   │   │   ├── Button.tsx
-│   │   │   ├── Card.tsx
-│   │   │   ├── Input.tsx
-│   │   │   └── index.ts
-│   │   └── sections/      # Secciones del formulario
-│   │       ├── ClienteSection.tsx
-│   │       ├── VehiculoSection.tsx
-│   │       ├── ServiciosSection.tsx
-│   │       ├── RefaccionesSection.tsx
-│   │       ├── ManoObraSection.tsx
-│   │       ├── ResumenSection.tsx
-│   │       ├── GarantiaSection.tsx
-│   │       └── index.ts
-│   ├── constants/         # Constantes de la aplicación
-│   │   ├── garantia.ts
-│   │   └── servicios.ts
-│   ├── store/             # Estado global (Zustand)
-│   │   └── usePresupuestoStore.ts
-│   ├── types/             # Tipos TypeScript
-│   │   └── index.ts
-│   ├── App.tsx            # Componente principal
-│   ├── main.tsx           # Punto de entrada
-│   └── index.css          # Estilos globales
-├── index.html             # HTML base
-├── package.json           # Dependencias
-├── tailwind.config.js     # Configuración Tailwind
-├── tsconfig.json          # Configuración TypeScript
-└── vite.config.ts         # Configuración Vite
+**Terminal 2 - Frontend**:
+```bash
+npm run dev
 ```
 
-## 🎯 Funcionalidades
+### Acceso a la Aplicación
 
-### 1. Información del Cliente
-- Captura datos completos del cliente
-- Validación de campos requeridos
-- Interfaz intuitiva
+1. Abre tu navegador en: `http://localhost:5173`
+2. Usa las credenciales de prueba:
+   - **Usuario**: `admin@saggarage.com`
+   - **Contraseña**: `admin123`
 
-### 2. Información del Vehículo
-- Marca, modelo, color
-- Placas y kilometraje
-- Diseño moderno con iconos
+## 📱 Uso del Sistema
 
-### 3. Servicios
-- Catálogo predefinido de servicios
-- Servicios personalizados
-- Gestión dinámica
+### 1. Login
+- Ingresa con las credenciales proporcionadas
+- El sistema guardará tu sesión
 
-### 4. Refacciones
-- Descripción, cantidad y costo
-- Cálculo automático de totales
-- Lista editable
+### 2. Dashboard
+- Visualiza todas las órdenes de servicio
+- Usa la barra de búsqueda para filtrar
+- Haz clic en los botones de acción:
+  - 👁️ Ver detalles
+  - ✏️ Editar orden
+  - 🖨️ Imprimir presupuesto
+  - 🗑️ Eliminar orden
 
-### 5. Mano de Obra
-- Conceptos de trabajo
-- Precios personalizados
-- Interfaz clara
+### 3. Nueva Orden
+- Haz clic en "Nueva Orden" desde el Dashboard
+- Completa el formulario sección por sección:
+  1. **Datos del Cliente**: Nombre, teléfono, email
+  2. **Datos del Vehículo**: Marca, modelo, año, placas, etc.
+  3. **Inspección Visual**: Marca daños en la carrocería
+  4. **Nivel de Combustible**: Ajusta el indicador
+  5. **Problema Reportado**: Describe la falla
+  6. **Servicios**: Selecciona servicios predefinidos
+  7. **Mano de Obra**: Agrega trabajos con horas y costo
+  8. **Refacciones**: Lista de piezas necesarias
+  9. **Garantía**: Revisa términos y condiciones
+  10. **Resumen**: Verifica totales y genera presupuesto
 
-### 6. Resumen Financiero
-- Desglose por categorías
-- Cálculo de anticipo
-- Saldo restante
-- Visualización profesional
+### 4. Impresión y PDF
+- Desde el resumen o el dashboard, haz clic en "Imprimir"
+- Se generará un PDF profesional con todos los detalles
+- Incluye logo, datos del taller y términos de garantía
 
-### 7. Póliza de Garantía
-- Términos completos
-- Expandible/colapsable
-- Aceptación del cliente
-- Información del PDF original
+## 🎨 Personalización
 
-## 🌐 Deployment en Neubox
+### Logo del Taller
+Reemplaza el logo en `public/logo.png` con tu logo personalizado.
 
-Este proyecto está optimizado para funcionar en hosting **Neubox**:
+### Colores Corporativos
+Modifica los colores en `tailwind.config.js`:
+```javascript
+colors: {
+  primary: '#2563eb',   // Azul principal
+  secondary: '#64748b', // Gris secundario
+  // ... más colores
+}
+```
 
-1. **Build del proyecto:**
-   ```bash
-   npm run build
-   ```
+### Información del Taller
+Actualiza los datos en:
+- `src/components/PrintablePresupuesto.tsx`
+- `src/components/PDFDocument.tsx`
 
-2. **Sube la carpeta `dist/` a tu hosting Neubox**
+### Términos de Garantía
+Edita el archivo `src/constants/garantia.ts`
 
-3. **Configura el dominio** para apuntar a la carpeta dist
+## 🔧 Scripts Disponibles
 
-## 💡 Características Técnicas
+### Frontend
+```bash
+npm run dev          # Desarrollo
+npm run build        # Build de producción
+npm run preview      # Preview del build
+npm run lint         # Linter
+```
 
-### State Management
-- **Zustand** para estado global eficiente
-- Persistencia automática en localStorage
-- Cálculos reactivos en tiempo real
+### Backend
+```bash
+npm run dev          # Desarrollo con nodemon
+npm run build        # Compilar TypeScript
+npm start            # Producción
+```
 
-### Diseño UX/UI
-- Transiciones suaves y animaciones
-- Feedback visual claro
-- Diseño accesible (WCAG)
-- Micro-interacciones pulidas
+## 🚢 Despliegue a Producción
 
-### Performance
-- Code splitting automático
-- Lazy loading de componentes
-- Optimización de bundle size
-- Fast Refresh en desarrollo
+Ver guía completa en: [DEPLOYMENT.md](./DEPLOYMENT.md)
 
-## 🔮 Próximas Funcionalidades
+### Opciones Recomendadas:
+1. **Vercel** - Para frontend (React/Vite)
+2. **Render** / **Railway** - Para backend (Node.js)
+3. **MongoDB Atlas** - Para base de datos en producción
 
-- [ ] Generación de PDF completa
-- [ ] Firma digital del cliente
-- [ ] Exportar a Excel
-- [ ] Sistema de plantillas
-- [ ] Historial de presupuestos
-- [ ] Modo impresión optimizado
+## 🔐 Seguridad
 
-## 📝 Notas
+- ✅ Contraseñas hasheadas con bcrypt
+- ✅ Tokens JWT con expiración
+- ✅ Validación de datos en backend
+- ✅ CORS configurado
+- ✅ Variables de entorno para secretos
+- ⚠️ **IMPORTANTE**: Cambia el `JWT_SECRET` en producción
 
-- Los datos se guardan automáticamente en el navegador (localStorage)
-- El tema (oscuro/claro) se recuerda entre sesiones
-- Compatible con todos los navegadores modernos
+## 🐛 Troubleshooting
 
-## 🤝 Soporte
+### El backend no inicia
+- Verifica que el puerto 3001 esté libre
+- Revisa que las dependencias estén instaladas: `cd backend && npm install`
 
-Para soporte o preguntas, contacta al equipo de desarrollo.
+### El frontend no se conecta al backend
+- Verifica que el backend esté corriendo
+- Revisa la URL en `src/services/api.ts`
+
+### Errores de TypeScript
+- Ejecuta `npm install` en ambas carpetas
+- Verifica las versiones de Node.js (18+)
+
+### Base de datos no guarda cambios
+- Verifica permisos de escritura en `backend/data/`
+- El archivo `ordenes.json` debe existir
+
+## 📞 Soporte
+
+Para dudas o problemas:
+1. Revisa esta documentación
+2. Consulta los comentarios en el código
+3. Verifica la consola del navegador y terminal
+
+## 📄 Licencia
+
+Este proyecto es de uso privado para SAG Garage.
+
+## 🎉 Características Futuras Planeadas
+
+- [ ] Envío de presupuestos por email
+- [ ] Notificaciones push
+- [ ] Calendario de citas
+- [ ] Historial de vehículos
+- [ ] Estadísticas y reportes
+- [ ] Integración con sistemas de facturación
+- [ ] App móvil nativa
+- [ ] Multi-usuario con roles
 
 ---
 
 **Desarrollado con ❤️ para SAG Garage**
+
+*Sistema de gestión profesional para talleres mecánicos del siglo XXI*

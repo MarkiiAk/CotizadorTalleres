@@ -6,7 +6,72 @@ import { DanoVehiculo } from '../../types';
 
 export const InspeccionSection: React.FC = () => {
   const { presupuesto } = usePresupuestoStore();
-  const { inspeccion } = presupuesto;
+  
+  // Asegurar que inspeccion siempre tenga una estructura válida
+  const inspeccion = React.useMemo(() => {
+    if (!presupuesto.inspeccion) {
+      return {
+        exteriores: {
+          lucesFrontales: true,
+          cuartoLuces: true,
+          antena: true,
+          espejosLaterales: true,
+          cristales: true,
+          emblemas: true,
+          llantas: true,
+          taponRuedas: true,
+          moldurasCompletas: true,
+          taponGasolina: true,
+          limpiadores: true,
+        },
+        interiores: {
+          instrumentoTablero: true,
+          calefaccion: true,
+          sistemaSonido: true,
+          bocinas: true,
+          espejoRetrovisor: true,
+          cinturones: true,
+          botoniaGeneral: true,
+          manijas: true,
+          tapetes: true,
+          vestiduras: true,
+          otros: true,
+        },
+        danosAdicionales: [],
+      };
+    }
+    
+    // Asegurar que exteriores e interiores existen
+    return {
+      exteriores: presupuesto.inspeccion.exteriores || {
+        lucesFrontales: true,
+        cuartoLuces: true,
+        antena: true,
+        espejosLaterales: true,
+        cristales: true,
+        emblemas: true,
+        llantas: true,
+        taponRuedas: true,
+        moldurasCompletas: true,
+        taponGasolina: true,
+        limpiadores: true,
+      },
+      interiores: presupuesto.inspeccion.interiores || {
+        instrumentoTablero: true,
+        calefaccion: true,
+        sistemaSonido: true,
+        bocinas: true,
+        espejoRetrovisor: true,
+        cinturones: true,
+        botoniaGeneral: true,
+        manijas: true,
+        tapetes: true,
+        vestiduras: true,
+        otros: true,
+      },
+      danosAdicionales: presupuesto.inspeccion.danosAdicionales || [],
+    };
+  }, [presupuesto.inspeccion]);
 
   const [nuevoDano, setNuevoDano] = React.useState<Omit<DanoVehiculo, 'id'>>({
     ubicacion: '',
@@ -16,6 +81,16 @@ export const InspeccionSection: React.FC = () => {
 
   const handleCheckboxChange = (section: 'exteriores' | 'interiores', field: string) => {
     const store = usePresupuestoStore.getState();
+    
+    // Inicializar inspeccion si no existe
+    if (!store.presupuesto.inspeccion) {
+      store.presupuesto.inspeccion = {
+        exteriores: { ...inspeccion.exteriores },
+        interiores: { ...inspeccion.interiores },
+        danosAdicionales: [],
+      };
+    }
+    
     const sectionData = store.presupuesto.inspeccion[section] as any;
     sectionData[field] = !sectionData[field];
     usePresupuestoStore.setState({ presupuesto: { ...store.presupuesto } });
@@ -24,6 +99,16 @@ export const InspeccionSection: React.FC = () => {
   const agregarDano = () => {
     if (nuevoDano.ubicacion && nuevoDano.tipo) {
       const store = usePresupuestoStore.getState();
+      
+      // Inicializar inspeccion si no existe
+      if (!store.presupuesto.inspeccion) {
+        store.presupuesto.inspeccion = {
+          exteriores: { ...inspeccion.exteriores },
+          interiores: { ...inspeccion.interiores },
+          danosAdicionales: [],
+        };
+      }
+      
       const newDano: DanoVehiculo = {
         ...nuevoDano,
         id: Math.random().toString(36).substring(2, 11),
@@ -36,6 +121,16 @@ export const InspeccionSection: React.FC = () => {
 
   const eliminarDano = (id: string) => {
     const store = usePresupuestoStore.getState();
+    
+    // Inicializar inspeccion si no existe
+    if (!store.presupuesto.inspeccion) {
+      store.presupuesto.inspeccion = {
+        exteriores: { ...inspeccion.exteriores },
+        interiores: { ...inspeccion.interiores },
+        danosAdicionales: [],
+      };
+    }
+    
     store.presupuesto.inspeccion.danosAdicionales = 
       store.presupuesto.inspeccion.danosAdicionales.filter(d => d.id !== id);
     usePresupuestoStore.setState({ presupuesto: store.presupuesto });

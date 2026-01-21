@@ -102,14 +102,20 @@ export const VehiculoSection: React.FC = () => {
                 </div>
                 <input
                   type="date"
-                  value={
-                    presupuesto.fechaEntrada instanceof Date
-                      ? presupuesto.fechaEntrada.toISOString().split('T')[0]
-                      : new Date(presupuesto.fechaEntrada).toISOString().split('T')[0]
-                  }
+                  value={(() => {
+                    const fecha = presupuesto.fechaEntrada;
+                    if (!fecha) return '';
+                    try {
+                      const dateObj = fecha instanceof Date ? fecha : new Date(fecha as any);
+                      if (isNaN(dateObj.getTime())) return '';
+                      return dateObj.toISOString().split('T')[0];
+                    } catch {
+                      return '';
+                    }
+                  })()}
                   onChange={(e) => {
                     const store = usePresupuestoStore.getState();
-                    store.presupuesto.fechaEntrada = new Date(e.target.value);
+                    store.presupuesto.fechaEntrada = e.target.value ? new Date(e.target.value) : new Date();
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
                   className="pl-10 w-full px-4 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
@@ -127,13 +133,17 @@ export const VehiculoSection: React.FC = () => {
                 </div>
                 <input
                   type="date"
-                  value={
-                    presupuesto.fechaSalida
-                      ? presupuesto.fechaSalida instanceof Date
-                        ? presupuesto.fechaSalida.toISOString().split('T')[0]
-                        : new Date(presupuesto.fechaSalida).toISOString().split('T')[0]
-                      : ''
-                  }
+                  value={(() => {
+                    const fecha = presupuesto.fechaSalida;
+                    if (!fecha) return '';
+                    try {
+                      const dateObj = fecha instanceof Date ? fecha : new Date(fecha as any);
+                      if (isNaN(dateObj.getTime())) return '';
+                      return dateObj.toISOString().split('T')[0];
+                    } catch {
+                      return '';
+                    }
+                  })()}
                   onChange={(e) => {
                     const store = usePresupuestoStore.getState();
                     store.presupuesto.fechaSalida = e.target.value ? new Date(e.target.value) : undefined;

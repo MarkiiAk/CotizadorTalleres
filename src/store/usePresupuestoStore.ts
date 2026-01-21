@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { Presupuesto, Servicio, Refaccion, ManoDeObra, ThemeMode, InspeccionVehiculo } from '../types';
 
 interface PresupuestoState {
@@ -9,8 +8,8 @@ interface PresupuestoState {
   // Tema
   themeMode: ThemeMode;
   
-  // Autoguardado
-  autoSave: boolean;
+  // Estado de guardado
+  hasUnsavedChanges: boolean;
   lastSaved: Date | null;
   
   // Acciones del presupuesto
@@ -40,11 +39,18 @@ interface PresupuestoState {
   // Tema
   toggleTheme: () => void;
   
-  // Autoguardado
-  toggleAutoSave: () => void;
+  // Control de cambios
+  markAsChanged: () => void;
+  markAsSaved: () => void;
   
   // Reset
   resetPresupuesto: () => void;
+  
+  // Cargar presupuesto
+  loadPresupuesto: (presupuesto: Presupuesto) => void;
+  
+  // Cargar desde orden
+  loadFromOrden: (orden: any) => void;
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 11);
@@ -130,293 +136,315 @@ const initialPresupuesto: Presupuesto = {
   },
 };
 
-export const usePresupuestoStore = create<PresupuestoState>()(
-  persist(
-    (set, get) => ({
-      presupuesto: initialPresupuesto,
-      themeMode: 'light',
-      autoSave: true,
+export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
+  presupuesto: initialPresupuesto,
+  themeMode: 'light',
+  hasUnsavedChanges: false,
+  lastSaved: null,
+
+  // Actualizar información del taller
+  updateTaller: (data) => {
+    set((state) => ({
+      presupuesto: {
+        ...state.presupuesto,
+        taller: { ...state.presupuesto.taller, ...data },
+      },
+      hasUnsavedChanges: true,
+    }));
+  },
+
+  // Actualizar información del cliente
+  updateCliente: (data) => {
+    set((state) => ({
+      presupuesto: {
+        ...state.presupuesto,
+        cliente: { ...state.presupuesto.cliente, ...data },
+      },
+      hasUnsavedChanges: true,
+    }));
+  },
+
+  // Actualizar información del vehículo
+  updateVehiculo: (data) => {
+    set((state) => ({
+      presupuesto: {
+        ...state.presupuesto,
+        vehiculo: { ...state.presupuesto.vehiculo, ...data },
+      },
+      hasUnsavedChanges: true,
+    }));
+  },
+
+  // Agregar servicio
+  addServicio: (servicio) => {
+    set((state) => {
+      const newServicio: Servicio = {
+        ...servicio,
+        id: generateId(),
+      };
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          servicios: [...state.presupuesto.servicios, newServicio],
+        },
+        hasUnsavedChanges: true,
+      };
+      // Calcular resumen después de actualizar
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Actualizar servicio
+  updateServicio: (id, servicio) => {
+    set((state) => {
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          servicios: state.presupuesto.servicios.map((s) =>
+            s.id === id ? { ...s, ...servicio } : s
+          ),
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Eliminar servicio
+  deleteServicio: (id) => {
+    set((state) => {
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          servicios: state.presupuesto.servicios.filter((s) => s.id !== id),
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Agregar refacción
+  addRefaccion: (refaccion) => {
+    set((state) => {
+      const total = refaccion.cantidad * refaccion.costoUnitario;
+      const newRefaccion: Refaccion = {
+        ...refaccion,
+        id: generateId(),
+        total,
+      };
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          refacciones: [...state.presupuesto.refacciones, newRefaccion],
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Actualizar refacción
+  updateRefaccion: (id, refaccion) => {
+    set((state) => {
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          refacciones: state.presupuesto.refacciones.map((r) => {
+            if (r.id === id) {
+              const updated = { ...r, ...refaccion };
+              updated.total = updated.cantidad * updated.costoUnitario;
+              return updated;
+            }
+            return r;
+          }),
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Eliminar refacción
+  deleteRefaccion: (id) => {
+    set((state) => {
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          refacciones: state.presupuesto.refacciones.filter((r) => r.id !== id),
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Agregar mano de obra
+  addManoDeObra: (manoDeObra) => {
+    set((state) => {
+      const newManoDeObra: ManoDeObra = {
+        ...manoDeObra,
+        id: generateId(),
+      };
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          manoDeObra: [...state.presupuesto.manoDeObra, newManoDeObra],
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Actualizar mano de obra
+  updateManoDeObra: (id, manoDeObra) => {
+    set((state) => {
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          manoDeObra: state.presupuesto.manoDeObra.map((m) =>
+            m.id === id ? { ...m, ...manoDeObra } : m
+          ),
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Eliminar mano de obra
+  deleteManoDeObra: (id) => {
+    set((state) => {
+      const newState = {
+        presupuesto: {
+          ...state.presupuesto,
+          manoDeObra: state.presupuesto.manoDeObra.filter((m) => m.id !== id),
+        },
+        hasUnsavedChanges: true,
+      };
+      setTimeout(() => get().calcularResumen(), 0);
+      return newState;
+    });
+  },
+
+  // Actualizar anticipo
+  updateAnticipo: (anticipo) => {
+    set((state) => ({
+      presupuesto: {
+        ...state.presupuesto,
+        resumen: {
+          ...state.presupuesto.resumen,
+          anticipo,
+          restante: state.presupuesto.resumen.subtotal - anticipo,
+        },
+      },
+      hasUnsavedChanges: true,
+    }));
+  },
+
+  // Calcular resumen financiero
+  calcularResumen: () => {
+    set((state) => {
+      const serviciosTotal = state.presupuesto.servicios.reduce(
+        (sum, s) => sum + s.precio,
+        0
+      );
+      const refaccionesTotal = state.presupuesto.refacciones.reduce(
+        (sum, r) => sum + r.total,
+        0
+      );
+      const manoDeObraTotal = state.presupuesto.manoDeObra.reduce(
+        (sum, m) => sum + m.precio,
+        0
+      );
+      const subtotal = serviciosTotal + refaccionesTotal + manoDeObraTotal;
+      const restante = subtotal - state.presupuesto.resumen.anticipo;
+
+      return {
+        presupuesto: {
+          ...state.presupuesto,
+          resumen: {
+            servicios: serviciosTotal,
+            refacciones: refaccionesTotal,
+            manoDeObra: manoDeObraTotal,
+            subtotal,
+            anticipo: state.presupuesto.resumen.anticipo,
+            restante,
+          },
+        },
+      };
+    });
+  },
+
+  // Toggle tema
+  toggleTheme: () => {
+    set((state) => ({
+      themeMode: state.themeMode === 'light' ? 'dark' : 'light',
+    }));
+  },
+
+  // Marcar como cambiado
+  markAsChanged: () => {
+    set({ hasUnsavedChanges: true });
+  },
+
+  // Marcar como guardado
+  markAsSaved: () => {
+    set({ hasUnsavedChanges: false, lastSaved: new Date() });
+  },
+
+  // Reset presupuesto
+  resetPresupuesto: () => {
+    set({
+      presupuesto: {
+        ...initialPresupuesto,
+        id: generateId(),
+        folio: generateFolio(),
+        fecha: new Date(),
+        fechaEntrada: new Date(),
+      },
+      hasUnsavedChanges: false,
       lastSaved: null,
+    });
+  },
 
-      // Actualizar información del taller
-      updateTaller: (data) => {
-        set((state) => ({
-          presupuesto: {
-            ...state.presupuesto,
-            taller: { ...state.presupuesto.taller, ...data },
-          },
-          lastSaved: new Date(),
-        }));
+  // Cargar presupuesto
+  loadPresupuesto: (presupuesto) => {
+    set({
+      presupuesto,
+      hasUnsavedChanges: false,
+    });
+  },
+  
+  // Cargar desde orden
+  loadFromOrden: (orden) => {
+    set({
+      presupuesto: {
+        id: orden.id,
+        folio: orden.folio,
+        fecha: new Date(orden.fechaCreacion),
+        fechaEntrada: orden.fechaEntrada ? new Date(orden.fechaEntrada) : new Date(orden.fechaCreacion),
+        taller: orden.taller,
+        cliente: orden.cliente,
+        vehiculo: orden.vehiculo,
+        inspeccion: orden.inspeccion || initialInspeccion,
+        problemaReportado: orden.problemaReportado || '',
+        diagnosticoTecnico: orden.diagnosticoTecnico || '',
+        servicios: orden.servicios || [],
+        refacciones: orden.refacciones || [],
+        manoDeObra: orden.manoDeObra || [],
+        resumen: orden.resumen,
       },
-
-      // Actualizar información del cliente
-      updateCliente: (data) => {
-        set((state) => ({
-          presupuesto: {
-            ...state.presupuesto,
-            cliente: { ...state.presupuesto.cliente, ...data },
-          },
-          lastSaved: new Date(),
-        }));
-      },
-
-      // Actualizar información del vehículo
-      updateVehiculo: (data) => {
-        set((state) => ({
-          presupuesto: {
-            ...state.presupuesto,
-            vehiculo: { ...state.presupuesto.vehiculo, ...data },
-          },
-          lastSaved: new Date(),
-        }));
-      },
-
-      // Agregar servicio
-      addServicio: (servicio) => {
-        set((state) => {
-          const newServicio: Servicio = {
-            ...servicio,
-            id: generateId(),
-          };
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              servicios: [...state.presupuesto.servicios, newServicio],
-            },
-            lastSaved: new Date(),
-          };
-          // Calcular resumen después de actualizar
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Actualizar servicio
-      updateServicio: (id, servicio) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              servicios: state.presupuesto.servicios.map((s) =>
-                s.id === id ? { ...s, ...servicio } : s
-              ),
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Eliminar servicio
-      deleteServicio: (id) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              servicios: state.presupuesto.servicios.filter((s) => s.id !== id),
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Agregar refacción
-      addRefaccion: (refaccion) => {
-        set((state) => {
-          const total = refaccion.cantidad * refaccion.costoUnitario;
-          const newRefaccion: Refaccion = {
-            ...refaccion,
-            id: generateId(),
-            total,
-          };
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              refacciones: [...state.presupuesto.refacciones, newRefaccion],
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Actualizar refacción
-      updateRefaccion: (id, refaccion) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              refacciones: state.presupuesto.refacciones.map((r) => {
-                if (r.id === id) {
-                  const updated = { ...r, ...refaccion };
-                  updated.total = updated.cantidad * updated.costoUnitario;
-                  return updated;
-                }
-                return r;
-              }),
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Eliminar refacción
-      deleteRefaccion: (id) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              refacciones: state.presupuesto.refacciones.filter((r) => r.id !== id),
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Agregar mano de obra
-      addManoDeObra: (manoDeObra) => {
-        set((state) => {
-          const newManoDeObra: ManoDeObra = {
-            ...manoDeObra,
-            id: generateId(),
-          };
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              manoDeObra: [...state.presupuesto.manoDeObra, newManoDeObra],
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Actualizar mano de obra
-      updateManoDeObra: (id, manoDeObra) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              manoDeObra: state.presupuesto.manoDeObra.map((m) =>
-                m.id === id ? { ...m, ...manoDeObra } : m
-              ),
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Eliminar mano de obra
-      deleteManoDeObra: (id) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              manoDeObra: state.presupuesto.manoDeObra.filter((m) => m.id !== id),
-            },
-            lastSaved: new Date(),
-          };
-          setTimeout(() => get().calcularResumen(), 0);
-          return newState;
-        });
-      },
-
-      // Actualizar anticipo
-      updateAnticipo: (anticipo) => {
-        set((state) => {
-          const newState = {
-            presupuesto: {
-              ...state.presupuesto,
-              resumen: {
-                ...state.presupuesto.resumen,
-                anticipo,
-                restante: state.presupuesto.resumen.subtotal - anticipo,
-              },
-            },
-            lastSaved: new Date(),
-          };
-          return newState;
-        });
-      },
-
-      // Calcular resumen financiero
-      calcularResumen: () => {
-        set((state) => {
-          const serviciosTotal = state.presupuesto.servicios.reduce(
-            (sum, s) => sum + s.precio,
-            0
-          );
-          const refaccionesTotal = state.presupuesto.refacciones.reduce(
-            (sum, r) => sum + r.total,
-            0
-          );
-          const manoDeObraTotal = state.presupuesto.manoDeObra.reduce(
-            (sum, m) => sum + m.precio,
-            0
-          );
-          const subtotal = serviciosTotal + refaccionesTotal + manoDeObraTotal;
-          const restante = subtotal - state.presupuesto.resumen.anticipo;
-
-          return {
-            presupuesto: {
-              ...state.presupuesto,
-              resumen: {
-                servicios: serviciosTotal,
-                refacciones: refaccionesTotal,
-                manoDeObra: manoDeObraTotal,
-                subtotal,
-                anticipo: state.presupuesto.resumen.anticipo,
-                restante,
-              },
-            },
-          };
-        });
-      },
-
-      // Toggle tema
-      toggleTheme: () => {
-        set((state) => ({
-          themeMode: state.themeMode === 'light' ? 'dark' : 'light',
-        }));
-      },
-
-      // Toggle autoguardado
-      toggleAutoSave: () => {
-        set((state) => ({
-          autoSave: !state.autoSave,
-        }));
-      },
-
-      // Reset presupuesto
-      resetPresupuesto: () => {
-        set({
-          presupuesto: {
-            ...initialPresupuesto,
-            id: generateId(),
-            fecha: new Date(),
-          },
-          lastSaved: null,
-        });
-      },
-    }),
-    {
-      name: 'sag-garage-presupuesto-storage',
-      partialize: (state) => ({
-        presupuesto: state.presupuesto,
-        themeMode: state.themeMode,
-        autoSave: state.autoSave,
-      }),
-    }
-  )
-);
+      hasUnsavedChanges: false,
+    });
+  },
+}));

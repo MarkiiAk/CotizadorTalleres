@@ -132,3 +132,42 @@ export interface AppState {
   autoSave: boolean;
   lastSaved: Date | null;
 }
+
+// Tipos para el sistema de gestión de órdenes
+
+export interface Orden {
+  id: string;
+  folio: string;
+  estado: 'abierta' | 'cerrada';
+  fechaCreacion: string;
+  fechaActualizacion: string;
+  fechaCierre?: string;
+  creadoPor?: string;
+  modificadoPor?: string;
+  taller: TallerInfo;
+  cliente: ClienteInfo;
+  vehiculo: VehiculoInfo;
+  inspeccion: InspeccionVehiculo;
+  problemaReportado: string;
+  diagnosticoTecnico: string;
+  servicios: Servicio[];
+  refacciones: Refaccion[];
+  manoDeObra: ManoDeObra[];
+  resumen: ResumenFinanciero;
+}
+
+export interface Usuario {
+  id: string;
+  username: string;
+  nombre: string;
+  rol: 'admin' | 'mecanico' | 'recepcionista';
+}
+
+export interface AuthContextType {
+  user: Usuario | null;
+  token: string | null;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}

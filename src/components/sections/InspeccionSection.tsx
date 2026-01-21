@@ -148,7 +148,7 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
           checked={checked}
           onChange={onChange}
           disabled={disabled}
-          className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-5 h-5 text-green-700 dark:text-green-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         />
         <span className={`text-sm font-medium transition-colors ${
           checked 

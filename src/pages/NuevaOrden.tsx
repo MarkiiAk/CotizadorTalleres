@@ -24,6 +24,11 @@ export const NuevaOrden = () => {
   const { presupuesto, themeMode, toggleTheme, resetPresupuesto, markAsSaved } = usePresupuestoStore();
   const [showLoader, setShowLoader] = useState(false);
 
+  // Limpiar formulario al montar el componente
+  useEffect(() => {
+    resetPresupuesto();
+  }, [resetPresupuesto]);
+
   // Aplicar el tema al documento
   useEffect(() => {
     if (themeMode === 'dark') {

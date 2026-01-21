@@ -79,15 +79,21 @@ export const ManoObraSection: React.FC<ManoObraSectionProps> = ({ disabled = fal
 
       {/* Botón para mostrar formulario */}
       {!showForm && (
-        <Button
-          variant="outline"
+        <button
           onClick={() => setShowForm(true)}
-          icon={<Plus size={20} />}
-          className="w-full"
           disabled={disabled}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 
+                     bg-white dark:bg-gray-900
+                     border-2 border-green-500 dark:border-green-400
+                     text-green-600 dark:text-green-400 font-medium rounded-lg
+                     hover:bg-green-50 dark:hover:bg-green-950/30
+                     active:bg-green-100 dark:active:bg-green-950/50
+                     transition-all duration-200
+                     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-gray-900"
         >
-          Agregar Mano de Obra
-        </Button>
+          <Plus size={20} />
+          <span>Agregar Mano de Obra</span>
+        </button>
       )}
 
       {/* Formulario para agregar mano de obra */}

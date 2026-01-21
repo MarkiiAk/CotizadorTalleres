@@ -107,9 +107,6 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
                 Fecha Entrada
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Calendar size={20} className="text-gray-400" />
-                </div>
                 <input
                   type="date"
                   value={(() => {
@@ -118,30 +115,31 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
                     try {
                       const dateObj = fecha instanceof Date ? fecha : new Date(fecha as any);
                       if (isNaN(dateObj.getTime())) return '';
-                      return dateObj.toISOString().split('T')[0];
+                      // Usar fecha local en lugar de UTC
+                      const year = dateObj.getFullYear();
+                      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                      const day = String(dateObj.getDate()).padStart(2, '0');
+                      return `${year}-${month}-${day}`;
                     } catch {
                       return '';
                     }
                   })()}
                   onChange={(e) => {
                     const store = usePresupuestoStore.getState();
-                    store.presupuesto.fechaEntrada = e.target.value ? new Date(e.target.value) : new Date();
+                    store.presupuesto.fechaEntrada = e.target.value ? new Date(e.target.value + 'T00:00:00') : new Date();
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
                   disabled={disabled}
-                  className="pl-10 w-full px-4 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-50 focus:outline-none focus:ring-0 focus:border-green-600 dark:focus:border-green-500 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Fecha Salida 
+                Fecha Salida
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Calendar size={20} className="text-gray-400" />
-                </div>
                 <input
                   type="date"
                   value={(() => {
@@ -150,18 +148,22 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
                     try {
                       const dateObj = fecha instanceof Date ? fecha : new Date(fecha as any);
                       if (isNaN(dateObj.getTime())) return '';
-                      return dateObj.toISOString().split('T')[0];
+                      // Usar fecha local en lugar de UTC
+                      const year = dateObj.getFullYear();
+                      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                      const day = String(dateObj.getDate()).padStart(2, '0');
+                      return `${year}-${month}-${day}`;
                     } catch {
                       return '';
                     }
                   })()}
                   onChange={(e) => {
                     const store = usePresupuestoStore.getState();
-                    store.presupuesto.fechaSalida = e.target.value ? new Date(e.target.value) : undefined;
+                    store.presupuesto.fechaSalida = e.target.value ? new Date(e.target.value + 'T00:00:00') : undefined;
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
                   disabled={disabled}
-                  className="pl-10 w-full px-4 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-50 focus:outline-none focus:ring-0 focus:border-green-600 dark:focus:border-green-500 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
                 />
               </div>
             </div>

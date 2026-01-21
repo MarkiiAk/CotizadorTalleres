@@ -46,6 +46,8 @@ export const DetalleOrden = () => {
         return;
       }
 
+      setIsLoading(true);
+      
       try {
         const ordenData = await localStorageService.getOrden(id);
         if (ordenData) {
@@ -60,7 +62,10 @@ export const DetalleOrden = () => {
         alert('Error al cargar la orden');
         navigate('/dashboard');
       } finally {
-        setIsLoading(false);
+        // Pequeño delay para asegurar que el loader sea visible
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
       }
     };
 
@@ -133,12 +138,31 @@ export const DetalleOrden = () => {
     navigate('/dashboard');
   };
 
+  // Mostrar loader mientras carga la orden
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Cargando orden...</p>
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-600 to-green-700 rounded-2xl mb-6 shadow-lg">
+            <svg
+              className="w-10 h-10 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Cargando orden...
+          </h2>
+          <div className="flex gap-2 justify-center">
+            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '450ms' }}></div>
+          </div>
         </div>
       </div>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, FileText, Stethoscope } from 'lucide-react';
+import { FileText, Stethoscope } from 'lucide-react';
 import { Card } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 

@@ -183,7 +183,7 @@ export const DetalleOrden = () => {
                 className="!p-3"
                 title="Volver al Dashboard"
               />
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
                 <FileText className="text-white" size={24} />
               </div>
               <div>

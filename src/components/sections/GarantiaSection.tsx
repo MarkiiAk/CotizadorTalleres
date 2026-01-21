@@ -17,7 +17,7 @@ export const GarantiaSection: React.FC = () => {
         <div className="p-6 rounded-xl border-2 bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800">
           <div className="flex items-start gap-4">
             <div className="p-3 rounded-full bg-primary-100 dark:bg-primary-900/40">
-              <FileText className="text-primary-600 dark:text-primary-400" size={28} />
+              <FileText className="text-green-600 dark:text-green-400" size={28} />
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
@@ -40,9 +40,9 @@ export const GarantiaSection: React.FC = () => {
             {expanded ? 'Ocultar' : 'Ver'} Términos Completos de la Garantía
           </span>
           {expanded ? (
-            <ChevronUp className="text-primary-600 dark:text-primary-400" size={24} />
+            <ChevronUp className="text-green-600 dark:text-green-400" size={24} />
           ) : (
-            <ChevronDown className="text-primary-600 dark:text-primary-400" size={24} />
+            <ChevronDown className="text-green-600 dark:text-green-400" size={24} />
           )}
         </button>
 
@@ -52,7 +52,7 @@ export const GarantiaSection: React.FC = () => {
             {/* Cobertura */}
             <div className="space-y-2">
               <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                <Shield size={18} className="text-primary-600 dark:text-primary-400" />
+                <Shield size={18} className="text-green-600 dark:text-green-400" />
                 1. Cobertura de la Garantía
               </h4>
               <p className="text-sm text-gray-600 dark:text-gray-400 pl-6">

@@ -4,7 +4,11 @@ import { Card, Input, Button } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 import { SERVICIOS_COMUNES } from '../../constants/servicios';
 
-export const ServiciosSection: React.FC = () => {
+interface ServiciosSectionProps {
+  disabled?: boolean;
+}
+
+export const ServiciosSection: React.FC<ServiciosSectionProps> = ({ disabled = false }) => {
   const { presupuesto, addServicio, deleteServicio } = usePresupuestoStore();
   const { servicios } = presupuesto;
   
@@ -68,6 +72,7 @@ export const ServiciosSection: React.FC = () => {
                 onClick={() => deleteServicio(servicio.id)}
                 icon={<X size={16} />}
                 className="!p-2"
+                disabled={disabled}
               >
                 Eliminar
               </Button>
@@ -83,6 +88,7 @@ export const ServiciosSection: React.FC = () => {
           onClick={() => setShowForm(true)}
           icon={<Plus size={20} />}
           className="w-full"
+          disabled={disabled}
         >
           Agregar Servicio
         </Button>
@@ -98,6 +104,7 @@ export const ServiciosSection: React.FC = () => {
                 className="input"
                 value={selectedServicio}
                 onChange={(e) => setSelectedServicio(e.target.value)}
+                disabled={disabled}
               >
                 <option value="">Selecciona un servicio</option>
                 {SERVICIOS_COMUNES.map((servicio, index) => (
@@ -115,6 +122,7 @@ export const ServiciosSection: React.FC = () => {
                 placeholder="Ej: Reparación de motor"
                 value={customServicio}
                 onChange={(e) => setCustomServicio(e.target.value)}
+                disabled={disabled}
               />
             )}
 
@@ -126,6 +134,7 @@ export const ServiciosSection: React.FC = () => {
               onChange={(e) => setPrecio(e.target.value)}
               min="0"
               step="0.01"
+              disabled={disabled}
             />
           </div>
 
@@ -135,6 +144,7 @@ export const ServiciosSection: React.FC = () => {
               onClick={handleAddServicio}
               icon={<Plus size={20} />}
               disabled={
+                disabled ||
                 !selectedServicio ||
                 (selectedServicio === 'otro' && !customServicio) ||
                 !precio ||
@@ -151,6 +161,7 @@ export const ServiciosSection: React.FC = () => {
                 setCustomServicio('');
                 setPrecio('');
               }}
+              disabled={disabled}
             >
               Cancelar
             </Button>

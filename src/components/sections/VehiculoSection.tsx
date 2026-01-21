@@ -3,7 +3,11 @@ import { Car, Palette, CreditCard, Gauge, Calendar } from 'lucide-react';
 import { Card, Input, FuelGauge } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
-export const VehiculoSection: React.FC = () => {
+interface VehiculoSectionProps {
+  disabled?: boolean;
+}
+
+export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = false }) => {
   const { presupuesto, updateVehiculo } = usePresupuestoStore();
   const { vehiculo } = presupuesto;
 
@@ -38,6 +42,7 @@ export const VehiculoSection: React.FC = () => {
               onChange={handleChange('marca')}
               icon={<Car size={20} />}
               required
+              disabled={disabled}
             />
             
             <Input
@@ -47,6 +52,7 @@ export const VehiculoSection: React.FC = () => {
               onChange={handleChange('modelo')}
               icon={<Car size={20} />}
               required
+              disabled={disabled}
             />
             
             <Input
@@ -55,6 +61,7 @@ export const VehiculoSection: React.FC = () => {
               value={vehiculo.color}
               onChange={handleChange('color')}
               icon={<Palette size={20} />}
+              disabled={disabled}
             />
             
             <Input
@@ -64,6 +71,7 @@ export const VehiculoSection: React.FC = () => {
               onChange={handleChange('placas')}
               icon={<CreditCard size={20} />}
               required
+              disabled={disabled}
             />
           </div>
         </div>
@@ -82,6 +90,7 @@ export const VehiculoSection: React.FC = () => {
               onChange={handleChange('kilometrajeEntrada')}
               icon={<Gauge size={20} />}
               required
+              disabled={disabled}
             />
             
             <Input
@@ -90,6 +99,7 @@ export const VehiculoSection: React.FC = () => {
               value={vehiculo.kilometrajeSalida}
               onChange={handleChange('kilometrajeSalida')}
               icon={<Gauge size={20} />}
+              disabled={disabled}
             />
             
             <div>
@@ -118,6 +128,7 @@ export const VehiculoSection: React.FC = () => {
                     store.presupuesto.fechaEntrada = e.target.value ? new Date(e.target.value) : new Date();
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
+                  disabled={disabled}
                   className="pl-10 w-full px-4 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
@@ -149,6 +160,7 @@ export const VehiculoSection: React.FC = () => {
                     store.presupuesto.fechaSalida = e.target.value ? new Date(e.target.value) : undefined;
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
+                  disabled={disabled}
                   className="pl-10 w-full px-4 py-2.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
@@ -167,6 +179,7 @@ export const VehiculoSection: React.FC = () => {
               level={vehiculo.nivelGasolina}
               onChange={handleFuelChange}
               label="Nivel de Gasolina al Ingreso"
+              disabled={disabled}
             />
           </div>
         </div>

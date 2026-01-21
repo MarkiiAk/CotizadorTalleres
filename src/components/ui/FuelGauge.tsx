@@ -5,9 +5,10 @@ interface FuelGaugeProps {
   level: number; // 0-100
   onChange: (level: number) => void;
   label?: string;
+  disabled?: boolean;
 }
 
-export const FuelGauge: React.FC<FuelGaugeProps> = ({ level, onChange, label = 'Nivel de Gasolina' }) => {
+export const FuelGauge: React.FC<FuelGaugeProps> = ({ level, onChange, label = 'Nivel de Gasolina', disabled = false }) => {
   const getFuelColor = () => {
     if (level <= 25) return '#ef4444'; // red
     if (level <= 50) return '#eab308'; // yellow
@@ -86,7 +87,8 @@ export const FuelGauge: React.FC<FuelGaugeProps> = ({ level, onChange, label = '
             step="5"
             value={level}
             onChange={(e) => onChange(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-600"
+            disabled={disabled}
+            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           
           {/* Quick buttons */}
@@ -94,35 +96,40 @@ export const FuelGauge: React.FC<FuelGaugeProps> = ({ level, onChange, label = '
             <button
               type="button"
               onClick={() => onChange(0)}
-              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              disabled={disabled}
+              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Vacío
             </button>
             <button
               type="button"
               onClick={() => onChange(25)}
-              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              disabled={disabled}
+              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               1/4
             </button>
             <button
               type="button"
               onClick={() => onChange(50)}
-              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              disabled={disabled}
+              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               1/2
             </button>
             <button
               type="button"
               onClick={() => onChange(75)}
-              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              disabled={disabled}
+              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               3/4
             </button>
             <button
               type="button"
               onClick={() => onChange(100)}
-              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              disabled={disabled}
+              className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Lleno
             </button>

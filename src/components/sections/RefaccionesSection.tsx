@@ -57,7 +57,7 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
               className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600"
             >
               <div className="flex items-center gap-3 flex-1">
-                <Package className="text-primary-600 dark:text-primary-400" size={20} />
+                <Package className="text-primary-600" size={20} />
                 <div className="flex-1">
                   <p className="font-medium text-gray-900 dark:text-gray-100">
                     {refaccion.nombre}

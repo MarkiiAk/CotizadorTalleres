@@ -1,0 +1,92 @@
+name: Deploy to cPanel
+
+# Se ejecuta automáticamente cuando haces push a la rama main
+on:
+  push:
+    branches:
+      - main
+  # También puedes ejecutarlo manualmente desde GitHub
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Configurar Node.js
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # 3. Instalar dependencias
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      # 4. Compilar el proyecto (crear carpeta dist/)
+      - name: 🏗️ Build proyecto
+        run: npm run build
+        env:
+          # Variables de entorno para el build (si las necesitas)
+          NODE_ENV: production
+
+      # 5. Verificar que el build se creó correctamente
+      - name: ✅ Verificar build
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ Error: La carpeta dist no se generó"
+            exit 1
+          fi
+          echo "✅ Build generado correctamente"
+          ls -la dist/
+
+      # 6. Subir archivos a cPanel vía FTP
+      - name: 🚀 Deploy a cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # Estas variables las configurarás en GitHub Secrets
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || 21 }}
+          
+          # Carpeta local que se subirá (la compilada)
+          local-dir: ./dist/
+          
+          # Carpeta remota en tu cPanel (ajusta según tu necesidad)
+          server-dir: ${{ secrets.FTP_SERVER_DIR || '/public_html/' }}
+          
+          # Configuraciones importantes
+          dangerous-clean-slate: false  # NO borra todo antes de subir (más seguro)
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.vscode/**
+            **/.DS_Store
+          
+          # Opciones de seguridad
+          security: strict
+          
+          # Timeout en segundos
+          timeout: 600000
+
+      # 7. Notificación de éxito
+      - name: ✅ Deploy completado
+        if: success()
+        run: |
+          echo "🎉 ¡Deploy exitoso a cPanel!"
+          echo "🌐 Tu sitio está actualizado"
+          echo "⏰ Fecha: $(date)"
+
+      # 8. Notificación de error
+      - name: ❌ Deploy falló
+        if: failure()
+        run: |
+          echo "❌ Hubo un error en el deploy"
+          echo "Revisa los logs arriba para más detalles"

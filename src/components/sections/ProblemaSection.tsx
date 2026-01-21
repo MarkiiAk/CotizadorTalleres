@@ -37,7 +37,7 @@ export const ProblemaSection: React.FC<ProblemaSectionProps> = ({ disabled = fal
             placeholder="Describe el problema o servicio solicitado por el cliente..."
             rows={6}
             disabled={disabled}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-0 focus:border-green-600 dark:focus:border-green-500 resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           />
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Registra exactamente lo que el cliente menciona sobre el problema del vehículo.
@@ -56,7 +56,7 @@ export const ProblemaSection: React.FC<ProblemaSectionProps> = ({ disabled = fal
             rows={5}
             placeholder="Describe el diagnóstico técnico realizado, incluyendo pruebas, verificaciones y conclusiones..."
             disabled={disabled}
-            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-0 focus:border-green-600 dark:focus:border-green-500 transition-all duration-200 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Incluye el resultado de la inspección técnica, las causas identificadas y las reparaciones necesarias.

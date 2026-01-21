@@ -8,22 +8,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Paleta SAG Garage - Premium Verde Neón
-        // Inspirado en diseño Apple/Silicon Valley con el vibrante verde SAG
+        // Paleta Base - Neutros Sofisticados (Inspirado en Linear/Vercel)
         primary: {
-          50: '#f0ffe5',
-          100: '#dcffc7',
-          200: '#bdff94',
-          300: '#8fff56',
-          400: '#66ff1f',  // Verde neón base SAG
-          500: '#4ae600',  // Color principal vibrante
-          600: '#37b800',
-          700: '#2a8b00',
-          800: '#246e07',
-          900: '#1f5c0b',
-          950: '#0d3302',
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+          950: '#0a0a0a',
         },
-        secondary: {
+        
+        // Acento Principal - Slate Refinado (para botones principales)
+        accent: {
           50: '#f8fafc',
           100: '#f1f5f9',
           200: '#e2e8f0',
@@ -36,8 +37,39 @@ export default {
           900: '#0f172a',
           950: '#020617',
         },
-        // Acento dorado premium (para highlights y elementos especiales)
-        accent: {
+        
+        // Success - Verde Elegante (solo para estados exitosos)
+        success: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16',
+        },
+        
+        // Error - Rojo Sofisticado (para acciones destructivas)
+        error: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          950: '#450a0a',
+        },
+        
+        // Warning - Ámbar Premium
+        warning: {
           50: '#fffbeb',
           100: '#fef3c7',
           200: '#fde68a',
@@ -50,26 +82,35 @@ export default {
           900: '#78350f',
           950: '#451a03',
         },
-        // Colores de estado - refinados
-        success: {
-          light: '#4ade80',
-          DEFAULT: '#22c55e',
-          dark: '#16a34a',
-        },
-        warning: {
-          light: '#fbbf24',
-          DEFAULT: '#f59e0b',
-          dark: '#d97706',
-        },
-        error: {
-          light: '#f87171',
-          DEFAULT: '#ef4444',
-          dark: '#dc2626',
-        },
+        
+        // Info - Azul Claro Sutil
         info: {
-          light: '#60a5fa',
-          DEFAULT: '#3b82f6',
-          dark: '#2563eb',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554',
+        },
+        
+        // SAG Brand - Verde sutil para marca (solo en logos/detalles)
+        sag: {
+          50: '#f0ffe5',
+          100: '#dcffc7',
+          200: '#bdff94',
+          300: '#8fff56',
+          400: '#66ff1f',
+          500: '#4ae600',
+          600: '#37b800',
+          700: '#2a8b00',
+          800: '#246e07',
+          900: '#1f5c0b',
+          950: '#0d3302',
         },
       },
       fontFamily: {
@@ -89,34 +130,31 @@ export default {
         '5xl': ['3rem', { lineHeight: '1' }],
       },
       boxShadow: {
-        // Sombras estilo Apple - sutiles pero elegantes
-        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        'medium': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        'hard': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        // Glow effects para el verde neón
-        'glow-sm': '0 0 10px rgba(74, 230, 0, 0.3)',
-        'glow': '0 0 20px rgba(74, 230, 0, 0.4), 0 0 40px rgba(74, 230, 0, 0.2)',
-        'glow-lg': '0 0 30px rgba(74, 230, 0, 0.5), 0 0 60px rgba(74, 230, 0, 0.3)',
+        // Sombras Sutiles Estilo Stripe/Linear
+        'soft': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'medium': '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'hard': '0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
         'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        // Dark mode shadows
-        'dark-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2)',
-        'dark-md': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
-        'dark-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
+        // Dark mode shadows más sutiles
+        'dark-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.3)',
+        'dark-md': '0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3)',
+        'dark-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4)',
+        // Glow effects MUY sutiles (solo para hover estados especiales)
+        'glow-sm': '0 0 10px rgba(100, 116, 139, 0.15)',
+        'glow': '0 0 20px rgba(100, 116, 139, 0.2)',
       },
       animation: {
-        'fade-in': 'fadeIn 0.4s ease-out',
-        'fade-out': 'fadeOut 0.3s ease-in',
-        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        'slide-down': 'slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        'slide-left': 'slideLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        'slide-right': 'slideRight 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        'scale-in': 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        'scale-out': 'scaleOut 0.2s cubic-bezier(0.4, 0, 1, 1)',
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'fade-out': 'fadeOut 0.2s ease-in',
+        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'slide-down': 'slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'slide-left': 'slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'slide-right': 'slideRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'scale-in': 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+        'scale-out': 'scaleOut 0.15s cubic-bezier(0.4, 0, 1, 1)',
         'spin-slow': 'spin 3s linear infinite',
-        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-        'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -128,40 +166,28 @@ export default {
           '100%': { opacity: '0' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
         slideDown: {
-          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '0%': { transform: 'translateY(-10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
         slideLeft: {
-          '0%': { transform: 'translateX(20px)', opacity: '0' },
+          '0%': { transform: 'translateX(10px)', opacity: '0' },
           '100%': { transform: 'translateX(0)', opacity: '1' },
         },
         slideRight: {
-          '0%': { transform: 'translateX(-20px)', opacity: '0' },
+          '0%': { transform: 'translateX(-10px)', opacity: '0' },
           '100%': { transform: 'translateX(0)', opacity: '1' },
         },
         scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '0%': { transform: 'scale(0.98)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
         scaleOut: {
           '0%': { transform: 'scale(1)', opacity: '1' },
-          '100%': { transform: 'scale(0.95)', opacity: '0' },
-        },
-        pulseGlow: {
-          '0%, 100%': { 
-            boxShadow: '0 0 20px rgba(74, 230, 0, 0.4), 0 0 40px rgba(74, 230, 0, 0.2)' 
-          },
-          '50%': { 
-            boxShadow: '0 0 30px rgba(74, 230, 0, 0.6), 0 0 60px rgba(74, 230, 0, 0.3)' 
-          },
-        },
-        bounceSubtle: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
+          '100%': { transform: 'scale(0.98)', opacity: '0' },
         },
       },
       backdropBlur: {
@@ -171,7 +197,7 @@ export default {
         '4xl': '2rem',
       },
       transitionTimingFunction: {
-        'apple': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'smooth': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

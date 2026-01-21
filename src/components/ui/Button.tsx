@@ -25,14 +25,14 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${variantClasses[variant]} ${className} transition-transform hover:scale-105 active:scale-95`}
+      className={`${variantClasses[variant]} ${className} inline-flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95`}
       disabled={disabled || loading}
       {...props}
     >
       {loading ? (
         <>
           <svg
-            className="animate-spin h-5 w-5"
+            className="animate-spin h-4 w-4"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -55,8 +55,8 @@ export const Button: React.FC<ButtonProps> = ({
         </>
       ) : (
         <>
-          {icon && <span className="flex-shrink-0">{icon}</span>}
-          <span>{children}</span>
+          {icon && <span className="inline-flex items-center justify-center w-4 h-4 [&>svg]:w-full [&>svg]:h-full">{icon}</span>}
+          {children && <span>{children}</span>}
         </>
       )}
     </button>

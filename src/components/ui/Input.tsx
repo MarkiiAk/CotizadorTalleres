@@ -30,7 +30,11 @@ export const Input: React.FC<InputProps> = ({
           </div>
         )}
         <input
-          className={`${icon ? 'pl-10' : ''} ${error ? 'input-error' : 'input'} ${className}`}
+          className={`w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 ${
+            error 
+              ? 'border-red-500 focus:border-red-600' 
+              : 'border-gray-300 dark:border-gray-700 focus:border-green-600 dark:focus:border-green-500'
+          } rounded-lg text-gray-900 dark:text-gray-50 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-0 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed ${icon ? 'pl-10' : ''} ${className}`}
           {...props}
         />
       </div>

@@ -11,7 +11,6 @@ export const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState<string>('todas');
-  const [showFilters, setShowFilters] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 

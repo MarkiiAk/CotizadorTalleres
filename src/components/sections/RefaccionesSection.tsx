@@ -3,7 +3,11 @@ import { Plus, X, Package } from 'lucide-react';
 import { Card, Input, Button } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
-export const RefaccionesSection: React.FC = () => {
+interface RefaccionesSectionProps {
+  disabled?: boolean;
+}
+
+export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled = false }) => {
   const { presupuesto, addRefaccion, deleteRefaccion } = usePresupuestoStore();
   const { refacciones } = presupuesto;
   
@@ -72,6 +76,7 @@ export const RefaccionesSection: React.FC = () => {
                 onClick={() => deleteRefaccion(refaccion.id)}
                 icon={<X size={16} />}
                 className="!p-2"
+                disabled={disabled}
               >
                 Eliminar
               </Button>
@@ -87,6 +92,7 @@ export const RefaccionesSection: React.FC = () => {
           onClick={() => setShowForm(true)}
           icon={<Plus size={20} />}
           className="w-full"
+          disabled={disabled}
         >
           Agregar Refacción
         </Button>
@@ -102,6 +108,7 @@ export const RefaccionesSection: React.FC = () => {
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               required
+              disabled={disabled}
             />
 
             <Input
@@ -112,6 +119,7 @@ export const RefaccionesSection: React.FC = () => {
               onChange={(e) => setCantidad(e.target.value)}
               min="1"
               required
+              disabled={disabled}
             />
 
             <Input
@@ -123,6 +131,7 @@ export const RefaccionesSection: React.FC = () => {
               min="0"
               step="0.01"
               required
+              disabled={disabled}
             />
           </div>
 
@@ -141,6 +150,7 @@ export const RefaccionesSection: React.FC = () => {
               onClick={handleAddRefaccion}
               icon={<Plus size={20} />}
               disabled={
+                disabled ||
                 !nombre ||
                 !cantidad ||
                 !costoUnitario ||
@@ -158,6 +168,7 @@ export const RefaccionesSection: React.FC = () => {
                 setCantidad('');
                 setCostoUnitario('');
               }}
+              disabled={disabled}
             >
               Cancelar
             </Button>

@@ -3,7 +3,11 @@ import { Plus, X, HardHat } from 'lucide-react';
 import { Card, Input, Button } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
-export const ManoObraSection: React.FC = () => {
+interface ManoObraSectionProps {
+  disabled?: boolean;
+}
+
+export const ManoObraSection: React.FC<ManoObraSectionProps> = ({ disabled = false }) => {
   const { presupuesto, addManoDeObra, deleteManoDeObra } = usePresupuestoStore();
   const { manoDeObra } = presupuesto;
   
@@ -64,6 +68,7 @@ export const ManoObraSection: React.FC = () => {
                 onClick={() => deleteManoDeObra(item.id)}
                 icon={<X size={16} />}
                 className="!p-2"
+                disabled={disabled}
               >
                 Eliminar
               </Button>
@@ -79,6 +84,7 @@ export const ManoObraSection: React.FC = () => {
           onClick={() => setShowForm(true)}
           icon={<Plus size={20} />}
           className="w-full"
+          disabled={disabled}
         >
           Agregar Mano de Obra
         </Button>
@@ -94,6 +100,7 @@ export const ManoObraSection: React.FC = () => {
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
               required
+              disabled={disabled}
             />
 
             <Input
@@ -105,6 +112,7 @@ export const ManoObraSection: React.FC = () => {
               min="0"
               step="0.01"
               required
+              disabled={disabled}
             />
           </div>
 
@@ -114,6 +122,7 @@ export const ManoObraSection: React.FC = () => {
               onClick={handleAddManoObra}
               icon={<Plus size={20} />}
               disabled={
+                disabled ||
                 !descripcion ||
                 !precio ||
                 parseFloat(precio) <= 0
@@ -128,6 +137,7 @@ export const ManoObraSection: React.FC = () => {
                 setDescripcion('');
                 setPrecio('');
               }}
+              disabled={disabled}
             >
               Cancelar
             </Button>

@@ -4,7 +4,11 @@ import { Card, Input, Button } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 import { DanoVehiculo } from '../../types';
 
-export const InspeccionSection: React.FC = () => {
+interface InspeccionSectionProps {
+  disabled?: boolean;
+}
+
+export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled = false }) => {
   const { presupuesto } = usePresupuestoStore();
   
   // Asegurar que inspeccion siempre tenga una estructura válida
@@ -143,7 +147,8 @@ export const InspeccionSection: React.FC = () => {
           type="checkbox"
           checked={checked}
           onChange={onChange}
-          className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 cursor-pointer"
+          disabled={disabled}
+          className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         />
         <span className={`text-sm font-medium transition-colors ${
           checked 
@@ -325,7 +330,8 @@ export const InspeccionSection: React.FC = () => {
                   </div>
                   <button
                     onClick={() => eliminarDano(dano.id)}
-                    className="flex-shrink-0 p-1.5 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                    disabled={disabled}
+                    className="flex-shrink-0 p-1.5 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Eliminar daño"
                   >
                     <X size={18} />
@@ -343,24 +349,27 @@ export const InspeccionSection: React.FC = () => {
                 placeholder="Ej: Puerta delantera izq."
                 value={nuevoDano.ubicacion}
                 onChange={(e) => setNuevoDano({ ...nuevoDano, ubicacion: e.target.value })}
+                disabled={disabled}
               />
               <Input
                 label="Tipo de Daño"
                 placeholder="Ej: Rayón, Golpe, Abolladura"
                 value={nuevoDano.tipo}
                 onChange={(e) => setNuevoDano({ ...nuevoDano, tipo: e.target.value })}
+                disabled={disabled}
               />
               <Input
                 label="Descripción (opcional)"
                 placeholder="Detalles adicionales"
                 value={nuevoDano.descripcion}
                 onChange={(e) => setNuevoDano({ ...nuevoDano, descripcion: e.target.value })}
+                disabled={disabled}
               />
             </div>
             <Button
               variant="secondary"
               onClick={agregarDano}
-              disabled={!nuevoDano.ubicacion || !nuevoDano.tipo}
+              disabled={disabled || !nuevoDano.ubicacion || !nuevoDano.tipo}
               className="w-full md:w-auto md:min-w-[180px]"
             >
              + Agregar Daño

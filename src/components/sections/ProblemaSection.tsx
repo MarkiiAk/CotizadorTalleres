@@ -1,9 +1,13 @@
 import React from 'react';
-import { FileText, Stethoscope } from 'lucide-react';
+import { AlertCircle, FileText, Stethoscope } from 'lucide-react';
 import { Card } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
-export const ProblemaSection: React.FC = () => {
+interface ProblemaSectionProps {
+  disabled?: boolean;
+}
+
+export const ProblemaSection: React.FC<ProblemaSectionProps> = ({ disabled = false }) => {
   const { presupuesto } = usePresupuestoStore();
 
   const handleChange = (field: 'problemaReportado' | 'diagnosticoTecnico') => (
@@ -30,9 +34,10 @@ export const ProblemaSection: React.FC = () => {
           <textarea
             value={presupuesto.problemaReportado}
             onChange={handleChange('problemaReportado')}
-            rows={4}
-            placeholder="Describe el problema que reporta el cliente con sus propias palabras..."
-            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none"
+            placeholder="Describe el problema o servicio solicitado por el cliente..."
+            rows={6}
+            disabled={disabled}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Registra exactamente lo que el cliente menciona sobre el problema del vehículo.
@@ -50,7 +55,8 @@ export const ProblemaSection: React.FC = () => {
             onChange={handleChange('diagnosticoTecnico')}
             rows={5}
             placeholder="Describe el diagnóstico técnico realizado, incluyendo pruebas, verificaciones y conclusiones..."
-            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none"
+            disabled={disabled}
+            className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Incluye el resultado de la inspección técnica, las causas identificadas y las reparaciones necesarias.

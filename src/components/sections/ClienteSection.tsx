@@ -1,9 +1,13 @@
 import React from 'react';
-import { User, Phone, Mail, MapPin } from 'lucide-react';
+import { User, Phone, Mail } from 'lucide-react';
 import { Card, Input } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
-export const ClienteSection: React.FC = () => {
+interface ClienteSectionProps {
+  disabled?: boolean;
+}
+
+export const ClienteSection: React.FC<ClienteSectionProps> = ({ disabled = false }) => {
   const { presupuesto, updateCliente } = usePresupuestoStore();
   const { cliente } = presupuesto;
 
@@ -27,33 +31,27 @@ export const ClienteSection: React.FC = () => {
           onChange={handleChange('nombreCompleto')}
           icon={<User size={20} />}
           required
+          disabled={disabled}
         />
         
         <Input
           label="Teléfono"
-          type="tel"
-          placeholder="Ej: 55 1234 5678"
+          placeholder="Ej: 555-123-4567"
           value={cliente.telefono}
           onChange={handleChange('telefono')}
           icon={<Phone size={20} />}
           required
+          disabled={disabled}
         />
         
         <Input
           label="Correo Electrónico"
           type="email"
-          placeholder="Ej: cliente@ejemplo.com"
+          placeholder="correo@ejemplo.com"
           value={cliente.email}
           onChange={handleChange('email')}
           icon={<Mail size={20} />}
-        />
-        
-        <Input
-          label="Domicilio"
-          placeholder="Ej: Calle Principal #123, Col. Centro"
-          value={cliente.domicilio}
-          onChange={handleChange('domicilio')}
-          icon={<MapPin size={20} />}
+          disabled={disabled}
         />
       </div>
     </Card>

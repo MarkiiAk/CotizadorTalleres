@@ -1,5 +1,5 @@
 import React from 'react';
-import { Car, Palette, CreditCard, Gauge, Calendar } from 'lucide-react';
+import { Car, Palette, CreditCard, Gauge } from 'lucide-react';
 import { Card, Input, FuelGauge } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 

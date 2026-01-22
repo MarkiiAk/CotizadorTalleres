@@ -34,6 +34,7 @@ interface PresupuestoState {
   
   // Resumen financiero
   updateAnticipo: (anticipo: number) => void;
+  toggleIVA: (incluir: boolean) => void;
   calcularResumen: () => void;
   
   // Tema
@@ -131,6 +132,9 @@ const initialPresupuesto: Presupuesto = {
     refacciones: 0,
     manoDeObra: 0,
     subtotal: 0,
+    incluirIVA: false,
+    iva: 0,
+    total: 0,
     anticipo: 0,
     restante: 0,
   },
@@ -338,17 +342,47 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
 
   // Actualizar anticipo
   updateAnticipo: (anticipo) => {
-    set((state) => ({
-      presupuesto: {
-        ...state.presupuesto,
-        resumen: {
-          ...state.presupuesto.resumen,
-          anticipo,
-          restante: state.presupuesto.resumen.subtotal - anticipo,
+    set((state) => {
+      const total = state.presupuesto.resumen.incluirIVA 
+        ? state.presupuesto.resumen.subtotal * 1.16 
+        : state.presupuesto.resumen.subtotal;
+      
+      return {
+        presupuesto: {
+          ...state.presupuesto,
+          resumen: {
+            ...state.presupuesto.resumen,
+            anticipo,
+            restante: total - anticipo,
+          },
         },
-      },
-      hasUnsavedChanges: true,
-    }));
+        hasUnsavedChanges: true,
+      };
+    });
+  },
+
+  // Toggle IVA
+  toggleIVA: (incluir) => {
+    set((state) => {
+      const subtotal = state.presupuesto.resumen.subtotal;
+      const iva = incluir ? subtotal * 0.16 : 0;
+      const total = incluir ? subtotal * 1.16 : subtotal;
+      const restante = total - state.presupuesto.resumen.anticipo;
+
+      return {
+        presupuesto: {
+          ...state.presupuesto,
+          resumen: {
+            ...state.presupuesto.resumen,
+            incluirIVA: incluir,
+            iva,
+            total,
+            restante,
+          },
+        },
+        hasUnsavedChanges: true,
+      };
+    });
   },
 
   // Calcular resumen financiero
@@ -367,7 +401,10 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
         0
       );
       const subtotal = serviciosTotal + refaccionesTotal + manoDeObraTotal;
-      const restante = subtotal - state.presupuesto.resumen.anticipo;
+      const incluirIVA = state.presupuesto.resumen.incluirIVA;
+      const iva = incluirIVA ? subtotal * 0.16 : 0;
+      const total = incluirIVA ? subtotal * 1.16 : subtotal;
+      const restante = total - state.presupuesto.resumen.anticipo;
 
       return {
         presupuesto: {
@@ -377,6 +414,9 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
             refacciones: refaccionesTotal,
             manoDeObra: manoDeObraTotal,
             subtotal,
+            incluirIVA,
+            iva,
+            total,
             anticipo: state.presupuesto.resumen.anticipo,
             restante,
           },

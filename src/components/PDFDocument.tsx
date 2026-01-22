@@ -352,10 +352,28 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
             <Text>Mano de Obra:</Text>
             <Text style={styles.label}>{formatCurrency(presupuesto.resumen?.manoDeObra || 0)}</Text>
           </View>
-          <View style={styles.resumenTotal}>
-            <Text>TOTAL:</Text>
-            <Text>{formatCurrency(presupuesto.resumen?.subtotal || 0)}</Text>
+          <View style={[styles.resumenRow, { marginTop: 5, paddingTop: 5, borderTop: '1px solid #d1d5db' }]}>
+            <Text>Subtotal:</Text>
+            <Text style={styles.label}>{formatCurrency(presupuesto.resumen?.subtotal || 0)}</Text>
           </View>
+          {presupuesto.resumen?.incluirIVA && (
+            <>
+              <View style={styles.resumenRow}>
+                <Text>IVA (16%):</Text>
+                <Text style={styles.label}>{formatCurrency(presupuesto.resumen.iva || 0)}</Text>
+              </View>
+              <View style={styles.resumenTotal}>
+                <Text>TOTAL CON IVA:</Text>
+                <Text>{formatCurrency(presupuesto.resumen.total || 0)}</Text>
+              </View>
+            </>
+          )}
+          {!presupuesto.resumen?.incluirIVA && (
+            <View style={styles.resumenTotal}>
+              <Text>TOTAL:</Text>
+              <Text>{formatCurrency(presupuesto.resumen?.subtotal || 0)}</Text>
+            </View>
+          )}
           {presupuesto.resumen?.anticipo > 0 && (
             <>
               <View style={[styles.resumenRow, { color: '#16a34a', marginTop: 5 }]}>

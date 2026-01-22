@@ -87,6 +87,9 @@ export interface ResumenFinanciero {
   refacciones: number;
   manoDeObra: number;
   subtotal: number;
+  incluirIVA: boolean;
+  iva: number;
+  total: number;
   anticipo: number;
   restante: number;
 }

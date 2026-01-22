@@ -72,6 +72,7 @@ export interface Diagnostico {
 
 export interface Totales {
   subtotal: number;
+  incluirIVA: boolean;
   iva: number;
   total: number;
 }

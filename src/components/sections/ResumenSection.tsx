@@ -4,7 +4,7 @@ import { Card, Input } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
 export const ResumenSection: React.FC = () => {
-  const { presupuesto, updateAnticipo } = usePresupuestoStore();
+  const { presupuesto, updateAnticipo, toggleIVA } = usePresupuestoStore();
   const { resumen } = presupuesto;
   const [anticipoDisplay, setAnticipoDisplay] = React.useState('');
 
@@ -131,6 +131,46 @@ export const ResumenSection: React.FC = () => {
           </div>
         </div>
 
+        {/* IVA Toggle */}
+        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="incluir-iva"
+                checked={resumen.incluirIVA}
+                onChange={(e) => toggleIVA(e.target.checked)}
+                className="w-5 h-5 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2 cursor-pointer"
+              />
+              <label
+                htmlFor="incluir-iva"
+                className="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
+              >
+                Incluir IVA (16%)
+              </label>
+            </div>
+            {resumen.incluirIVA && (
+              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {formatCurrency(resumen.iva)}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Total (si incluye IVA) */}
+        {resumen.incluirIVA && (
+          <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border-2 border-green-300 dark:border-green-700">
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                Total con IVA
+              </span>
+              <span className="text-3xl font-bold text-green-700 dark:text-green-400">
+                {formatCurrency(resumen.total)}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Anticipo */}
         <div className="space-y-3">
           <Input
@@ -151,7 +191,7 @@ export const ResumenSection: React.FC = () => {
                   Porcentaje del anticipo:
                 </span>
                 <span className="font-semibold text-gray-900 dark:text-gray-100">
-                  {((resumen.anticipo / resumen.subtotal) * 100).toFixed(1)}%
+                  {((resumen.anticipo / (resumen.incluirIVA ? resumen.total : resumen.subtotal)) * 100).toFixed(1)}%
                 </span>
               </div>
             </div>

@@ -274,14 +274,18 @@ export const PrintablePresupuesto: React.FC<PrintablePresupuestoProps> = ({ pres
                 </tr>
               </thead>
               <tbody>
-                {presupuesto.refacciones.map((refaccion, idx) => (
-                  <tr key={idx}>
-                    <td style={styles.td}>{refaccion.nombre}</td>
-                    <td style={{ ...styles.td, textAlign: 'center' }}>{refaccion.cantidad}</td>
-                    <td style={{ ...styles.td, textAlign: 'right' }}>{formatCurrency(refaccion.precioVenta)}</td>
-                    <td style={{ ...styles.td, textAlign: 'right' }}>{formatCurrency(refaccion.total)}</td>
-                  </tr>
-                ))}
+                {presupuesto.refacciones.map((refaccion, idx) => {
+                  // Calcular precio unitario con el 30% incluido
+                  const precioUnitario = refaccion.total / refaccion.cantidad;
+                  return (
+                    <tr key={idx}>
+                      <td style={styles.td}>{refaccion.nombre}</td>
+                      <td style={{ ...styles.td, textAlign: 'center' }}>{refaccion.cantidad}</td>
+                      <td style={{ ...styles.td, textAlign: 'right' }}>{formatCurrency(precioUnitario)}</td>
+                      <td style={{ ...styles.td, textAlign: 'right' }}>{formatCurrency(refaccion.total)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

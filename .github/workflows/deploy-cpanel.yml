@@ -55,12 +55,10 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT || 21 }}
           
-          # Carpeta local que se subirá (la compilada)
-          local-dir: ./dist/
+          # Carpeta local: SIN barra al final para que tome el contenido de dist
+          local-dir: dist
           
-          # Carpeta remota en tu cPanel
-          # La barra al final hace que copie EL CONTENIDO de dist/ dentro de public_html/
-          # Primero debes ELIMINAR manualmente la carpeta public_html/public_html desde cPanel
+          # Carpeta remota: CON barra al final para indicar que es una carpeta destino
           server-dir: public_html/
           
           # Configuraciones importantes

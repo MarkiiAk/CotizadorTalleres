@@ -58,8 +58,10 @@ jobs:
           # Carpeta local que se subirá (la compilada)
           local-dir: ./dist/
           
-          # Carpeta remota en tu cPanel (ajusta según tu necesidad)
-          server-dir: ${{ secrets.FTP_SERVER_DIR || '/public_html/' }}
+          # Carpeta remota en tu cPanel
+          # El "/" al final es importante para copiar EL CONTENIDO dentro de public_html
+          # Sin el "/" copiaría la carpeta dist dentro de public_html
+          server-dir: /public_html/
           
           # Configuraciones importantes
           dangerous-clean-slate: false  # NO borra todo antes de subir (más seguro)

@@ -14,23 +14,26 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
   const [showForm, setShowForm] = useState(false);
   const [nombre, setNombre] = useState('');
   const [cantidad, setCantidad] = useState('');
-  const [costoUnitario, setCostoUnitario] = useState('');
+  const [precioCosto, setPrecioCosto] = useState('');
+  const [margenGanancia] = useState(30); // 30% fijo de ganancia
 
   const handleAddRefaccion = () => {
     const cantidadNum = parseInt(cantidad);
-    const costoNum = parseFloat(costoUnitario);
+    const precioCostoNum = parseFloat(precioCosto);
 
-    if (nombre && cantidadNum > 0 && costoNum > 0) {
+    if (nombre && cantidadNum > 0 && precioCostoNum > 0) {
       addRefaccion({
         nombre,
         cantidad: cantidadNum,
-        costoUnitario: costoNum,
+        precioCosto: precioCostoNum,
+        precioVenta: 0, // Se calcula automáticamente en el store
+        margenGanancia,
       });
       
       // Reset form
       setNombre('');
       setCantidad('');
-      setCostoUnitario('');
+      setPrecioCosto('');
       setShowForm(false);
     }
   };
@@ -64,7 +67,7 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
                   </p>
                   <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
                     <span>Cant: {refaccion.cantidad}</span>
-                    <span>Unitario: {formatCurrency(refaccion.costoUnitario)}</span>
+                    <span>Precio Unit: {formatCurrency(refaccion.precioVenta)}</span>
                     <span className="font-semibold text-gray-900 dark:text-gray-100">
                       Total: {formatCurrency(refaccion.total)}
                     </span>
@@ -129,11 +132,11 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
             />
 
             <Input
-              label="Costo Unitario"
+              label="Precio de Costo"
               type="number"
               placeholder="0.00"
-              value={costoUnitario}
-              onChange={(e) => setCostoUnitario(e.target.value)}
+              value={precioCosto}
+              onChange={(e) => setPrecioCosto(e.target.value)}
               min="0"
               step="0.01"
               required
@@ -141,12 +144,42 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
             />
           </div>
 
-          {cantidad && costoUnitario && parseInt(cantidad) > 0 && parseFloat(costoUnitario) > 0 && (
-            <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                <span className="font-medium">Total estimado:</span>{' '}
-                {formatCurrency(parseInt(cantidad) * parseFloat(costoUnitario))}
-              </p>
+          {cantidad && precioCosto && parseInt(cantidad) > 0 && parseFloat(precioCosto) > 0 && (
+            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-700 dark:text-gray-300">Precio de Costo:</span>
+                <span className="font-medium text-gray-900 dark:text-gray-100">
+                  {formatCurrency(parseFloat(precioCosto))}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-green-700 dark:text-green-300">
+                  Margen de Ganancia ({margenGanancia}%):
+                </span>
+                <span className="font-medium text-green-700 dark:text-green-300">
+                  + {formatCurrency(parseFloat(precioCosto) * (margenGanancia / 100))}
+                </span>
+              </div>
+              <div className="h-px bg-green-200 dark:bg-green-800"></div>
+              <div className="flex justify-between text-base">
+                <span className="font-semibold text-gray-900 dark:text-gray-100">
+                  Precio de Venta:
+                </span>
+                <span className="font-bold text-green-600 dark:text-green-400">
+                  {formatCurrency(parseFloat(precioCosto) * (1 + margenGanancia / 100))}
+                </span>
+              </div>
+              <div className="h-px bg-green-200 dark:bg-green-800"></div>
+              <div className="flex justify-between text-base">
+                <span className="font-semibold text-gray-900 dark:text-gray-100">
+                  Total Estimado:
+                </span>
+                <span className="font-bold text-primary-600 dark:text-primary-400">
+                  {formatCurrency(
+                    parseInt(cantidad) * parseFloat(precioCosto) * (1 + margenGanancia / 100)
+                  )}
+                </span>
+              </div>
             </div>
           )}
 
@@ -159,9 +192,9 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
                 disabled ||
                 !nombre ||
                 !cantidad ||
-                !costoUnitario ||
+                !precioCosto ||
                 parseInt(cantidad) <= 0 ||
-                parseFloat(costoUnitario) <= 0
+                parseFloat(precioCosto) <= 0
               }
             >
               Agregar
@@ -172,7 +205,7 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
                 setShowForm(false);
                 setNombre('');
                 setCantidad('');
-                setCostoUnitario('');
+                setPrecioCosto('');
               }}
               disabled={disabled}
             >

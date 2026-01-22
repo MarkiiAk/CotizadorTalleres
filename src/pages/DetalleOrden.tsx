@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { usePresupuestoStore } from '../store/usePresupuestoStore';
 import { localStorageService } from '../services/localStorage';
 import { GarageLoader } from '../components/ui/GarageLoader';
+import { mergePDFWithGarantia } from '../utils/pdfMerger';
 import {
   ClienteSection,
   VehiculoSection,
@@ -74,8 +75,14 @@ export const DetalleOrden = () => {
 
   const handleGeneratePDF = async () => {
     try {
-      const blob = await pdf(<PDFDocument presupuesto={presupuesto} />).toBlob();
-      const url = URL.createObjectURL(blob);
+      // Generar el PDF del presupuesto
+      const presupuestoBlob = await pdf(<PDFDocument presupuesto={presupuesto} />).toBlob();
+      
+      // Fusionar con el PDF de garantía
+      const mergedBlob = await mergePDFWithGarantia(presupuestoBlob);
+      
+      // Descargar el PDF fusionado
+      const url = URL.createObjectURL(mergedBlob);
       const link = document.createElement('a');
       link.href = url;
       link.download = `SAG_Garage_Presupuesto_${presupuesto.folio}.pdf`;

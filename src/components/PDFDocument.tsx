@@ -207,7 +207,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         </View>
 
         {/* Información del Cliente y Vehículo */}
-        <View style={styles.row}>
+        <View style={styles.row} wrap={false}>
           <View style={[styles.column, styles.card]}>
             <Text style={styles.cardTitle}>Información del Cliente</Text>
             <Text style={styles.infoRow}>
@@ -259,7 +259,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
 
         {/* Problema y Diagnóstico */}
         {(presupuesto.problemaReportado || presupuesto.diagnosticoTecnico) && (
-          <View style={styles.card}>
+          <View style={styles.card} wrap={false}>
             <Text style={styles.cardTitle}>Problema y Diagnóstico</Text>
             {presupuesto.problemaReportado && (
               <View style={{ marginBottom: 5 }}>
@@ -278,7 +278,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
 
         {/* Servicios */}
         {presupuesto.servicios && presupuesto.servicios.length > 0 && (
-          <View style={styles.card}>
+          <View style={styles.card} wrap={false}>
             <Text style={styles.cardTitle}>Servicios a Realizar</Text>
             <View style={styles.table}>
               <View style={styles.tableHeader}>
@@ -297,7 +297,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
 
         {/* Refacciones */}
         {presupuesto.refacciones && presupuesto.refacciones.length > 0 && (
-          <View style={styles.card}>
+          <View style={styles.card} wrap={false}>
             <Text style={styles.cardTitle}>Refacciones</Text>
             <View style={styles.table}>
               <View style={styles.tableHeader}>
@@ -324,7 +324,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
 
         {/* Mano de Obra */}
         {presupuesto.manoDeObra && presupuesto.manoDeObra.length > 0 && (
-          <View style={styles.card}>
+          <View style={styles.card} wrap={false}>
             <Text style={styles.cardTitle}>Mano de Obra</Text>
             <View style={styles.table}>
               <View style={styles.tableHeader}>
@@ -342,7 +342,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         )}
 
         {/* Resumen Financiero */}
-        <View style={styles.resumenBox}>
+        <View style={styles.resumenBox} wrap={false}>
           <Text style={styles.cardTitle}>Resumen Financiero</Text>
           <View style={styles.resumenRow}>
             <Text>Servicios:</Text>
@@ -393,7 +393,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         </View>
 
         {/* Firmas */}
-        <View style={styles.firmasContainer}>
+        <View style={styles.firmasContainer} wrap={false}>
           <View style={styles.firmaBox}>
             <View style={styles.firmaLine}>
               <Text style={styles.label}>Firma del Cliente</Text>

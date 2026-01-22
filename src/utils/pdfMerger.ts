@@ -11,10 +11,12 @@ export async function mergePDFWithGarantia(generatedPdfBlob: Blob): Promise<Blob
     const generatedPdfBytes = await generatedPdfBlob.arrayBuffer();
     const generatedPdf = await PDFDocument.load(generatedPdfBytes);
 
-    // Cargar el PDF de garantía desde public
-    const garantiaResponse = await fetch('/Garantia.pdf');
+    // Cargar el PDF de garantía desde public (con base path correcto)
+    const baseUrl = import.meta.env.BASE_URL || '/';
+    const garantiaUrl = `${baseUrl}Garantia.pdf`.replace('//', '/');
+    const garantiaResponse = await fetch(garantiaUrl);
     if (!garantiaResponse.ok) {
-      throw new Error('No se pudo cargar el PDF de garantía');
+      throw new Error(`No se pudo cargar el PDF de garantía desde ${garantiaUrl}`);
     }
     const garantiaPdfBytes = await garantiaResponse.arrayBuffer();
     const garantiaPdf = await PDFDocument.load(garantiaPdfBytes);

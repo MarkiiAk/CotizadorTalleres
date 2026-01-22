@@ -5,20 +5,20 @@ import { Presupuesto } from '../types';
 // Estilos para el PDF
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 40,
     fontSize: 10,
     fontFamily: 'Helvetica',
   },
   // Header
   header: {
-    marginBottom: 20,
-    borderBottom: '3px solid #2563eb',
+    marginBottom: 15,
+    borderBottom: '3px solid #10b981',
     paddingBottom: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#10b981',
     marginBottom: 5,
   },
   subtitle: {
@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
     border: '1px solid #d1d5db',
     borderRadius: 4,
     padding: 10,
-    marginBottom: 15,
+    marginBottom: 12,
   },
   cardTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#10b981',
     marginBottom: 8,
     paddingBottom: 5,
     borderBottom: '1px solid #d1d5db',
@@ -86,16 +86,17 @@ const styles = StyleSheet.create({
   col5: { width: '20%', textAlign: 'right' },
   // Resumen
   resumenBox: {
-    border: '2px solid #2563eb',
+    border: '2px solid #10b981',
     borderRadius: 4,
-    padding: 10,
-    backgroundColor: '#eff6ff',
+    padding: 12,
+    backgroundColor: '#ecfdf5',
     marginBottom: 15,
+    marginTop: 10,
   },
   resumenRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    marginBottom: 5,
     fontSize: 9,
   },
   resumenTotal: {
@@ -103,17 +104,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 8,
     paddingTop: 8,
-    borderTop: '2px solid #2563eb',
+    borderTop: '2px solid #10b981',
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#10b981',
   },
   // Firmas
   firmasContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 30,
-    paddingTop: 20,
+    marginTop: 25,
+    paddingTop: 15,
     borderTop: '2px solid #d1d5db',
   },
   firmaBox: {

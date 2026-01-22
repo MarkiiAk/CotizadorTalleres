@@ -58,8 +58,9 @@ jobs:
           # Carpeta local que se subirá (compilada por Vite)
           local-dir: dist/
           
-          # Carpeta remota en cPanel donde se copiará el contenido
-          server-dir: public_html/
+          # Carpeta remota - usar la raíz del usuario FTP que ya apunta a public_html
+          # NO especificar public_html/ porque el usuario FTP ya está en ese directorio
+          server-dir: ./
           
           # IMPORTANTE: Esta opción borrará TODO en public_html/ antes de subir
           # Esto previene carpetas duplicadas y asegura un deploy limpio

@@ -28,11 +28,10 @@ jobs:
       - name: 📦 Instalar dependencias
         run: npm ci
 
-      # 4. Compilar el proyecto (crear carpeta dist/)
-      - name: 🏗️ Build proyecto
+      # 4. Compilar el proyecto React (crear carpeta dist/ con subfolder gestion/)
+      - name: 🏗️ Build proyecto React
         run: npm run build
         env:
-          # Variables de entorno para el build (si las necesitas)
           NODE_ENV: production
 
       # 5. Verificar que el build se creó correctamente
@@ -45,26 +44,70 @@ jobs:
           echo "✅ Build generado correctamente"
           ls -la dist/
 
-      # 6. Subir archivos a cPanel vía FTP
-      - name: 🚀 Deploy a cPanel
+      # 6. Preparar estructura de deploy con sitio público
+      - name: 📦 Preparar estructura de deploy
+        run: |
+          echo "📁 Creando estructura de deploy..."
+          mkdir -p deploy-temp
+          
+          # Copiar el sitio público (index.html + logo) a la raíz
+          echo "📄 Copiando sitio público..."
+          cp public-site/index.html deploy-temp/
+          cp public-site/logo.jpg deploy-temp/
+          
+          # Copiar la aplicación React a la carpeta gestion/
+          echo "⚛️  Copiando aplicación React..."
+          cp -r dist deploy-temp/gestion
+          
+          echo "✅ Estructura preparada:"
+          ls -la deploy-temp/
+          echo ""
+          echo "📂 Contenido de gestion/:"
+          ls -la deploy-temp/gestion/
+
+      # 7. Subir sitio público (index.html + logo) a raíz de cPanel
+      - name: 🚀 Deploy sitio público a raíz
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          # Estas variables las configurarás en GitHub Secrets
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT || 21 }}
           
-          # Carpeta local que se subirá (compilada por Vite)
-          local-dir: dist/
-          
-          # Carpeta remota - usar la raíz del usuario FTP que ya apunta a public_html
-          # NO especificar public_html/ porque el usuario FTP ya está en ese directorio
+          # Subir solo el sitio público a la raíz
+          local-dir: deploy-temp/
           server-dir: ./
           
-          # IMPORTANTE: Esta opción borrará TODO en public_html/ antes de subir
-          # Esto previene carpetas duplicadas y asegura un deploy limpio
+          # NO usar dangerous-clean-slate aquí porque solo queremos actualizar archivos específicos
+          dangerous-clean-slate: false
+          
+          exclude: |
+            **/gestion/**
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.vscode/**
+            **/.DS_Store
+          
+          security: strict
+          timeout: 600000
+
+      # 8. Subir aplicación React a carpeta /gestion/
+      - name: 🚀 Deploy aplicación React a /gestion/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || 21 }}
+          
+          # Subir contenido de gestion/ a la carpeta remota /gestion/
+          local-dir: deploy-temp/gestion/
+          server-dir: ./gestion/
+          
+          # Limpiar solo la carpeta gestion/ antes de subir
           dangerous-clean-slate: true
+          
           exclude: |
             **/.git*
             **/.git*/**
@@ -72,10 +115,7 @@ jobs:
             **/.vscode/**
             **/.DS_Store
           
-          # Opciones de seguridad
           security: strict
-          
-          # Timeout en segundos
           timeout: 600000
 
       # 7. Notificación de éxito

@@ -8,7 +8,7 @@ import { DetalleOrden } from './pages/DetalleOrden';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/gestion">
       <AuthProvider>
         <Routes>
           {/* Ruta pública de login */}

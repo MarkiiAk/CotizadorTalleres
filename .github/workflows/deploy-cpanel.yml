@@ -58,9 +58,10 @@ jobs:
           # Carpeta local que se subirá (la compilada)
           local-dir: ./dist/
           
-          # Carpeta remota en tu cPanel (sin / al inicio ni al final)
-          # Esto copia el contenido de dist directamente en public_html
-          server-dir: public_html
+          # Carpeta remota en tu cPanel
+          # La barra al final hace que copie EL CONTENIDO de dist/ dentro de public_html/
+          # Primero debes ELIMINAR manualmente la carpeta public_html/public_html desde cPanel
+          server-dir: public_html/
           
           # Configuraciones importantes
           dangerous-clean-slate: false  # NO borra todo antes de subir (más seguro)

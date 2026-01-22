@@ -234,10 +234,16 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
   // Agregar refacción
   addRefaccion: (refaccion) => {
     set((state) => {
-      const total = refaccion.cantidad * refaccion.costoUnitario;
+      // Calcular precio de venta con el margen de ganancia (30% por defecto)
+      const margenGanancia = refaccion.margenGanancia || 30;
+      const precioVenta = refaccion.precioCosto * (1 + margenGanancia / 100);
+      const total = refaccion.cantidad * precioVenta;
+      
       const newRefaccion: Refaccion = {
         ...refaccion,
         id: generateId(),
+        precioVenta,
+        margenGanancia,
         total,
       };
       const newState = {
@@ -261,7 +267,15 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
           refacciones: state.presupuesto.refacciones.map((r) => {
             if (r.id === id) {
               const updated = { ...r, ...refaccion };
-              updated.total = updated.cantidad * updated.costoUnitario;
+              
+              // Si se actualiza el precio de costo o el margen, recalcular precio de venta
+              if (refaccion.precioCosto !== undefined || refaccion.margenGanancia !== undefined) {
+                const margenGanancia = updated.margenGanancia || 30;
+                updated.precioVenta = updated.precioCosto * (1 + margenGanancia / 100);
+              }
+              
+              // Recalcular total
+              updated.total = updated.cantidad * updated.precioVenta;
               return updated;
             }
             return r;

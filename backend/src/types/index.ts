@@ -40,10 +40,12 @@ export interface ManoObra {
 
 export interface Refaccion {
   id: string;
-  descripcion: string;
+  nombre: string;
   cantidad: number;
-  precioUnitario: number;
-  total: number;
+  precioCosto: number; // Precio de costo (lo que paga el taller)
+  precioVenta: number; // Precio de venta (con 30% de ganancia)
+  margenGanancia: number; // Porcentaje de ganancia (ej: 30)
+  total: number; // cantidad * precioVenta
 }
 
 export interface Inspeccion {

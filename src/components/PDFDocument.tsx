@@ -310,7 +310,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 <View key={idx} style={styles.tableRow}>
                   <Text style={styles.col1}>{refaccion.nombre}</Text>
                   <Text style={styles.col3}>{refaccion.cantidad}</Text>
-                  <Text style={styles.col4}>{formatCurrency(refaccion.costoUnitario)}</Text>
+                  <Text style={styles.col4}>{formatCurrency(refaccion.precioVenta)}</Text>
                   <Text style={styles.col5}>{formatCurrency(refaccion.total)}</Text>
                 </View>
               ))}

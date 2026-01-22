@@ -306,14 +306,18 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 <Text style={styles.col4}>P. Unit.</Text>
                 <Text style={styles.col5}>Total</Text>
               </View>
-              {presupuesto.refacciones.map((refaccion, idx) => (
-                <View key={idx} style={styles.tableRow}>
-                  <Text style={styles.col1}>{refaccion.nombre}</Text>
-                  <Text style={styles.col3}>{refaccion.cantidad}</Text>
-                  <Text style={styles.col4}>{formatCurrency(refaccion.precioVenta)}</Text>
-                  <Text style={styles.col5}>{formatCurrency(refaccion.total)}</Text>
-                </View>
-              ))}
+              {presupuesto.refacciones.map((refaccion, idx) => {
+                // Calcular precio unitario con el 30% incluido
+                const precioUnitario = refaccion.total / refaccion.cantidad;
+                return (
+                  <View key={idx} style={styles.tableRow}>
+                    <Text style={styles.col1}>{refaccion.nombre}</Text>
+                    <Text style={styles.col3}>{refaccion.cantidad}</Text>
+                    <Text style={styles.col4}>{formatCurrency(precioUnitario)}</Text>
+                    <Text style={styles.col5}>{formatCurrency(refaccion.total)}</Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
         )}

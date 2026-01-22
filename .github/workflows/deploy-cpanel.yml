@@ -59,11 +59,11 @@ jobs:
           local-dir: dist/
           
           # Carpeta remota en cPanel donde se copiará el contenido
-          # IMPORTANTE: Primero debes eliminar manualmente public_html/public_html desde cPanel
           server-dir: public_html/
           
-          # Configuraciones importantes
-          dangerous-clean-slate: false  # NO borra todo antes de subir (más seguro)
+          # IMPORTANTE: Esta opción borrará TODO en public_html/ antes de subir
+          # Esto previene carpetas duplicadas y asegura un deploy limpio
+          dangerous-clean-slate: true
           exclude: |
             **/.git*
             **/.git*/**

@@ -55,10 +55,11 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT || 21 }}
           
-          # Carpeta local: SIN barra al final para que tome el contenido de dist
-          local-dir: dist
+          # Carpeta local que se subirá (compilada por Vite)
+          local-dir: dist/
           
-          # Carpeta remota: CON barra al final para indicar que es una carpeta destino
+          # Carpeta remota en cPanel donde se copiará el contenido
+          # IMPORTANTE: Primero debes eliminar manualmente public_html/public_html desde cPanel
           server-dir: public_html/
           
           # Configuraciones importantes

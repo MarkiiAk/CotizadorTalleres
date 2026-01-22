@@ -1,6 +1,8 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Sun, Moon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { usePresupuestoStore } from '../store/usePresupuestoStore';
 import { Button } from '../components/ui/Button';
 
 export const Login = () => {
@@ -9,7 +11,17 @@ export const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { themeMode, toggleTheme } = usePresupuestoStore();
   const navigate = useNavigate();
+
+  // Aplicar el tema al documento
+  useEffect(() => {
+    if (themeMode === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [themeMode]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,6 +44,19 @@ export const Login = () => {
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-400/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl"></div>
       </div>
+
+      {/* Toggle tema - posición fija en la esquina superior derecha */}
+      <button
+        onClick={toggleTheme}
+        className="fixed top-6 right-6 z-50 p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+        title={`Cambiar a modo ${themeMode === 'light' ? 'oscuro' : 'claro'}`}
+      >
+        {themeMode === 'light' ? (
+          <Moon size={20} className="text-gray-600 dark:text-gray-300" />
+        ) : (
+          <Sun size={20} className="text-gray-600 dark:text-gray-300" />
+        )}
+      </button>
 
       <div className="w-full max-w-md relative">
         {/* Card principal */}

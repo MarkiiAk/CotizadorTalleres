@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Sun, Moon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { usePresupuestoStore } from '../store/usePresupuestoStore';
 import { localStorageService } from '../services/localStorage';
 import type { Orden } from '../types';
 import { Button } from '../components/ui/Button';
@@ -12,11 +14,21 @@ export const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState<string>('todas');
   const { user, logout } = useAuth();
+  const { themeMode, toggleTheme } = usePresupuestoStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     loadOrdenes();
   }, []);
+
+  // Aplicar el tema al documento
+  useEffect(() => {
+    if (themeMode === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [themeMode]);
 
   useEffect(() => {
     filterOrdenes();
@@ -127,6 +139,16 @@ export const Dashboard = () => {
                   <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{user?.rol}</p>
                 </div>
               </div>
+              
+              {/* Toggle tema */}
+              <Button
+                onClick={toggleTheme}
+                className="!p-2 bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                title={`Cambiar a modo ${themeMode === 'light' ? 'oscuro' : 'claro'}`}
+              >
+                {themeMode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </Button>
+
               <Button
                 onClick={handleLogout}
                 className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 hover:border-red-300 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/30"

@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { db } from '../models/database.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { LoginRequest } from '../types/index.js';
@@ -34,7 +34,7 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as string }
+      { expiresIn: '24h' }
     );
 
     const { password: _, ...userWithoutPassword } = user;

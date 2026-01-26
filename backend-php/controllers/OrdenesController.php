@@ -22,10 +22,10 @@ class OrdenesController {
                        c.nombre as cliente_nombre,
                        c.telefono as cliente_telefono,
                        v.marca, v.modelo, v.anio, v.placas
-                FROM ordenes o
+                FROM ordenes_servicio o
                 LEFT JOIN clientes c ON o.cliente_id = c.id
                 LEFT JOIN vehiculos v ON o.vehiculo_id = v.id
-                ORDER BY o.created_at DESC
+                ORDER BY o.fecha_ingreso DESC
             ');
             
             $ordenes = $stmt->fetchAll();
@@ -58,7 +58,7 @@ class OrdenesController {
                        c.nombre as cliente_nombre,
                        c.telefono as cliente_telefono,
                        v.marca, v.modelo, v.anio, v.placas
-                FROM ordenes o
+                FROM ordenes_servicio o
                 LEFT JOIN clientes c ON o.cliente_id = c.id
                 LEFT JOIN vehiculos v ON o.vehiculo_id = v.id
                 WHERE o.id = ?
@@ -102,49 +102,44 @@ class OrdenesController {
             // 2. Insertar o actualizar vehículo
             $vehiculo_id = $this->upsertVehiculo($data['vehiculo'], $cliente_id);
             
-            // 3. Generar folio
-            $folio = $this->generateFolio();
+            // 3. Generar número de orden
+            $numero_orden = $this->generateNumeroOrden();
             
-            // 4. Insertar orden
+            // 4. Insertar orden (usando nombres de campos del schema real)
             $stmt = $this->db->prepare('
-                INSERT INTO ordenes (
-                    folio, cliente_id, vehiculo_id, fecha_ingreso,
-                    kilometraje, nivel_gasolina, problema_reportado,
-                    observaciones_iniciales, estado, created_by
+                INSERT INTO ordenes_servicio (
+                    numero_orden, cliente_id, vehiculo_id, fecha_ingreso,
+                    kilometraje, nivel_combustible, problema_reportado,
+                    observaciones_cliente, estado, usuario_id
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $stmt->execute([
-                $folio,
+                $numero_orden,
                 $cliente_id,
                 $vehiculo_id,
                 $data['fecha_ingreso'] ?? date('Y-m-d H:i:s'),
                 $data['kilometraje'] ?? null,
-                $data['nivel_gasolina'] ?? null,
+                $data['nivel_gasolina'] ?? 0,
                 $data['problema_reportado'] ?? '',
                 $data['observaciones_iniciales'] ?? '',
-                $data['estado'] ?? 'abierta',
+                $data['estado'] ?? 'pendiente',
                 $userData['userId']
             ]);
             
             $orden_id = $this->db->lastInsertId();
             
-            // 5. Insertar inspección visual
-            if (isset($data['inspeccion']) && !empty($data['inspeccion'])) {
-                $this->insertInspeccion($orden_id, $data['inspeccion']);
-            }
-            
-            // 6. Insertar servicios
+            // 5. Insertar servicios
             if (isset($data['servicios']) && !empty($data['servicios'])) {
                 $this->insertServicios($orden_id, $data['servicios']);
             }
             
-            // 7. Insertar refacciones
+            // 6. Insertar refacciones
             if (isset($data['refacciones']) && !empty($data['refacciones'])) {
                 $this->insertRefacciones($orden_id, $data['refacciones']);
             }
             
-            // 8. Insertar mano de obra
+            // 7. Insertar mano de obra (usando tabla servicios_orden del schema)
             if (isset($data['mano_obra']) && !empty($data['mano_obra'])) {
                 $this->insertManoObra($orden_id, $data['mano_obra']);
             }
@@ -175,7 +170,7 @@ class OrdenesController {
             $data = json_decode(file_get_contents('php://input'), true);
             
             // Verificar que la orden existe
-            $stmt = $this->db->prepare('SELECT id FROM ordenes WHERE id = ?');
+            $stmt = $this->db->prepare('SELECT id FROM ordenes_servicio WHERE id = ?');
             $stmt->execute([$id]);
             if (!$stmt->fetch()) {
                 http_response_code(404);
@@ -201,10 +196,9 @@ class OrdenesController {
             $updateValues = [];
             
             $allowedFields = [
-                'fecha_ingreso', 'kilometraje', 'nivel_gasolina',
-                'problema_reportado', 'observaciones_iniciales',
-                'diagnostico', 'recomendaciones', 'estado',
-                'fecha_salida', 'total'
+                'fecha_ingreso', 'kilometraje', 'nivel_combustible',
+                'problema_reportado', 'diagnostico',
+                'estado', 'fecha_completada', 'total'
             ];
             
             foreach ($allowedFields as $field) {
@@ -215,40 +209,32 @@ class OrdenesController {
             }
             
             if (!empty($updateFields)) {
-                $updateValues[] = $userData['userId'];
                 $updateValues[] = $id;
                 
-                $sql = 'UPDATE ordenes SET ' . implode(', ', $updateFields) . 
-                       ', updated_by = ?, updated_at = NOW() WHERE id = ?';
+                $sql = 'UPDATE ordenes_servicio SET ' . implode(', ', $updateFields) . 
+                       ', ultima_modificacion = NOW() WHERE id = ?';
                        
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute($updateValues);
             }
             
             // 4. Actualizar datos relacionados si se enviaron
-            if (isset($data['inspeccion'])) {
-                $this->db->prepare('DELETE FROM inspeccion_visual WHERE orden_id = ?')->execute([$id]);
-                if (!empty($data['inspeccion'])) {
-                    $this->insertInspeccion($id, $data['inspeccion']);
-                }
-            }
-            
             if (isset($data['servicios'])) {
-                $this->db->prepare('DELETE FROM servicios WHERE orden_id = ?')->execute([$id]);
+                $this->db->prepare('DELETE FROM servicios_orden WHERE orden_id = ?')->execute([$id]);
                 if (!empty($data['servicios'])) {
                     $this->insertServicios($id, $data['servicios']);
                 }
             }
             
             if (isset($data['refacciones'])) {
-                $this->db->prepare('DELETE FROM refacciones WHERE orden_id = ?')->execute([$id]);
+                $this->db->prepare('DELETE FROM refacciones_orden WHERE orden_id = ?')->execute([$id]);
                 if (!empty($data['refacciones'])) {
                     $this->insertRefacciones($id, $data['refacciones']);
                 }
             }
             
             if (isset($data['mano_obra'])) {
-                $this->db->prepare('DELETE FROM mano_obra WHERE orden_id = ?')->execute([$id]);
+                $this->db->prepare('DELETE FROM servicios_orden WHERE orden_id = ?')->execute([$id]);
                 if (!empty($data['mano_obra'])) {
                     $this->insertManoObra($id, $data['mano_obra']);
                 }
@@ -276,7 +262,7 @@ class OrdenesController {
         try {
             requireAuth();
             
-            $stmt = $this->db->prepare('DELETE FROM ordenes WHERE id = ?');
+            $stmt = $this->db->prepare('DELETE FROM ordenes_servicio WHERE id = ?');
             $stmt->execute([$id]);
             
             if ($stmt->rowCount() === 0) {
@@ -304,25 +290,15 @@ class OrdenesController {
             $orden['problema_reportado'] = json_decode($orden['problema_reportado'], true);
         }
         
-        // Obtener inspección visual
-        $stmt = $this->db->prepare('SELECT * FROM inspeccion_visual WHERE orden_id = ?');
-        $stmt->execute([$orden['id']]);
-        $orden['inspeccion'] = $stmt->fetchAll();
-        
-        // Obtener servicios
-        $stmt = $this->db->prepare('SELECT * FROM servicios WHERE orden_id = ?');
+        // Obtener servicios (servicios_orden en el schema)
+        $stmt = $this->db->prepare('SELECT * FROM servicios_orden WHERE orden_id = ?');
         $stmt->execute([$orden['id']]);
         $orden['servicios'] = $stmt->fetchAll();
         
-        // Obtener refacciones
-        $stmt = $this->db->prepare('SELECT * FROM refacciones WHERE orden_id = ?');
+        // Obtener refacciones (refacciones_orden en el schema)
+        $stmt = $this->db->prepare('SELECT * FROM refacciones_orden WHERE orden_id = ?');
         $stmt->execute([$orden['id']]);
         $orden['refacciones'] = $stmt->fetchAll();
-        
-        // Obtener mano de obra
-        $stmt = $this->db->prepare('SELECT * FROM mano_obra WHERE orden_id = ?');
-        $stmt->execute([$orden['id']]);
-        $orden['mano_obra'] = $stmt->fetchAll();
         
         return $orden;
     }
@@ -372,7 +348,7 @@ class OrdenesController {
             // Actualizar
             $stmt = $this->db->prepare('
                 UPDATE vehiculos SET marca = ?, modelo = ?, anio = ?, 
-                       color = ?, vin = ?, cliente_id = ?
+                       color = ?, numero_serie = ?, cliente_id = ?
                 WHERE id = ?
             ');
             $stmt->execute([
@@ -388,7 +364,7 @@ class OrdenesController {
         } else {
             // Insertar
             $stmt = $this->db->prepare('
-                INSERT INTO vehiculos (marca, modelo, anio, color, placas, vin, cliente_id)
+                INSERT INTO vehiculos (marca, modelo, anio, color, placas, numero_serie, cliente_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             ');
             $stmt->execute([
@@ -404,41 +380,30 @@ class OrdenesController {
         }
     }
     
-    private function insertInspeccion($orden_id, $items) {
-        $stmt = $this->db->prepare('
-            INSERT INTO inspeccion_visual (orden_id, item, estado, observaciones)
-            VALUES (?, ?, ?, ?)
-        ');
-        
-        foreach ($items as $item) {
-            $stmt->execute([
-                $orden_id,
-                $item['item'],
-                $item['estado'],
-                $item['observaciones'] ?? null
-            ]);
-        }
-    }
-    
     private function insertServicios($orden_id, $servicios) {
         $stmt = $this->db->prepare('
-            INSERT INTO servicios (orden_id, descripcion, precio, cantidad)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO servicios_orden (orden_id, descripcion, precio_unitario, cantidad, subtotal)
+            VALUES (?, ?, ?, ?, ?)
         ');
         
         foreach ($servicios as $servicio) {
+            $cantidad = $servicio['cantidad'] ?? 1;
+            $precio = $servicio['precio'] ?? 0;
+            $subtotal = $cantidad * $precio;
+            
             $stmt->execute([
                 $orden_id,
                 $servicio['descripcion'],
-                $servicio['precio'] ?? 0,
-                $servicio['cantidad'] ?? 1
+                $precio,
+                $cantidad,
+                $subtotal
             ]);
         }
     }
     
     private function insertRefacciones($orden_id, $refacciones) {
         $stmt = $this->db->prepare('
-            INSERT INTO refacciones (orden_id, descripcion, cantidad, precio_unitario, subtotal)
+            INSERT INTO refacciones_orden (orden_id, descripcion, cantidad, precio_unitario, subtotal)
             VALUES (?, ?, ?, ?, ?)
         ');
         
@@ -455,43 +420,48 @@ class OrdenesController {
     
     private function insertManoObra($orden_id, $manoObra) {
         $stmt = $this->db->prepare('
-            INSERT INTO mano_obra (orden_id, descripcion, horas, precio_hora, subtotal)
+            INSERT INTO servicios_orden (orden_id, descripcion, precio_unitario, cantidad, subtotal)
             VALUES (?, ?, ?, ?, ?)
         ');
         
         foreach ($manoObra as $trabajo) {
+            $horas = $trabajo['horas'] ?? 1;
+            $precioHora = $trabajo['precio_hora'] ?? 0;
+            $subtotal = $horas * $precioHora;
+            
             $stmt->execute([
                 $orden_id,
                 $trabajo['descripcion'],
-                $trabajo['horas'] ?? 1,
-                $trabajo['precio_hora'] ?? 0,
-                $trabajo['subtotal'] ?? 0
+                $precioHora,
+                $horas,
+                $subtotal
             ]);
         }
     }
     
-    private function generateFolio() {
-        $prefix = 'SAG-';
-        $date = date('dmY');
+    private function generateNumeroOrden() {
+        $prefix = 'OS-';
+        $year = date('Y');
+        $month = date('m');
         
-        // Obtener el último folio del día
+        // Obtener el último número de orden del mes
         $stmt = $this->db->prepare("
-            SELECT folio FROM ordenes 
-            WHERE folio LIKE ? 
+            SELECT numero_orden FROM ordenes_servicio 
+            WHERE numero_orden LIKE ? 
             ORDER BY id DESC 
             LIMIT 1
         ");
-        $stmt->execute([$prefix . $date . '%']);
-        $lastFolio = $stmt->fetchColumn();
+        $stmt->execute([$prefix . $year . $month . '%']);
+        $lastNumero = $stmt->fetchColumn();
         
-        if ($lastFolio) {
-            $lastNumber = (int)substr($lastFolio, -1);
+        if ($lastNumero) {
+            $lastNumber = (int)substr($lastNumero, -4);
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;
         }
         
-        return $prefix . $date . '-' . $newNumber;
+        return $prefix . $year . $month . '-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
     
     private function isJson($string) {

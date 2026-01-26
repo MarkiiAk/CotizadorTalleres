@@ -22,8 +22,8 @@ Sistema profesional de gestión de presupuestos y órdenes de servicio para tall
 - **Rutas Protegidas**: Control de acceso a páginas según autenticación
 - **Sesión Persistente**: Mantiene la sesión del usuario
 - **Credenciales de Prueba**:
-  - Usuario: `admin@saggarage.com`
-  - Contraseña: `admin123`
+  - Usuario: `tu_usuario`
+  - Contraseña: `tu_password`
 
 ### 📊 Dashboard Administrativo
 - **Vista de Todas las Órdenes**: Tabla completa con paginación

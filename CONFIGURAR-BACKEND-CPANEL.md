@@ -75,9 +75,9 @@ FRONTEND_URL=https://saggarage.com
 # MySQL Database Configuration (PRODUCCIÓN)
 DB_HOST=localhost
 DB_PORT=3306
-DB_USER=saggarag_admin
-DB_PASSWORD=Kndiani2593!
-DB_NAME=saggarag_GestionPresupuestos
+DB_USER=tu_usuario_mysql
+DB_PASSWORD=tu_password_segura_aqui
+DB_NAME=tu_base_de_datos
 ```
 
 5. **Guarda el archivo**

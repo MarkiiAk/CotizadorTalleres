@@ -17,37 +17,51 @@ class AuthController {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             
-            if (!isset($data['email']) || !isset($data['password'])) {
+            // Log para debug
+            error_log('LOGIN ATTEMPT - Data received: ' . json_encode($data));
+            
+            // Aceptar tanto 'username' como 'email'
+            $username = $data['username'] ?? $data['email'] ?? null;
+            $password = $data['password'] ?? null;
+            
+            if (!$username || !$password) {
+                error_log('LOGIN ERROR - Missing credentials');
                 http_response_code(400);
-                echo json_encode(['error' => 'Email y contraseña son requeridos']);
+                echo json_encode(['error' => 'Usuario/email y contraseña son requeridos']);
                 return;
             }
             
-            $email = $data['email'];
-            $password = $data['password'];
+            error_log('LOGIN - Searching user: ' . $username);
             
-            // Buscar usuario en la base de datos
-            $stmt = $this->db->prepare('SELECT * FROM users WHERE email = ? LIMIT 1');
-            $stmt->execute([$email]);
+            // Buscar usuario por username o email
+            $stmt = $this->db->prepare('SELECT * FROM users WHERE username = ? OR email = ? LIMIT 1');
+            $stmt->execute([$username, $username]);
             $user = $stmt->fetch();
             
             if (!$user) {
+                error_log('LOGIN ERROR - User not found: ' . $username);
                 http_response_code(401);
                 echo json_encode(['error' => 'Credenciales inválidas']);
                 return;
             }
             
+            error_log('LOGIN - User found, verifying password');
+            
             // Verificar contraseña
             if (!password_verify($password, $user['password'])) {
+                error_log('LOGIN ERROR - Invalid password for user: ' . $username);
                 http_response_code(401);
                 echo json_encode(['error' => 'Credenciales inválidas']);
                 return;
             }
+            
+            error_log('LOGIN SUCCESS - User authenticated: ' . $username);
             
             // Generar token JWT
             $payload = [
                 'userId' => $user['id'],
                 'email' => $user['email'],
+                'username' => $user['username'] ?? $user['email'],
                 'role' => $user['role'],
                 'iat' => time(),
                 'exp' => time() + (24 * 60 * 60) // 24 horas
@@ -61,14 +75,18 @@ class AuthController {
                 'user' => [
                     'id' => $user['id'],
                     'email' => $user['email'],
-                    'name' => $user['name'],
+                    'username' => $user['username'] ?? $user['email'],
+                    'name' => $user['name'] ?? $user['username'] ?? $user['email'],
                     'role' => $user['role']
                 ]
             ];
             
+            error_log('LOGIN - Response prepared, sending token');
             echo json_encode($response);
             
         } catch (Exception $e) {
+            error_log('LOGIN EXCEPTION - ' . $e->getMessage());
+            error_log('LOGIN EXCEPTION - Stack trace: ' . $e->getTraceAsString());
             http_response_code(500);
             echo json_encode([
                 'error' => 'Error al procesar login',

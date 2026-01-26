@@ -304,9 +304,19 @@ class OrdenesController {
     }
     
     private function upsertCliente($clienteData) {
+        // Mapear campos del frontend al backend
+        $nombre = $clienteData['nombreCompleto'] ?? $clienteData['nombre'] ?? null;
+        $telefono = $clienteData['telefono'] ?? null;
+        $email = $clienteData['email'] ?? null;
+        $direccion = $clienteData['domicilio'] ?? $clienteData['direccion'] ?? null;
+        
+        if (!$nombre || !$telefono) {
+            throw new Exception('Nombre y teléfono del cliente son requeridos');
+        }
+        
         // Buscar cliente existente por teléfono
         $stmt = $this->db->prepare('SELECT id FROM clientes WHERE telefono = ? LIMIT 1');
-        $stmt->execute([$clienteData['telefono']]);
+        $stmt->execute([$telefono]);
         $existing = $stmt->fetch();
         
         if ($existing) {
@@ -316,9 +326,9 @@ class OrdenesController {
                 WHERE id = ?
             ');
             $stmt->execute([
-                $clienteData['nombre'],
-                $clienteData['email'] ?? null,
-                $clienteData['direccion'] ?? null,
+                $nombre,
+                $email,
+                $direccion,
                 $existing['id']
             ]);
             return $existing['id'];
@@ -329,19 +339,31 @@ class OrdenesController {
                 VALUES (?, ?, ?, ?)
             ');
             $stmt->execute([
-                $clienteData['nombre'],
-                $clienteData['telefono'],
-                $clienteData['email'] ?? null,
-                $clienteData['direccion'] ?? null
+                $nombre,
+                $telefono,
+                $email,
+                $direccion
             ]);
             return $this->db->lastInsertId();
         }
     }
     
     private function upsertVehiculo($vehiculoData, $cliente_id) {
+        // Mapear campos del frontend al backend
+        $marca = $vehiculoData['marca'] ?? null;
+        $modelo = $vehiculoData['modelo'] ?? null;
+        $anio = $vehiculoData['anio'] ?? null;
+        $color = $vehiculoData['color'] ?? null;
+        $placas = $vehiculoData['placas'] ?? null;
+        $numeroSerie = $vehiculoData['vin'] ?? $vehiculoData['numero_serie'] ?? null;
+        
+        if (!$marca || !$modelo || !$placas) {
+            throw new Exception('Marca, modelo y placas del vehículo son requeridos');
+        }
+        
         // Buscar vehículo existente por placas
         $stmt = $this->db->prepare('SELECT id FROM vehiculos WHERE placas = ? LIMIT 1');
-        $stmt->execute([$vehiculoData['placas']]);
+        $stmt->execute([$placas]);
         $existing = $stmt->fetch();
         
         if ($existing) {
@@ -352,11 +374,11 @@ class OrdenesController {
                 WHERE id = ?
             ');
             $stmt->execute([
-                $vehiculoData['marca'],
-                $vehiculoData['modelo'],
-                $vehiculoData['anio'] ?? null,
-                $vehiculoData['color'] ?? null,
-                $vehiculoData['vin'] ?? null,
+                $marca,
+                $modelo,
+                $anio,
+                $color,
+                $numeroSerie,
                 $cliente_id,
                 $existing['id']
             ]);
@@ -368,12 +390,12 @@ class OrdenesController {
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             ');
             $stmt->execute([
-                $vehiculoData['marca'],
-                $vehiculoData['modelo'],
-                $vehiculoData['anio'] ?? null,
-                $vehiculoData['color'] ?? null,
-                $vehiculoData['placas'],
-                $vehiculoData['vin'] ?? null,
+                $marca,
+                $modelo,
+                $anio,
+                $color,
+                $placas,
+                $numeroSerie,
                 $cliente_id
             ]);
             return $this->db->lastInsertId();

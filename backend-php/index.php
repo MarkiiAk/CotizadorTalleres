@@ -31,44 +31,47 @@ $request_method = $_SERVER['REQUEST_METHOD'];
 
 // Remover query string y obtener path
 $path = parse_url($request_uri, PHP_URL_PATH);
-$path = str_replace('/backend/', '', $path); // Ajustar según tu estructura
+
+// Remover el prefijo /gestion/backend-php/ de la URL
+$path = str_replace('/gestion/backend-php/', '', $path);
+$path = trim($path, '/');
 
 // Router simple
 try {
     // Rutas de autenticación
-    if ($path === 'api/auth/login' && $request_method === 'POST') {
+    if ($path === 'auth/login' && $request_method === 'POST') {
         $controller = new AuthController();
         $controller->login();
     }
-    elseif ($path === 'api/auth/me' && $request_method === 'GET') {
+    elseif ($path === 'auth/me' && $request_method === 'GET') {
         $controller = new AuthController();
         $controller->me();
     }
     
     // Rutas de órdenes
-    elseif ($path === 'api/ordenes' && $request_method === 'GET') {
+    elseif ($path === 'ordenes' && $request_method === 'GET') {
         $controller = new OrdenesController();
         $controller->getAll();
     }
-    elseif (preg_match('#^api/ordenes/([0-9]+)$#', $path, $matches) && $request_method === 'GET') {
+    elseif (preg_match('#^ordenes/([0-9]+)$#', $path, $matches) && $request_method === 'GET') {
         $controller = new OrdenesController();
         $controller->getById($matches[1]);
     }
-    elseif ($path === 'api/ordenes' && $request_method === 'POST') {
+    elseif ($path === 'ordenes' && $request_method === 'POST') {
         $controller = new OrdenesController();
         $controller->create();
     }
-    elseif (preg_match('#^api/ordenes/([0-9]+)$#', $path, $matches) && $request_method === 'PUT') {
+    elseif (preg_match('#^ordenes/([0-9]+)$#', $path, $matches) && $request_method === 'PUT') {
         $controller = new OrdenesController();
         $controller->update($matches[1]);
     }
-    elseif (preg_match('#^api/ordenes/([0-9]+)$#', $path, $matches) && $request_method === 'DELETE') {
+    elseif (preg_match('#^ordenes/([0-9]+)$#', $path, $matches) && $request_method === 'DELETE') {
         $controller = new OrdenesController();
         $controller->delete($matches[1]);
     }
     
     // Ruta de salud
-    elseif ($path === 'api/health' && $request_method === 'GET') {
+    elseif ($path === 'health' && $request_method === 'GET') {
         echo json_encode([
             'status' => 'ok',
             'database' => 'MySQL conectado',

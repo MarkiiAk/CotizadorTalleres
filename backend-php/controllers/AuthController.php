@@ -34,7 +34,7 @@ class AuthController {
             error_log('LOGIN - Searching user: ' . $username);
             
             // Buscar usuario por username o email
-            $stmt = $this->db->prepare('SELECT * FROM users WHERE username = ? OR email = ? LIMIT 1');
+            $stmt = $this->db->prepare('SELECT * FROM usuarios WHERE username = ? OR email = ? LIMIT 1');
             $stmt->execute([$username, $username]);
             $user = $stmt->fetch();
             
@@ -47,8 +47,8 @@ class AuthController {
             
             error_log('LOGIN - User found, verifying password');
             
-            // Verificar contraseña
-            if (!password_verify($password, $user['password'])) {
+            // Verificar contraseña (el campo es password_hash en la tabla usuarios)
+            if (!password_verify($password, $user['password_hash'])) {
                 error_log('LOGIN ERROR - Invalid password for user: ' . $username);
                 http_response_code(401);
                 echo json_encode(['error' => 'Credenciales inválidas']);
@@ -62,7 +62,7 @@ class AuthController {
                 'userId' => $user['id'],
                 'email' => $user['email'],
                 'username' => $user['username'] ?? $user['email'],
-                'role' => $user['role'],
+                'role' => $user['rol'], // El campo es 'rol' en la tabla usuarios
                 'iat' => time(),
                 'exp' => time() + (24 * 60 * 60) // 24 horas
             ];
@@ -76,8 +76,8 @@ class AuthController {
                     'id' => $user['id'],
                     'email' => $user['email'],
                     'username' => $user['username'] ?? $user['email'],
-                    'name' => $user['name'] ?? $user['username'] ?? $user['email'],
-                    'role' => $user['role']
+                    'name' => $user['nombre_completo'] ?? $user['username'] ?? $user['email'],
+                    'role' => $user['rol'] // El campo es 'rol' en la tabla usuarios
                 ]
             ];
             
@@ -103,7 +103,7 @@ class AuthController {
             $userData = requireAuth();
             
             // Obtener usuario actualizado de la base de datos
-            $stmt = $this->db->prepare('SELECT id, email, name, role FROM users WHERE id = ? LIMIT 1');
+            $stmt = $this->db->prepare('SELECT id, email, nombre_completo, rol FROM usuarios WHERE id = ? LIMIT 1');
             $stmt->execute([$userData['userId']]);
             $user = $stmt->fetch();
             

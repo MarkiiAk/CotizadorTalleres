@@ -150,7 +150,31 @@ jobs:
           security: loose
           timeout: 900000
 
-      # 10. Notificación de éxito
+      # 10. Subir .htaccess manualmente (workaround para archivos con punto)
+      - name: 📄 Upload .htaccess
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || 21 }}
+          
+          # Subir SOLO el .htaccess
+          local-dir: backend-php/
+          server-dir: ./gestion/backend-php/
+          
+          dangerous-clean-slate: false
+          
+          # Incluir SOLO .htaccess, excluir todo lo demás
+          exclude: |
+            **/*
+            !**/.htaccess
+          
+          log-level: verbose
+          security: loose
+          timeout: 300000
+
+      # 11. Notificación de éxito
       - name: ✅ Deploy completado
         if: success()
         run: |
@@ -158,7 +182,7 @@ jobs:
           echo "🌐 Tu sitio está actualizado"
           echo "⏰ Fecha: $(date)"
 
-      # 8. Notificación de error
+      # 12. Notificación de error
       - name: ❌ Deploy falló
         if: failure()
         run: |

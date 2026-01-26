@@ -135,8 +135,9 @@ jobs:
           dangerous-clean-slate: false
           
           exclude: |
-            **/.git*
-            **/.git*/**
+            **/.git
+            **/.github/**
+            **/.gitignore
             **/node_modules/**
             **/.vscode/**
             **/.DS_Store

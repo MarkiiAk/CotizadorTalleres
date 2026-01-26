@@ -118,7 +118,36 @@ jobs:
           security: strict
           timeout: 600000
 
-      # 7. Notificación de éxito
+      # 9. Subir Backend PHP a /gestion/backend-php/
+      - name: 🐘 Deploy Backend PHP a /gestion/backend-php/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || 21 }}
+          
+          # Subir backend PHP
+          local-dir: backend-php/
+          server-dir: ./gestion/backend-php/
+          
+          # NO limpiar porque el .env ya está configurado manualmente
+          dangerous-clean-slate: false
+          
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.vscode/**
+            **/.DS_Store
+            **/.env
+            **/.env.example
+            **/INSTALACION-BACKEND-PHP.md
+          
+          security: strict
+          timeout: 600000
+
+      # 10. Notificación de éxito
       - name: ✅ Deploy completado
         if: success()
         run: |

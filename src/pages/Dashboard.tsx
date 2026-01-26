@@ -133,11 +133,11 @@ export const Dashboard = () => {
               <div className="hidden sm:flex items-center gap-2 text-sm">
                 <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
                   <span className="text-green-600 dark:text-green-400 font-semibold">
-                    {user?.nombre.charAt(0).toUpperCase()}
+                    {user?.nombre?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || 'U'}
                   </span>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-gray-900 dark:text-white">{user?.nombre}</p>
+                  <p className="font-medium text-gray-900 dark:text-white">{user?.nombre || user?.username}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{user?.rol}</p>
                 </div>
               </div>

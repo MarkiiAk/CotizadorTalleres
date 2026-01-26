@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { localStorageService } from '../services/localStorage';
+import { authAPI } from '../services/api';
 import type { AuthContextType, Usuario } from '../types';
+
+console.log('🔐 AuthContext inicializado - usando API REST directamente');
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -24,13 +26,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const verifyToken = async () => {
       const storedToken = localStorage.getItem('token');
+      console.log('🔍 Verificando token:', storedToken ? 'existe' : 'no existe');
+      
       if (storedToken) {
         try {
-          const data = await localStorageService.verifyToken();
+          console.log('📡 Verificando token con API...');
+          const data = await authAPI.verify();
+          console.log('✅ Token válido, usuario:', data.user);
           setUser(data.user);
           setToken(storedToken);
         } catch (error) {
-          console.error('Error al verificar token:', error);
+          console.error('❌ Error al verificar token:', error);
           localStorage.removeItem('token');
           setToken(null);
           setUser(null);
@@ -43,26 +49,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const login = async (username: string, password: string) => {
+    console.log('🔐 Intentando login con:', { username });
     try {
-      const data = await localStorageService.login(username, password);
+      const data = await authAPI.login(username, password);
+      console.log('✅ Login exitoso, guardando token');
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
+      console.log('✅ Usuario autenticado:', data.user);
     } catch (error) {
-      console.error('Error en login:', error);
+      console.error('❌ Error en login:', error);
       throw error;
     }
   };
 
   const logout = async () => {
+    console.log('🚪 Cerrando sesión...');
     try {
-      await localStorageService.logout();
+      await authAPI.logout();
+      console.log('✅ Logout exitoso en API');
     } catch (error) {
-      console.error('Error en logout:', error);
+      console.error('❌ Error en logout API:', error);
     } finally {
       localStorage.removeItem('token');
       setToken(null);
       setUser(null);
+      console.log('✅ Sesión cerrada localmente');
     }
   };
 

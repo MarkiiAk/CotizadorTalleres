@@ -43,6 +43,10 @@ try {
         $controller = new AuthController();
         $controller->login();
     }
+    elseif ($path === 'auth/verify' && $request_method === 'GET') {
+        $controller = new AuthController();
+        $controller->verify();
+    }
     elseif ($path === 'auth/me' && $request_method === 'GET') {
         $controller = new AuthController();
         $controller->me();

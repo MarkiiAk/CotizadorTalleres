@@ -96,6 +96,53 @@ class AuthController {
     }
     
     /**
+     * Verificar token - GET /api/auth/verify
+     */
+    public function verify() {
+        try {
+            error_log('VERIFY - Verifying token...');
+            
+            $userData = requireAuth();
+            
+            error_log('VERIFY - Token valid, fetching user data for userId: ' . $userData['userId']);
+            
+            // Obtener usuario actualizado de la base de datos
+            $stmt = $this->db->prepare('SELECT id, email, username, nombre_completo, rol FROM usuarios WHERE id = ? LIMIT 1');
+            $stmt->execute([$userData['userId']]);
+            $user = $stmt->fetch();
+            
+            if (!$user) {
+                error_log('VERIFY ERROR - User not found: ' . $userData['userId']);
+                http_response_code(404);
+                echo json_encode(['error' => 'Usuario no encontrado']);
+                return;
+            }
+            
+            error_log('VERIFY SUCCESS - User found: ' . $user['username']);
+            
+            // Retornar información del usuario
+            echo json_encode([
+                'valid' => true,
+                'user' => [
+                    'id' => (string)$user['id'],
+                    'email' => $user['email'],
+                    'username' => $user['username'] ?? $user['email'],
+                    'nombre' => $user['nombre_completo'] ?? $user['username'] ?? $user['email'],
+                    'rol' => $user['rol']
+                ]
+            ]);
+            
+        } catch (Exception $e) {
+            error_log('VERIFY ERROR - Exception: ' . $e->getMessage());
+            http_response_code(401);
+            echo json_encode([
+                'valid' => false,
+                'error' => 'Token inválido o expirado'
+            ]);
+        }
+    }
+    
+    /**
      * Obtener usuario actual - GET /api/auth/me
      */
     public function me() {

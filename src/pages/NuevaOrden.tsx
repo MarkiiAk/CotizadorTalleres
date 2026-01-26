@@ -3,7 +3,7 @@ import { Sun, Moon, FileText, Download, Save, ArrowLeft } from 'lucide-react';
 import { pdf } from '@react-pdf/renderer';
 import { useNavigate } from 'react-router-dom';
 import { usePresupuestoStore } from '../store/usePresupuestoStore';
-import { localStorageService } from '../services/localStorage';
+import { ordenesAPI } from '../services/api';
 import { GarageLoader } from '../components/ui/GarageLoader';
 import {
   ClienteSection,
@@ -83,7 +83,9 @@ export const NuevaOrden = () => {
         fechaModificacion: new Date().toISOString(),
       };
       
-      await localStorageService.createOrden(orden);
+      console.log('💾 Guardando orden en API...');
+      await ordenesAPI.create(orden);
+      console.log('✅ Orden guardada exitosamente');
       markAsSaved();
     } catch (error) {
       console.error('Error al guardar la orden:', error);

@@ -3,7 +3,7 @@ import { Sun, Moon, FileText, Download, Save, ArrowLeft, X } from 'lucide-react'
 import { pdf } from '@react-pdf/renderer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePresupuestoStore } from '../store/usePresupuestoStore';
-import { localStorageService } from '../services/localStorage';
+import { ordenesAPI } from '../services/api';
 import { GarageLoader } from '../components/ui/GarageLoader';
 import { mergePDFWithGarantia } from '../utils/pdfMerger';
 import {
@@ -50,7 +50,9 @@ export const DetalleOrden = () => {
       setIsLoading(true);
       
       try {
-        const ordenData = await localStorageService.getOrden(id);
+        console.log('📋 Cargando orden desde API:', id);
+        const ordenData = await ordenesAPI.getById(id);
+        console.log('✅ Orden cargada:', ordenData);
         if (ordenData) {
           setOrden(ordenData);
           loadFromOrden(ordenData);
@@ -116,7 +118,9 @@ export const DetalleOrden = () => {
         resumen: presupuesto.resumen,
       };
 
-      await localStorageService.updateOrden(id, ordenActualizada);
+      console.log('💾 Actualizando orden en API...');
+      await ordenesAPI.update(id, ordenActualizada);
+      console.log('✅ Orden actualizada exitosamente');
       markAsSaved();
     } catch (error) {
       console.error('Error al guardar cambios:', error);
@@ -130,7 +134,9 @@ export const DetalleOrden = () => {
 
     try {
       setShowLoader(true);
-      await localStorageService.updateOrden(id, { estado: 'cerrada' });
+      console.log('🔒 Cerrando orden en API...');
+      await ordenesAPI.update(id, { estado: 'cerrada' });
+      console.log('✅ Orden cerrada exitosamente');
       setShowCloseModal(false);
     } catch (error) {
       console.error('Error al cerrar orden:', error);

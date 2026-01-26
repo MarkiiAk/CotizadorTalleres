@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sun, Moon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { usePresupuestoStore } from '../store/usePresupuestoStore';
-import { localStorageService } from '../services/localStorage';
+import { ordenesAPI } from '../services/api';
 import type { Orden } from '../types';
 import { Button } from '../components/ui/Button';
 
@@ -37,10 +37,12 @@ export const Dashboard = () => {
   const loadOrdenes = async () => {
     try {
       setIsLoading(true);
-      const data = await localStorageService.getOrdenes();
+      console.log('📋 Cargando órdenes desde API...');
+      const data = await ordenesAPI.getAll();
+      console.log('✅ Órdenes cargadas:', data.length);
       setOrdenes(data);
     } catch (error) {
-      console.error('Error al cargar órdenes:', error);
+      console.error('❌ Error al cargar órdenes:', error);
     } finally {
       setIsLoading(false);
     }

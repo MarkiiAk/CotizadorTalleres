@@ -144,8 +144,10 @@ jobs:
             **/.env.example
             **/INSTALACION-BACKEND-PHP.md
           
-          security: strict
-          timeout: 600000
+          # Configuración de reintentos y timeouts más agresiva
+          log-level: verbose
+          security: loose
+          timeout: 900000
 
       # 10. Notificación de éxito
       - name: ✅ Deploy completado

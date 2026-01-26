@@ -150,8 +150,8 @@ jobs:
           security: loose
           timeout: 900000
 
-      # 10. Subir .htaccess manualmente (workaround para archivos con punto)
-      - name: 📄 Upload .htaccess
+      # 10. Subir .htaccess del backend (workaround para archivos con punto)
+      - name: 📄 Upload backend .htaccess
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -159,7 +159,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT || 21 }}
           
-          # Subir SOLO el .htaccess
+          # Subir SOLO el .htaccess del backend
           local-dir: backend-php/
           server-dir: ./gestion/backend-php/
           
@@ -174,7 +174,31 @@ jobs:
           security: loose
           timeout: 300000
 
-      # 11. Notificación de éxito
+      # 11. Subir .htaccess del frontend para manejar rutas React Router
+      - name: 📄 Upload frontend .htaccess (React Router)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || 21 }}
+          
+          # Subir .htaccess del frontend a /gestion/
+          local-dir: frontend-htaccess/
+          server-dir: ./gestion/
+          
+          dangerous-clean-slate: false
+          
+          # Incluir SOLO .htaccess
+          exclude: |
+            **/*
+            !**/.htaccess
+          
+          log-level: verbose
+          security: loose
+          timeout: 300000
+
+      # 12. Notificación de éxito
       - name: ✅ Deploy completado
         if: success()
         run: |
@@ -182,7 +206,7 @@ jobs:
           echo "🌐 Tu sitio está actualizado"
           echo "⏰ Fecha: $(date)"
 
-      # 12. Notificación de error
+      # 13. Notificación de error
       - name: ❌ Deploy falló
         if: failure()
         run: |

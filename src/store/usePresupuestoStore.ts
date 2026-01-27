@@ -481,22 +481,65 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
   
   // Cargar desde orden
   loadFromOrden: (orden) => {
+    // Convertir formato backend PHP a formato frontend
+    const ordenAny = orden as any;
+    
+    // Si viene del backend PHP (campos planos), convertir a formato frontend
+    const cliente = ordenAny.cliente_nombre ? {
+      nombreCompleto: ordenAny.cliente_nombre || '',
+      telefono: ordenAny.cliente_telefono || '',
+      email: ordenAny.cliente_email || '',
+      domicilio: ordenAny.cliente_domicilio || '',
+    } : orden.cliente;
+    
+    const vehiculo = ordenAny.marca ? {
+      marca: ordenAny.marca || '',
+      modelo: ordenAny.modelo || '',
+      color: ordenAny.color || '',
+      placas: ordenAny.placas || '',
+      kilometrajeEntrada: ordenAny.kilometraje_entrada || '',
+      kilometrajeSalida: ordenAny.kilometraje_salida || '',
+      nivelGasolina: ordenAny.nivel_gasolina || 50,
+    } : orden.vehiculo;
+    
+    const taller = ordenAny.taller_encargado ? {
+      nombre: 'SAG Garage',
+      encargado: ordenAny.taller_encargado || '',
+      telefono: ordenAny.taller_telefono || '',
+      direccion: ordenAny.taller_direccion || '',
+    } : orden.taller;
+    
+    const resumen = ordenAny.subtotal !== undefined ? {
+      servicios: parseFloat(ordenAny.total_servicios || '0'),
+      refacciones: parseFloat(ordenAny.total_refacciones || '0'),
+      manoDeObra: parseFloat(ordenAny.total_mano_obra || '0'),
+      subtotal: parseFloat(ordenAny.subtotal || '0'),
+      incluirIVA: ordenAny.incluir_iva === 1 || ordenAny.incluir_iva === true,
+      iva: parseFloat(ordenAny.iva || '0'),
+      total: parseFloat(ordenAny.total || '0'),
+      anticipo: parseFloat(ordenAny.anticipo || '0'),
+      restante: parseFloat(ordenAny.restante || '0'),
+    } : orden.resumen;
+    
+    const folio = ordenAny.numero_orden || orden.folio || '';
+    const fechaCreacion = ordenAny.fecha_ingreso || orden.fechaCreacion;
+    
     set({
       presupuesto: {
         id: orden.id,
-        folio: orden.folio,
-        fecha: new Date(orden.fechaCreacion),
-        fechaEntrada: orden.fechaEntrada ? new Date(orden.fechaEntrada) : new Date(orden.fechaCreacion),
-        taller: orden.taller,
-        cliente: orden.cliente,
-        vehiculo: orden.vehiculo,
+        folio: folio,
+        fecha: new Date(fechaCreacion),
+        fechaEntrada: orden.fechaEntrada ? new Date(orden.fechaEntrada) : new Date(fechaCreacion),
+        taller: taller,
+        cliente: cliente,
+        vehiculo: vehiculo,
         inspeccion: orden.inspeccion || initialInspeccion,
-        problemaReportado: orden.problemaReportado || '',
-        diagnosticoTecnico: orden.diagnosticoTecnico || '',
+        problemaReportado: ordenAny.problema_reportado || orden.problemaReportado || '',
+        diagnosticoTecnico: ordenAny.diagnostico_tecnico || orden.diagnosticoTecnico || '',
         servicios: orden.servicios || [],
         refacciones: orden.refacciones || [],
         manoDeObra: orden.manoDeObra || [],
-        resumen: orden.resumen,
+        resumen: resumen,
       },
       hasUnsavedChanges: false,
     });

@@ -186,8 +186,17 @@ export const PrintablePresupuesto: React.FC<PrintablePresupuestoProps> = ({ pres
       <div style={styles.page}>
         {/* Header */}
         <div style={styles.headerMain}>
-          <h1 style={styles.title}>SAG GARAGE</h1>
-          <p style={styles.subtitle}>Orden de Servicio y Presupuesto</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+            <img 
+              src="/logo.png" 
+              alt="SAG Garage Logo" 
+              style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '12px' }}
+            />
+            <div>
+              <h1 style={styles.title}>SAG GARAGE</h1>
+              <p style={styles.subtitle}>Orden de Servicio y Presupuesto</p>
+            </div>
+          </div>
           <p style={styles.smallText}>Folio: {presupuesto.folio}</p>
           <p style={styles.smallText}>Fecha de emisión: {formatDate(presupuesto.fecha)}</p>
         </div>
@@ -373,8 +382,17 @@ export const PrintablePresupuesto: React.FC<PrintablePresupuestoProps> = ({ pres
       {/* PÁGINA 2: PÓLIZA DE GARANTÍA */}
       <div style={{ ...styles.page, pageBreakAfter: 'auto' }}>
         <div style={styles.headerGarantia}>
-          <h1 style={styles.titleGarantia}>PÓLIZA DE GARANTÍA</h1>
-          <p style={styles.subtitle}>SAG Garage - Términos y Condiciones</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+            <img 
+              src="/logo.png" 
+              alt="SAG Garage Logo" 
+              style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '12px' }}
+            />
+            <div>
+              <h1 style={styles.titleGarantia}>PÓLIZA DE GARANTÍA</h1>
+              <p style={styles.subtitle}>SAG Garage - Términos y Condiciones</p>
+            </div>
+          </div>
         </div>
 
         {/* Términos de Garantía */}

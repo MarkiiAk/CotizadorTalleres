@@ -124,12 +124,19 @@ class OrdenesController {
                     tiene_llanta_refaccion, tiene_herramienta, tiene_antena,
                     tiene_tapetes, tiene_extinguidor, tiene_documentos,
                     subtotal_mano_obra, subtotal_refacciones, total,
+                    fecha_promesa_entrega,
                     estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $vehiculoData = $data['vehiculo'] ?? [];
             $resumenData = $data['resumen'] ?? [];
+            
+            // Procesar fecha de salida/promesa
+            $fechaSalida = null;
+            if (isset($data['fechaSalida']) && $data['fechaSalida']) {
+                $fechaSalida = date('Y-m-d H:i:s', strtotime($data['fechaSalida']));
+            }
             
             $stmt->execute([
                 $numero_orden,
@@ -153,6 +160,7 @@ class OrdenesController {
                 $resumenData['manoDeObra'] ?? 0,
                 $resumenData['refacciones'] ?? 0,
                 $resumenData['total'] ?? 0,
+                $fechaSalida,
                 'abierta' // Estado inicial siempre es 'abierta'
             ]);
             
@@ -246,6 +254,17 @@ class OrdenesController {
                 $updateFields[] = 'kilometraje_salida = ?';
                 $updateValues[] = $data['vehiculo']['kilometrajeSalida'];
                 error_log('Kilometraje salida a actualizar: ' . $data['vehiculo']['kilometrajeSalida']);
+            }
+            
+            // Actualizar fecha de salida/promesa
+            if (isset($data['fechaSalida'])) {
+                if ($data['fechaSalida']) {
+                    $updateFields[] = 'fecha_promesa_entrega = ?';
+                    $updateValues[] = date('Y-m-d H:i:s', strtotime($data['fechaSalida']));
+                    error_log('Fecha salida a actualizar: ' . $data['fechaSalida']);
+                } else {
+                    $updateFields[] = 'fecha_promesa_entrega = NULL';
+                }
             }
             
             // Siempre actualizar ultima_modificacion
@@ -379,6 +398,11 @@ class OrdenesController {
         }
         if (isset($orden['kilometraje_salida'])) {
             $orden['vehiculo']['kilometrajeSalida'] = $orden['kilometraje_salida'];
+        }
+        
+        // Mapear fecha_promesa_entrega a fechaSalida
+        if (isset($orden['fecha_promesa_entrega']) && $orden['fecha_promesa_entrega']) {
+            $orden['fechaSalida'] = $orden['fecha_promesa_entrega'];
         }
         
         return $orden;

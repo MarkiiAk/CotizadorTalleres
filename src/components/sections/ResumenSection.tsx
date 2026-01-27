@@ -90,10 +90,10 @@ export const ResumenSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+          <div className="p-4 bg-sag-50 dark:bg-sag-900/20 rounded-lg border border-sag-200 dark:border-sag-800">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-green-100 dark:bg-green-900/40 rounded-lg">
-                <TrendingUp className="text-green-600 dark:text-green-400" size={20} />
+              <div className="p-2 bg-sag-100 dark:bg-sag-900/40 rounded-lg">
+                <TrendingUp className="text-sag-600 dark:text-sag-400" size={20} />
               </div>
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Refacciones
@@ -125,7 +125,7 @@ export const ResumenSection: React.FC = () => {
             <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
               Subtotal
             </span>
-            <span className="text-3xl font-bold text-green-600 dark:text-green-400">
+            <span className="text-3xl font-bold text-sag-600 dark:text-sag-400">
               {formatCurrency(resumen.subtotal)}
             </span>
           </div>
@@ -159,12 +159,12 @@ export const ResumenSection: React.FC = () => {
 
         {/* Total (si incluye IVA) */}
         {resumen.incluirIVA && (
-          <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border-2 border-green-300 dark:border-green-700">
+          <div className="p-6 bg-gradient-to-br from-sag-50 to-sag-100 dark:from-sag-900/20 dark:to-sag-800/20 rounded-xl border-2 border-sag-300 dark:border-sag-700">
             <div className="flex items-center justify-between">
               <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
                 Total con IVA
               </span>
-              <span className="text-3xl font-bold text-green-700 dark:text-green-400">
+              <span className="text-3xl font-bold text-sag-700 dark:text-sag-400">
                 {formatCurrency(resumen.total)}
               </span>
             </div>

@@ -60,7 +60,7 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
               className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600"
             >
               <div className="flex items-center gap-3 flex-1">
-                <Package className="text-green-600" size={20} />
+                <Package className="text-sag-600" size={20} />
                 <div className="flex-1">
                   <p className="font-medium text-gray-900 dark:text-gray-100">
                     {refaccion.nombre}
@@ -95,10 +95,10 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
           disabled={disabled}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 
                      bg-white dark:bg-gray-900
-                     border-2 border-green-500 dark:border-green-400
-                     text-green-600 dark:text-green-400 font-medium rounded-lg
-                     hover:bg-green-50 dark:hover:bg-green-950/30
-                     active:bg-green-100 dark:active:bg-green-950/50
+                     border-2 border-sag-500 dark:border-sag-400
+                     text-sag-600 dark:text-sag-400 font-medium rounded-lg
+                     hover:bg-sag-50 dark:hover:bg-sag-950/30
+                     active:bg-sag-100 dark:active:bg-sag-950/50
                      transition-all duration-200
                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-gray-900"
         >
@@ -145,7 +145,7 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
           </div>
 
           {cantidad && precioCosto && parseInt(cantidad) > 0 && parseFloat(precioCosto) > 0 && (
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 space-y-2">
+            <div className="p-4 bg-sag-50 dark:bg-sag-900/20 rounded-lg border border-sag-200 dark:border-sag-800 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-700 dark:text-gray-300">Precio de Costo:</span>
                 <span className="font-medium text-gray-900 dark:text-gray-100">
@@ -153,23 +153,23 @@ export const RefaccionesSection: React.FC<RefaccionesSectionProps> = ({ disabled
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-green-700 dark:text-green-300">
+                <span className="text-sag-700 dark:text-sag-300">
                   Margen de Ganancia ({margenGanancia}%):
                 </span>
-                <span className="font-medium text-green-700 dark:text-green-300">
+                <span className="font-medium text-sag-700 dark:text-sag-300">
                   + {formatCurrency(parseFloat(precioCosto) * (margenGanancia / 100))}
                 </span>
               </div>
-              <div className="h-px bg-green-200 dark:bg-green-800"></div>
+              <div className="h-px bg-sag-200 dark:bg-sag-800"></div>
               <div className="flex justify-between text-base">
                 <span className="font-semibold text-gray-900 dark:text-gray-100">
                   Precio de Venta:
                 </span>
-                <span className="font-bold text-green-600 dark:text-green-400">
+                <span className="font-bold text-sag-600 dark:text-sag-400">
                   {formatCurrency(parseFloat(precioCosto) * (1 + margenGanancia / 100))}
                 </span>
               </div>
-              <div className="h-px bg-green-200 dark:bg-green-800"></div>
+              <div className="h-px bg-sag-200 dark:bg-sag-800"></div>
               <div className="flex justify-between text-base">
                 <span className="font-semibold text-gray-900 dark:text-gray-100">
                   Total Estimado:

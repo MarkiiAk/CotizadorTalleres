@@ -39,10 +39,10 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sag-50 via-white to-sag-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-400/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-sag-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-sag-400/20 rounded-full blur-3xl"></div>
       </div>
 
       {/* Toggle tema - posición fija en la esquina superior derecha */}
@@ -68,7 +68,7 @@ export const Login = () => {
               alt="SAG Garage Logo" 
               className="inline-block w-20 h-20 rounded-2xl object-cover mb-4 shadow-lg"
             />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-sag-600 to-sag-600 bg-clip-text text-transparent">
               SAG Garage
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
@@ -123,7 +123,7 @@ export const Login = () => {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-sag-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
                     placeholder="Ingresa tu usuario"
                     required
                   />
@@ -155,7 +155,7 @@ export const Login = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-sag-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
                     placeholder="Ingresa tu contraseña"
                     required
                   />
@@ -167,7 +167,7 @@ export const Login = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-3 rounded-xl font-medium shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r from-sag-500 to-sag-600 hover:from-sag-600 hover:to-sag-700 text-white py-3 rounded-xl font-medium shadow-lg shadow-sag-500/30 hover:shadow-xl hover:shadow-sag-500/40 transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -201,11 +201,11 @@ export const Login = () => {
 
           {/* Credenciales por defecto */}
           <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
-            <div className="bg-green-50 dark:bg-green-900/30 rounded-xl p-4 space-y-2">
-              <p className="text-xs font-medium text-green-900 dark:text-green-300">
+            <div className="bg-sag-50 dark:bg-sag-900/30 rounded-xl p-4 space-y-2">
+              <p className="text-xs font-medium text-sag-900 dark:text-sag-300">
                 🔐 Credenciales por defecto:
               </p>
-              <div className="space-y-1 text-xs text-green-800 dark:text-green-400">
+              <div className="space-y-1 text-xs text-sag-800 dark:text-sag-400">
                 <p>Usuario: <span className="font-mono font-semibold">admin</span></p>
                 <p>Contraseña: <span className="font-mono font-semibold">admin123</span></p>
               </div>

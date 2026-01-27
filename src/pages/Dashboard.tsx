@@ -89,7 +89,7 @@ export const Dashboard = () => {
     
     const badges = {
       abierta: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-      cerrada: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      cerrada: 'bg-sag-100 text-sag-800 dark:bg-sag-900/30 dark:text-sag-400',
     };
 
     const labels = {
@@ -144,8 +144,8 @@ export const Dashboard = () => {
 
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-2 text-sm">
-                <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 dark:text-green-400 font-semibold">
+                <div className="w-8 h-8 bg-sag-100 dark:bg-sag-900/30 rounded-full flex items-center justify-center">
+                  <span className="text-sag-600 dark:text-sag-400 font-semibold">
                     {user?.nombre?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || 'U'}
                   </span>
                 </div>
@@ -185,8 +185,8 @@ export const Dashboard = () => {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Total Órdenes</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{stats.total}</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-sag-100 dark:bg-sag-900/30 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-sag-600 dark:text-sag-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
@@ -211,10 +211,10 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Cerradas</p>
-                <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">{stats.cerradas}</p>
+                <p className="text-3xl font-bold text-sag-600 dark:text-sag-400 mt-1">{stats.cerradas}</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-sag-100 dark:bg-sag-900/30 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-sag-600 dark:text-sag-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -237,7 +237,7 @@ export const Dashboard = () => {
                   placeholder="Buscar por folio, cliente, placas, marca o modelo..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-sag-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export const Dashboard = () => {
               <select
                 value={estadoFilter}
                 onChange={(e) => setEstadoFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-sag-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               >
                 <option value="todas">Todos los estados</option>
                 <option value="abierta">Abiertas</option>
@@ -255,7 +255,7 @@ export const Dashboard = () => {
 
               <Button
                 onClick={() => navigate('/nueva-orden')}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg shadow-green-500/30 hover:shadow-green-500/40 transition-all"
+                className="bg-gradient-to-r from-sag-500 to-sag-600 hover:from-sag-600 hover:to-sag-700 text-white shadow-lg shadow-sag-500/30 hover:shadow-sag-500/40 transition-all"
               >
                 + Nueva Orden
               </Button>
@@ -268,7 +268,7 @@ export const Dashboard = () => {
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center space-y-3">
-                <div className="animate-spin h-10 w-10 border-4 border-green-500 border-t-transparent rounded-full mx-auto shadow-lg shadow-green-500/30"></div>
+                <div className="animate-spin h-10 w-10 border-4 border-sag-500 border-t-transparent rounded-full mx-auto shadow-lg shadow-sag-500/30"></div>
                 <p className="text-gray-600 dark:text-gray-400">Cargando órdenes...</p>
               </div>
             </div>

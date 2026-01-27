@@ -57,7 +57,7 @@ export const ServiciosSection: React.FC<ServiciosSectionProps> = ({ disabled = f
               className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600"
             >
               <div className="flex items-center gap-3">
-                <Wrench className="text-green-600" size={20} />
+                <Wrench className="text-sag-600" size={20} />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-gray-100">
                     {servicio.descripcion}
@@ -88,10 +88,10 @@ export const ServiciosSection: React.FC<ServiciosSectionProps> = ({ disabled = f
           disabled={disabled}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 
                      bg-white dark:bg-gray-900
-                     border-2 border-green-500 dark:border-green-400
-                     text-green-600 dark:text-green-400 font-medium rounded-lg
-                     hover:bg-green-50 dark:hover:bg-green-950/30
-                     active:bg-green-100 dark:active:bg-green-950/50
+                     border-2 border-sag-500 dark:border-sag-400
+                     text-sag-600 dark:text-sag-400 font-medium rounded-lg
+                     hover:bg-sag-50 dark:hover:bg-sag-950/30
+                     active:bg-sag-100 dark:active:bg-sag-950/50
                      transition-all duration-200
                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-gray-900"
         >

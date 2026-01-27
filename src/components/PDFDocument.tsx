@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
-    borderBottom: '3px solid #10b981',
+    borderBottom: '3px solid #CBF518',
     paddingBottom: 10,
     gap: 15,
   },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#10b981',
+    color: '#CBF518',
     marginBottom: 8,
     paddingBottom: 5,
     borderBottom: '1px solid #d1d5db',
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
   col5: { width: '20%', textAlign: 'right' },
   // Resumen
   resumenBox: {
-    border: '2px solid #10b981',
+    border: '2px solid #CBF518',
     borderRadius: 4,
     padding: 12,
-    backgroundColor: '#ecfdf5',
+    backgroundColor: '#fefff0',
     marginBottom: 15,
     marginTop: 10,
   },
@@ -109,10 +109,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 8,
     paddingTop: 8,
-    borderTop: '2px solid #10b981',
+    borderTop: '2px solid #CBF518',
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#10b981',
+    color: '#CBF518',
   },
   // Firmas
   firmasContainer: {

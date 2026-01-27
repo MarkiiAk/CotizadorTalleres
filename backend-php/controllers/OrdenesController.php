@@ -400,10 +400,8 @@ class OrdenesController {
             $orden['vehiculo']['kilometrajeSalida'] = $orden['kilometraje_salida'];
         }
         
-        // Mapear fecha_promesa_entrega a fechaSalida
-        if (isset($orden['fecha_promesa_entrega']) && $orden['fecha_promesa_entrega']) {
-            $orden['fechaSalida'] = $orden['fecha_promesa_entrega'];
-        }
+        // Mapear fecha_promesa_entrega a fechaSalida (SIEMPRE, incluso si es null)
+        $orden['fechaSalida'] = $orden['fecha_promesa_entrega'] ?? null;
         
         return $orden;
     }

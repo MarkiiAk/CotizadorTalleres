@@ -1,8 +1,7 @@
 <?php
 /**
  * Controlador de órdenes de servicio
- * Basado en CREAR-TABLAS-CPANEL.sql
- * SIN campo 'vin' (no existe en la BD actual de cPanel)
+ * Basado en database-schema.sql REAL
  */
 
 class OrdenesController {
@@ -109,18 +108,27 @@ class OrdenesController {
             // 3. Generar numero_orden
             $numero_orden = $this->generateNumeroOrden();
             
-            // 4. Mapear datos del vehículo desde frontend
-            $vehiculoData = $data['vehiculo'] ?? [];
-            $kilometraje = $vehiculoData['kilometrajeEntrada'] ?? $vehiculoData['kilometraje'] ?? null;
-            $nivelCombustible = $vehiculoData['nivelGasolina'] ?? 0;
+            // 4. Preparar datos de inspección desde frontend
+            $inspeccionData = $data['inspeccion'] ?? [];
+            $exteriores = $inspeccionData['exteriores'] ?? [];
+            $interiores = $inspeccionData['interiores'] ?? [];
             
-            // 5. Insertar orden - CAMPOS SEGÚN SCHEMA REAL
+            // 5. Insertar orden con TODOS los campos del schema
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes_servicio (
                     numero_orden, cliente_id, vehiculo_id, usuario_id,
-                    problema_reportado, nivel_combustible, estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    problema_reportado,
+                    nivel_combustible,
+                    tiene_radio, tiene_encendedor, tiene_gato,
+                    tiene_llanta_refaccion, tiene_herramienta, tiene_antena,
+                    tiene_tapetes, tiene_extinguidor, tiene_documentos,
+                    subtotal_mano_obra, subtotal_refacciones, total,
+                    estado
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
+            
+            $vehiculoData = $data['vehiculo'] ?? [];
+            $resumenData = $data['resumen'] ?? [];
             
             $stmt->execute([
                 $numero_orden,
@@ -128,36 +136,32 @@ class OrdenesController {
                 $vehiculo_id,
                 $userData['userId'],
                 $data['problemaReportado'] ?? '',
-                $nivelCombustible,
+                $vehiculoData['nivelGasolina'] ?? 0,
+                isset($interiores['radio']) && $interiores['radio'] ? 1 : 0,
+                isset($interiores['encendedor']) && $interiores['encendedor'] ? 1 : 0,
+                isset($exteriores['gato']) && $exteriores['gato'] ? 1 : 0,
+                isset($exteriores['llantaRefaccion']) && $exteriores['llantaRefaccion'] ? 1 : 0,
+                isset($exteriores['herramienta']) && $exteriores['herramienta'] ? 1 : 0,
+                isset($exteriores['antena']) && $exteriores['antena'] ? 1 : 0,
+                isset($interiores['tapetes']) && $interiores['tapetes'] ? 1 : 0,
+                isset($exteriores['extinguidor']) && $exteriores['extinguidor'] ? 1 : 0,
+                isset($interiores['documentos']) && $interiores['documentos'] ? 1 : 0,
+                $resumenData['subtotalManoObra'] ?? 0,
+                $resumenData['subtotalRefacciones'] ?? 0,
+                $resumenData['total'] ?? 0,
                 'pendiente'
             ]);
             
             $orden_id = $this->db->lastInsertId();
             
-            // 6. Insertar inspección visual
-            if (isset($data['inspeccion']) && !empty($data['inspeccion'])) {
-                $this->insertInspeccion($orden_id, $data['inspeccion']);
-            }
-            
-            // 7. Insertar servicios
-            if (isset($data['servicios']) && !empty($data['servicios'])) {
-                $this->insertServicios($orden_id, $data['servicios']);
-            }
-            
-            // 8. Insertar refacciones
-            if (isset($data['refacciones']) && !empty($data['refacciones'])) {
-                $this->insertRefacciones($orden_id, $data['refacciones']);
-            }
-            
-            // 9. Insertar mano de obra
+            // 6. Insertar servicios/mano de obra en servicios_orden
             if (isset($data['manoDeObra']) && !empty($data['manoDeObra'])) {
-                $this->insertManoObra($orden_id, $data['manoDeObra']);
+                $this->insertServiciosOrden($orden_id, $data['manoDeObra']);
             }
             
-            // 10. Calcular y actualizar total
-            if (isset($data['resumen']['total'])) {
-                $this->db->prepare('UPDATE ordenes_servicio SET total = ? WHERE id = ?')
-                         ->execute([$data['resumen']['total'], $orden_id]);
+            // 7. Insertar refacciones en refacciones_orden
+            if (isset($data['refacciones']) && !empty($data['refacciones'])) {
+                $this->insertRefaccionesOrden($orden_id, $data['refacciones']);
             }
             
             // Commit transacción
@@ -197,61 +201,42 @@ class OrdenesController {
             // Iniciar transacción
             $this->db->beginTransaction();
             
-            // Actualizar campos básicos si se enviaron
+            // Actualizar campos si se enviaron
             $updateFields = [];
             $updateValues = [];
             
-            $fieldMapping = [
-                'diagnostico' => 'diagnostico',
-                'recomendaciones' => 'recomendaciones',
-                'estado' => 'estado',
-                'total' => 'total'
-            ];
-            
-            foreach ($fieldMapping as $dataKey => $dbField) {
-                if (isset($data[$dataKey])) {
-                    $updateFields[] = "$dbField = ?";
-                    $updateValues[] = $data[$dataKey];
-                }
+            if (isset($data['diagnostico'])) {
+                $updateFields[] = 'diagnostico = ?';
+                $updateValues[] = $data['diagnostico'];
+            }
+            if (isset($data['estado'])) {
+                $updateFields[] = 'estado = ?';
+                $updateValues[] = $data['estado'];
+            }
+            if (isset($data['resumen']['total'])) {
+                $updateFields[] = 'total = ?';
+                $updateValues[] = $data['resumen']['total'];
             }
             
             if (!empty($updateFields)) {
-                $updateValues[] = $userData['userId'];
                 $updateValues[] = $id;
-                
-                $sql = 'UPDATE ordenes_servicio SET ' . implode(', ', $updateFields) . 
-                       ', updated_by = ? WHERE id = ?';
-                       
+                $sql = 'UPDATE ordenes_servicio SET ' . implode(', ', $updateFields) . ' WHERE id = ?';
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute($updateValues);
             }
             
-            // Actualizar datos relacionados si se enviaron
-            if (isset($data['inspeccion'])) {
-                $this->db->prepare('DELETE FROM inspeccion_visual WHERE orden_id = ?')->execute([$id]);
-                if (!empty($data['inspeccion'])) {
-                    $this->insertInspeccion($id, $data['inspeccion']);
-                }
-            }
-            
-            if (isset($data['servicios'])) {
-                $this->db->prepare('DELETE FROM servicios WHERE orden_id = ?')->execute([$id]);
-                if (!empty($data['servicios'])) {
-                    $this->insertServicios($id, $data['servicios']);
+            // Actualizar servicios y refacciones si se enviaron
+            if (isset($data['manoDeObra'])) {
+                $this->db->prepare('DELETE FROM servicios_orden WHERE orden_id = ?')->execute([$id]);
+                if (!empty($data['manoDeObra'])) {
+                    $this->insertServiciosOrden($id, $data['manoDeObra']);
                 }
             }
             
             if (isset($data['refacciones'])) {
-                $this->db->prepare('DELETE FROM refacciones WHERE orden_id = ?')->execute([$id]);
+                $this->db->prepare('DELETE FROM refacciones_orden WHERE orden_id = ?')->execute([$id]);
                 if (!empty($data['refacciones'])) {
-                    $this->insertRefacciones($id, $data['refacciones']);
-                }
-            }
-            
-            if (isset($data['manoDeObra'])) {
-                $this->db->prepare('DELETE FROM mano_obra WHERE orden_id = ?')->execute([$id]);
-                if (!empty($data['manoDeObra'])) {
-                    $this->insertManoObra($id, $data['manoDeObra']);
+                    $this->insertRefaccionesOrden($id, $data['refacciones']);
                 }
             }
             
@@ -300,31 +285,20 @@ class OrdenesController {
     // ========== MÉTODOS AUXILIARES ==========
     
     private function enrichOrdenData($orden) {
-        // Obtener inspección visual
-        $stmt = $this->db->prepare('SELECT * FROM inspeccion_visual WHERE orden_id = ?');
-        $stmt->execute([$orden['id']]);
-        $orden['inspeccion'] = $stmt->fetchAll();
-        
-        // Obtener servicios
-        $stmt = $this->db->prepare('SELECT * FROM servicios WHERE orden_id = ?');
-        $stmt->execute([$orden['id']]);
-        $orden['servicios'] = $stmt->fetchAll();
-        
-        // Obtener refacciones
-        $stmt = $this->db->prepare('SELECT * FROM refacciones WHERE orden_id = ?');
-        $stmt->execute([$orden['id']]);
-        $orden['refacciones'] = $stmt->fetchAll();
-        
-        // Obtener mano de obra
-        $stmt = $this->db->prepare('SELECT * FROM mano_obra WHERE orden_id = ?');
+        // Obtener servicios/mano de obra
+        $stmt = $this->db->prepare('SELECT * FROM servicios_orden WHERE orden_id = ?');
         $stmt->execute([$orden['id']]);
         $orden['manoDeObra'] = $stmt->fetchAll();
+        
+        // Obtener refacciones
+        $stmt = $this->db->prepare('SELECT * FROM refacciones_orden WHERE orden_id = ?');
+        $stmt->execute([$orden['id']]);
+        $orden['refacciones'] = $stmt->fetchAll();
         
         return $orden;
     }
     
     private function upsertCliente($clienteData) {
-        // Mapear campos del frontend al backend
         $nombre = $clienteData['nombreCompleto'] ?? $clienteData['nombre'] ?? null;
         $telefono = $clienteData['telefono'] ?? null;
         $email = $clienteData['email'] ?? null;
@@ -375,7 +349,7 @@ class OrdenesController {
         $existing = $stmt->fetch();
         
         if ($existing) {
-            // Actualizar (SIN vin)
+            // Actualizar
             $stmt = $this->db->prepare('
                 UPDATE vehiculos SET marca = ?, modelo = ?, anio = ?, 
                        color = ?, cliente_id = ?
@@ -384,7 +358,7 @@ class OrdenesController {
             $stmt->execute([$marca, $modelo, $anio, $color, $cliente_id, $existing['id']]);
             return $existing['id'];
         } else {
-            // Insertar (SIN vin)
+            // Insertar
             $stmt = $this->db->prepare('
                 INSERT INTO vehiculos (marca, modelo, anio, color, placas, cliente_id)
                 VALUES (?, ?, ?, ?, ?, ?)
@@ -394,60 +368,30 @@ class OrdenesController {
         }
     }
     
-    private function insertInspeccion($orden_id, $inspeccionData) {
+    private function insertServiciosOrden($orden_id, $servicios) {
         $stmt = $this->db->prepare('
-            INSERT INTO inspeccion_visual (orden_id, item, estado, observaciones)
-            VALUES (?, ?, ?, ?)
-        ');
-        
-        // Procesar exteriores
-        if (isset($inspeccionData['exteriores'])) {
-            foreach ($inspeccionData['exteriores'] as $item => $valor) {
-                $estado = $valor ? 'bueno' : 'malo';
-                $stmt->execute([$orden_id, $item, $estado, null]);
-            }
-        }
-        
-        // Procesar interiores
-        if (isset($inspeccionData['interiores'])) {
-            foreach ($inspeccionData['interiores'] as $item => $valor) {
-                $estado = $valor ? 'bueno' : 'malo';
-                $stmt->execute([$orden_id, $item, $estado, null]);
-            }
-        }
-        
-        // Procesar daños adicionales
-        if (isset($inspeccionData['danosAdicionales'])) {
-            foreach ($inspeccionData['danosAdicionales'] as $dano) {
-                $stmt->execute([
-                    $orden_id,
-                    $dano['ubicacion'] ?? 'Sin ubicación',
-                    'malo',
-                    ($dano['tipo'] ?? '') . ': ' . ($dano['descripcion'] ?? '')
-                ]);
-            }
-        }
-    }
-    
-    private function insertServicios($orden_id, $servicios) {
-        $stmt = $this->db->prepare('
-            INSERT INTO servicios (orden_id, descripcion, precio, cantidad)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO servicios_orden (orden_id, descripcion, precio_unitario, cantidad, subtotal)
+            VALUES (?, ?, ?, ?, ?)
         ');
         
         foreach ($servicios as $servicio) {
+            $cantidad = $servicio['horas'] ?? $servicio['cantidad'] ?? 1;
+            $precioUnitario = $servicio['precio'] ?? $servicio['precio_unitario'] ?? 0;
+            $subtotal = $cantidad * $precioUnitario;
+            
             $stmt->execute([
                 $orden_id,
                 $servicio['descripcion'],
-                $servicio['precio'] ?? 0,
-                $servicio['cantidad'] ?? 1
+                $precioUnitario,
+                $cantidad,
+                $subtotal
             ]);
         }
     }
     
-    private function insertRefacciones($orden_id, $refacciones) {
+    private function insertRefaccionesOrden($orden_id, $refacciones) {
         $stmt = $this->db->prepare('
-            INSERT INTO refacciones (orden_id, descripcion, cantidad, precio_unitario, subtotal)
+            INSERT INTO refacciones_orden (orden_id, descripcion, cantidad, precio_unitario, subtotal)
             VALUES (?, ?, ?, ?, ?)
         ');
         
@@ -461,27 +405,6 @@ class OrdenesController {
                 $refaccion['nombre'] ?? $refaccion['descripcion'],
                 $cantidad,
                 $precioUnitario,
-                $subtotal
-            ]);
-        }
-    }
-    
-    private function insertManoObra($orden_id, $manoObra) {
-        $stmt = $this->db->prepare('
-            INSERT INTO mano_obra (orden_id, descripcion, horas, precio_hora, subtotal)
-            VALUES (?, ?, ?, ?, ?)
-        ');
-        
-        foreach ($manoObra as $trabajo) {
-            $horas = $trabajo['horas'] ?? 1;
-            $precioHora = $trabajo['precio'] ?? $trabajo['precio_hora'] ?? 0;
-            $subtotal = $horas * $precioHora;
-            
-            $stmt->execute([
-                $orden_id,
-                $trabajo['descripcion'],
-                $horas,
-                $precioHora,
                 $subtotal
             ]);
         }

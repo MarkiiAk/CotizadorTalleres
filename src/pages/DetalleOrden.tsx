@@ -30,6 +30,9 @@ export const DetalleOrden = () => {
   const [orden, setOrden] = useState<Orden | null>(null);
   const [showCloseModal, setShowCloseModal] = useState(false);
 
+  // Normalizar estado: mapear "pendiente" a "abierta" para compatibilidad
+  const estadoNormalizado = orden?.estado === 'pendiente' ? 'abierta' : orden?.estado;
+
   // Aplicar el tema al documento
   useEffect(() => {
     if (themeMode === 'dark') {
@@ -204,8 +207,8 @@ export const DetalleOrden = () => {
                   {presupuesto.folio}
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Estado: <span className={orden?.estado === 'abierta' ? 'text-green-600' : 'text-gray-600'}>
-                    {orden?.estado === 'abierta' ? 'Abierta' : 'Cerrada'}
+                  Estado: <span className={estadoNormalizado === 'abierta' ? 'text-green-600' : 'text-gray-600'}>
+                    {estadoNormalizado === 'abierta' ? 'Abierta' : 'Cerrada'}
                   </span>
                 </p>
               </div>
@@ -223,7 +226,7 @@ export const DetalleOrden = () => {
               />
 
               {/* Guardar Cambios - Solo si está abierta */}
-              {orden?.estado === 'abierta' && (
+              {estadoNormalizado === 'abierta' && (
                 <Button
                   variant="primary"
                   onClick={handleSaveChanges}
@@ -236,7 +239,7 @@ export const DetalleOrden = () => {
               )}
 
               {/* Cerrar Orden - Solo si está abierta */}
-              {orden?.estado === 'abierta' && (
+              {estadoNormalizado === 'abierta' && (
                 <Button
                   variant="danger"
                   onClick={() => setShowCloseModal(true)}
@@ -262,7 +265,7 @@ export const DetalleOrden = () => {
 
           {/* Botones móviles */}
           <div className="flex md:hidden gap-2 mt-3">
-            {orden?.estado === 'abierta' && (
+            {estadoNormalizado === 'abierta' && (
               <>
                 <Button
                   variant="primary"
@@ -300,24 +303,24 @@ export const DetalleOrden = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Información del Vehículo */}
-          <VehiculoSection disabled={orden?.estado === 'cerrada'} />
+          <VehiculoSection disabled={estadoNormalizado === 'cerrada'} />
 
           {/* Información del Cliente */}
-          <ClienteSection disabled={orden?.estado === 'cerrada'} />
+          <ClienteSection disabled={estadoNormalizado === 'cerrada'} />
 
           {/* Inspección Visual del Vehículo */}
-          <InspeccionSection disabled={orden?.estado === 'cerrada'} />
+          <InspeccionSection disabled={estadoNormalizado === 'cerrada'} />
 
           {/* Problema y Diagnóstico */}
-          <ProblemaSection disabled={orden?.estado === 'cerrada'} />
+          <ProblemaSection disabled={estadoNormalizado === 'cerrada'} />
 
           {/* Servicios */}
-          <ServiciosSection disabled={orden?.estado === 'cerrada'} />
+          <ServiciosSection disabled={estadoNormalizado === 'cerrada'} />
 
           {/* Refacciones y Mano de Obra */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <RefaccionesSection disabled={orden?.estado === 'cerrada'} />
-            <ManoObraSection disabled={orden?.estado === 'cerrada'} />
+            <RefaccionesSection disabled={estadoNormalizado === 'cerrada'} />
+            <ManoObraSection disabled={estadoNormalizado === 'cerrada'} />
           </div>
 
           {/* Resumen Financiero */}

@@ -2,6 +2,7 @@
 /**
  * Controlador de órdenes de servicio
  * Basado en CREAR-TABLAS-CPANEL.sql
+ * SIN campo 'vin' (no existe en la BD actual de cPanel)
  */
 
 class OrdenesController {
@@ -60,7 +61,7 @@ class OrdenesController {
                        c.telefono as cliente_telefono,
                        c.email as cliente_email,
                        c.direccion as cliente_direccion,
-                       v.marca, v.modelo, v.anio, v.placas, v.color, v.vin
+                       v.marca, v.modelo, v.anio, v.placas, v.color
                 FROM ordenes o
                 LEFT JOIN clientes c ON o.cliente_id = c.id
                 LEFT JOIN vehiculos v ON o.vehiculo_id = v.id
@@ -113,7 +114,7 @@ class OrdenesController {
             $kilometraje = $vehiculoData['kilometrajeEntrada'] ?? $vehiculoData['kilometraje'] ?? null;
             $nivelGasolina = $vehiculoData['nivelGasolina'] ?? 0;
             
-            // 5. Insertar orden (USAR CAMPOS EXACTOS DEL SCHEMA CREAR-TABLAS-CPANEL.sql)
+            // 5. Insertar orden
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes (
                     folio, cliente_id, vehiculo_id, fecha_ingreso,
@@ -367,7 +368,6 @@ class OrdenesController {
         $anio = $vehiculoData['anio'] ?? null;
         $color = $vehiculoData['color'] ?? null;
         $placas = $vehiculoData['placas'] ?? null;
-        $vin = $vehiculoData['vin'] ?? null;
         
         if (!$marca || !$modelo || !$placas) {
             throw new Exception('Marca, modelo y placas del vehículo son requeridos');
@@ -379,21 +379,21 @@ class OrdenesController {
         $existing = $stmt->fetch();
         
         if ($existing) {
-            // Actualizar
+            // Actualizar (SIN vin)
             $stmt = $this->db->prepare('
                 UPDATE vehiculos SET marca = ?, modelo = ?, anio = ?, 
-                       color = ?, vin = ?, cliente_id = ?
+                       color = ?, cliente_id = ?
                 WHERE id = ?
             ');
-            $stmt->execute([$marca, $modelo, $anio, $color, $vin, $cliente_id, $existing['id']]);
+            $stmt->execute([$marca, $modelo, $anio, $color, $cliente_id, $existing['id']]);
             return $existing['id'];
         } else {
-            // Insertar
+            // Insertar (SIN vin)
             $stmt = $this->db->prepare('
-                INSERT INTO vehiculos (marca, modelo, anio, color, placas, vin, cliente_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO vehiculos (marca, modelo, anio, color, placas, cliente_id)
+                VALUES (?, ?, ?, ?, ?, ?)
             ');
-            $stmt->execute([$marca, $modelo, $anio, $color, $placas, $vin, $cliente_id]);
+            $stmt->execute([$marca, $modelo, $anio, $color, $placas, $cliente_id]);
             return $this->db->lastInsertId();
         }
     }

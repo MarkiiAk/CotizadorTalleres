@@ -119,6 +119,8 @@ export const DetalleOrden = () => {
         refacciones: presupuesto.refacciones,
         manoDeObra: presupuesto.manoDeObra,
         resumen: presupuesto.resumen,
+        fechaSalida: presupuesto.fechaSalida?.toISOString() || null,
+        fechaEntrada: presupuesto.fechaEntrada?.toISOString() || presupuesto.fecha.toISOString(),
       };
 
       console.log('💾 Actualizando orden en API...');

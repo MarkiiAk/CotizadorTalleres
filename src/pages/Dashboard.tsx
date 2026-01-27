@@ -108,8 +108,16 @@ export const Dashboard = () => {
 
   const stats = {
     total: ordenes.length,
-    abiertas: ordenes.filter((o) => o.estado === 'abierta').length,
-    cerradas: ordenes.filter((o) => o.estado === 'cerrada').length,
+    abiertas: ordenes.filter((o) => {
+      const ordenAny = o as any;
+      const estado = ordenAny.estado || o.estado;
+      return estado === 'abierta';
+    }).length,
+    cerradas: ordenes.filter((o) => {
+      const ordenAny = o as any;
+      const estado = ordenAny.estado || o.estado;
+      return estado === 'cerrada' || estado === 'entregada';
+    }).length,
   };
 
   return (
@@ -343,7 +351,7 @@ export const Dashboard = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {getEstadoBadge(orden.estado)}
+                        {getEstadoBadge((ordenAny as any).estado || orden.estado)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm text-gray-900 dark:text-white">

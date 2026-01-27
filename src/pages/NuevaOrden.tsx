@@ -78,6 +78,8 @@ export const NuevaOrden = () => {
         refacciones: presupuesto.refacciones,
         manoDeObra: presupuesto.manoDeObra,
         resumen: presupuesto.resumen,
+        fechaSalida: presupuesto.fechaSalida?.toISOString() || null,
+        fechaEntrada: presupuesto.fechaEntrada?.toISOString() || presupuesto.fecha.toISOString(),
         estado: 'abierta' as const,
         fechaCreacion: presupuesto.fecha.toISOString(),
         fechaModificacion: new Date().toISOString(),

@@ -89,13 +89,10 @@ CREATE TABLE IF NOT EXISTS ordenes_servicio (
     problema_reportado TEXT NOT NULL,
     diagnostico TEXT,
     
-{error: "Error al crear orden",…}
-error
-: 
-"Error al crear orden"
-message
-: 
-"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'folio' in 'SELECT'"
+    -- Kilometrajes
+    kilometraje_entrada VARCHAR(20),
+    kilometraje_salida VARCHAR(20),
+    
     -- Datos de inspección
     nivel_combustible DECIMAL(5,2) DEFAULT 0,
     tiene_radio BOOLEAN DEFAULT FALSE,

@@ -106,34 +106,30 @@ class OrdenesController {
             // 2. Insertar o actualizar vehículo
             $vehiculo_id = $this->upsertVehiculo($data['vehiculo'], $cliente_id);
             
-            // 3. Generar folio
-            $folio = $this->generateFolio();
+            // 3. Generar numero_orden
+            $numero_orden = $this->generateNumeroOrden();
             
             // 4. Mapear datos del vehículo desde frontend
             $vehiculoData = $data['vehiculo'] ?? [];
             $kilometraje = $vehiculoData['kilometrajeEntrada'] ?? $vehiculoData['kilometraje'] ?? null;
-            $nivelGasolina = $vehiculoData['nivelGasolina'] ?? 0;
+            $nivelCombustible = $vehiculoData['nivelGasolina'] ?? 0;
             
-            // 5. Insertar orden
+            // 5. Insertar orden - CAMPOS SEGÚN SCHEMA REAL
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes_servicio (
-                    folio, cliente_id, vehiculo_id, fecha_ingreso,
-                    kilometraje, nivel_gasolina, problema_reportado,
-                    observaciones_iniciales, estado, created_by
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    numero_orden, cliente_id, vehiculo_id, usuario_id,
+                    problema_reportado, nivel_combustible, estado
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             ');
             
             $stmt->execute([
-                $folio,
+                $numero_orden,
                 $cliente_id,
                 $vehiculo_id,
-                $data['fechaEntrada'] ?? date('Y-m-d H:i:s'),
-                $kilometraje,
-                $nivelGasolina,
+                $userData['userId'],
                 $data['problemaReportado'] ?? '',
-                $data['observaciones_iniciales'] ?? '',
-                'abierta',
-                $userData['userId']
+                $nivelCombustible,
+                'pendiente'
             ]);
             
             $orden_id = $this->db->lastInsertId();
@@ -491,29 +487,30 @@ class OrdenesController {
         }
     }
     
-    private function generateFolio() {
-        $prefix = 'SAG-';
-        $date = date('dmY');
+    private function generateNumeroOrden() {
+        $prefix = 'OS-';
+        $year = date('Y');
+        $month = date('m');
         
-        // Obtener el último folio del día
+        // Obtener el último numero_orden del mes
         $stmt = $this->db->prepare("
-            SELECT folio FROM ordenes_servicio 
-            WHERE folio LIKE ? 
+            SELECT numero_orden FROM ordenes_servicio 
+            WHERE numero_orden LIKE ? 
             ORDER BY id DESC 
             LIMIT 1
         ");
-        $stmt->execute([$prefix . $date . '%']);
-        $lastFolio = $stmt->fetchColumn();
+        $stmt->execute([$prefix . $year . $month . '%']);
+        $lastOrden = $stmt->fetchColumn();
         
-        if ($lastFolio) {
+        if ($lastOrden) {
             // Extraer número del final
-            preg_match('/-(\d+)$/', $lastFolio, $matches);
+            preg_match('/-(\d+)$/', $lastOrden, $matches);
             $lastNumber = isset($matches[1]) ? (int)$matches[1] : 0;
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;
         }
         
-        return $prefix . $date . '-' . $newNumber;
+        return $prefix . $year . $month . '-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 }

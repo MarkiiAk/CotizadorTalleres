@@ -205,24 +205,40 @@ class OrdenesController {
             $updateFields = [];
             $updateValues = [];
             
+            // Log para debugging
+            error_log('=== UPDATE ORDEN ===');
+            error_log('ID: ' . $id);
+            error_log('Data recibida: ' . json_encode($data));
+            
             if (isset($data['diagnostico'])) {
                 $updateFields[] = 'diagnostico = ?';
                 $updateValues[] = $data['diagnostico'];
             }
+            
             if (isset($data['estado'])) {
                 $updateFields[] = 'estado = ?';
                 $updateValues[] = $data['estado'];
+                error_log('Estado a actualizar: ' . $data['estado']);
             }
+            
             if (isset($data['resumen']['total'])) {
                 $updateFields[] = 'total = ?';
                 $updateValues[] = $data['resumen']['total'];
             }
             
+            // Siempre actualizar ultima_modificacion
+            $updateFields[] = 'ultima_modificacion = NOW()';
+            
             if (!empty($updateFields)) {
                 $updateValues[] = $id;
                 $sql = 'UPDATE ordenes_servicio SET ' . implode(', ', $updateFields) . ' WHERE id = ?';
+                error_log('SQL: ' . $sql);
+                error_log('Values: ' . json_encode($updateValues));
+                
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute($updateValues);
+                
+                error_log('Filas afectadas: ' . $stmt->rowCount());
             }
             
             // Actualizar servicios y refacciones si se enviaron

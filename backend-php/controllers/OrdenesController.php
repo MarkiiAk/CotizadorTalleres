@@ -117,14 +117,14 @@ class OrdenesController {
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes_servicio (
                     numero_orden, cliente_id, vehiculo_id, usuario_id,
-                    problema_reportado,
+                    problema_reportado, diagnostico,
                     nivel_combustible,
                     tiene_radio, tiene_encendedor, tiene_gato,
                     tiene_llanta_refaccion, tiene_herramienta, tiene_antena,
                     tiene_tapetes, tiene_extinguidor, tiene_documentos,
                     subtotal_mano_obra, subtotal_refacciones, total,
                     estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $vehiculoData = $data['vehiculo'] ?? [];
@@ -136,6 +136,7 @@ class OrdenesController {
                 $vehiculo_id,
                 $userData['userId'],
                 $data['problemaReportado'] ?? '',
+                $data['diagnosticoTecnico'] ?? '',  // ✅ AGREGAR DIAGNÓSTICO TÉCNICO
                 $vehiculoData['nivelGasolina'] ?? 0,
                 isset($interiores['radio']) && $interiores['radio'] ? 1 : 0,
                 isset($interiores['encendedor']) && $interiores['encendedor'] ? 1 : 0,
@@ -146,15 +147,20 @@ class OrdenesController {
                 isset($interiores['tapetes']) && $interiores['tapetes'] ? 1 : 0,
                 isset($exteriores['extinguidor']) && $exteriores['extinguidor'] ? 1 : 0,
                 isset($interiores['documentos']) && $interiores['documentos'] ? 1 : 0,
-                $resumenData['subtotalManoObra'] ?? 0,
-                $resumenData['subtotalRefacciones'] ?? 0,
+                $resumenData['manoDeObra'] ?? 0,
+                $resumenData['refacciones'] ?? 0,
                 $resumenData['total'] ?? 0,
                 'abierta' // Estado inicial siempre es 'abierta'
             ]);
             
             $orden_id = $this->db->lastInsertId();
             
-            // 6. Insertar servicios/mano de obra en servicios_orden
+            // 6. Insertar SERVICIOS en servicios_orden
+            if (isset($data['servicios']) && !empty($data['servicios'])) {
+                $this->insertServiciosOrden($orden_id, $data['servicios']);
+            }
+            
+            // 6b. Insertar MANO DE OBRA en servicios_orden
             if (isset($data['manoDeObra']) && !empty($data['manoDeObra'])) {
                 $this->insertServiciosOrden($orden_id, $data['manoDeObra']);
             }
@@ -301,15 +307,52 @@ class OrdenesController {
     // ========== MÉTODOS AUXILIARES ==========
     
     private function enrichOrdenData($orden) {
-        // Obtener servicios/mano de obra
+        // Obtener servicios/mano de obra de servicios_orden
         $stmt = $this->db->prepare('SELECT * FROM servicios_orden WHERE orden_id = ?');
         $stmt->execute([$orden['id']]);
-        $orden['manoDeObra'] = $stmt->fetchAll();
+        $serviciosOrden = $stmt->fetchAll();
+        
+        // Convertir formato BD a frontend
+        $orden['servicios'] = [];
+        $orden['manoDeObra'] = [];
+        foreach ($serviciosOrden as $servicio) {
+            $item = [
+                'id' => (string)$servicio['id'],
+                'descripcion' => $servicio['descripcion'],
+                'precio' => (float)$servicio['precio_unitario'],
+                'cantidad' => (float)$servicio['cantidad'],
+                'subtotal' => (float)$servicio['subtotal']
+            ];
+            // Por ahora, todos van a manoDeObra (servicios y mano de obra se guardan ahí)
+            $orden['manoDeObra'][] = $item;
+        }
         
         // Obtener refacciones
         $stmt = $this->db->prepare('SELECT * FROM refacciones_orden WHERE orden_id = ?');
         $stmt->execute([$orden['id']]);
-        $orden['refacciones'] = $stmt->fetchAll();
+        $refacciones = $stmt->fetchAll();
+        
+        // Convertir formato BD a frontend
+        $orden['refacciones'] = [];
+        foreach ($refacciones as $refaccion) {
+            $orden['refacciones'][] = [
+                'id' => (string)$refaccion['id'],
+                'nombre' => $refaccion['descripcion'],
+                'cantidad' => (float)$refaccion['cantidad'],
+                'precioVenta' => (float)$refaccion['precio_unitario'],
+                'total' => (float)$refaccion['subtotal']
+            ];
+        }
+        
+        // Mapear campo diagnostico a diagnosticoTecnico para el frontend
+        if (isset($orden['diagnostico'])) {
+            $orden['diagnosticoTecnico'] = $orden['diagnostico'];
+        }
+        
+        // Mapear problema_reportado a problemaReportado
+        if (isset($orden['problema_reportado'])) {
+            $orden['problemaReportado'] = $orden['problema_reportado'];
+        }
         
         return $orden;
     }

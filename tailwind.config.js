@@ -133,19 +133,19 @@ export default {
           950: '#172554',
         },
         
-        // SAG Brand - Verde sutil para marca (solo en logos/detalles)
+        // SAG Brand - Verde lima brillante del logo
         sag: {
-          50: '#f0ffe5',
-          100: '#dcffc7',
-          200: '#bdff94',
-          300: '#8fff56',
-          400: '#66ff1f',
-          500: '#4ae600',
-          600: '#37b800',
-          700: '#2a8b00',
-          800: '#246e07',
-          900: '#1f5c0b',
-          950: '#0d3302',
+          50: '#fefff0',
+          100: '#fdfee0',
+          200: '#fbfdc7',
+          300: '#f6faa0',
+          400: '#eff669',
+          500: '#CBF518',  // Color principal del logo
+          600: '#a8c914',
+          700: '#7f9610',
+          800: '#65770d',
+          900: '#4d5c0a',
+          950: '#2a3305',
         },
       },
       fontFamily: {

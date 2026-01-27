@@ -31,7 +31,7 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
         {/* Datos básicos del vehículo */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <Car size={20} className="text-green-600" />
+            <Car size={20} className="text-sag-600" />
             Datos del Vehículo
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -79,7 +79,7 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
         {/* Kilometraje y fechas */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <Gauge size={20} className="text-green-600" />
+            <Gauge size={20} className="text-sag-600" />
             Kilometraje y Fechas
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -130,7 +130,7 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
                   disabled={disabled}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-50 focus:outline-none focus:ring-0 focus:border-green-600 dark:focus:border-green-500 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-50 focus:outline-none focus:ring-0 focus:border-sag-600 dark:focus:border-sag-500 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
@@ -163,7 +163,7 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
                     usePresupuestoStore.setState({ presupuesto: store.presupuesto });
                   }}
                   disabled={disabled}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-50 focus:outline-none focus:ring-0 focus:border-green-600 dark:focus:border-green-500 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-50 focus:outline-none focus:ring-0 focus:border-sag-600 dark:focus:border-sag-500 transition-all duration-200 ease-out disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
@@ -173,7 +173,7 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
         {/* Nivel de gasolina */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <Gauge size={20} className="text-green-600" />
+            <Gauge size={20} className="text-sag-600" />
             Estado de Gasolina
           </h3>
           <div className="max-w-md">

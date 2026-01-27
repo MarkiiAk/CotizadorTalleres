@@ -148,7 +148,7 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
           checked={checked}
           onChange={onChange}
           disabled={disabled}
-          className="w-5 h-5 text-green-700 dark:text-green-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-5 h-5 text-sag-700 dark:text-sag-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-sag-600 dark:focus:ring-sag-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         />
         <span className={`text-sm font-medium transition-colors ${
           checked 
@@ -170,7 +170,7 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
         {/* Exteriores */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <ClipboardCheck size={20} className="text-green-600" />
+            <ClipboardCheck size={20} className="text-sag-600" />
             Accesorios Exteriores
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -235,7 +235,7 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
         {/* Interiores */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <ClipboardCheck size={20} className="text-green-600" />
+            <ClipboardCheck size={20} className="text-sag-600" />
             Accesorios Interiores
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">

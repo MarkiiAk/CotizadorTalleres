@@ -165,7 +165,7 @@ export const DetalleOrden = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-600 to-green-700 rounded-2xl mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-sag-600 to-sag-700 rounded-2xl mb-6 shadow-lg">
             <svg
               className="w-10 h-10 text-white"
               fill="none"
@@ -180,10 +180,10 @@ export const DetalleOrden = () => {
             Cargando orden...
           </h2>
           <div className="flex gap-2 justify-center">
-            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-            <div className="w-3 h-3 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '450ms' }}></div>
+            <div className="w-3 h-3 bg-sag-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-3 h-3 bg-sag-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-3 h-3 bg-sag-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            <div className="w-3 h-3 bg-sag-600 rounded-full animate-bounce" style={{ animationDelay: '450ms' }}></div>
           </div>
         </div>
       </div>
@@ -205,7 +205,7 @@ export const DetalleOrden = () => {
                 className="!p-3"
                 title="Volver al Dashboard"
               />
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
+              <div className="w-12 h-12 bg-gradient-to-br from-sag-500 to-sag-600 rounded-xl flex items-center justify-center shadow-lg shadow-sag-500/30">
                 <FileText className="text-white" size={24} />
               </div>
               <div>
@@ -213,7 +213,7 @@ export const DetalleOrden = () => {
                   {presupuesto.folio}
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Estado: <span className={estadoNormalizado === 'abierta' ? 'text-green-600' : 'text-gray-600'}>
+                  Estado: <span className={estadoNormalizado === 'abierta' ? 'text-sag-600' : 'text-gray-600'}>
                     {estadoNormalizado === 'abierta' ? 'Abierta' : 'Cerrada'}
                   </span>
                 </p>

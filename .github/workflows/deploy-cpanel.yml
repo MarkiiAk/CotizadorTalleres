@@ -131,8 +131,8 @@ jobs:
           local-dir: backend-php/
           server-dir: ./gestion/backend-php/
           
-          # NO limpiar porque el .env ya está configurado manualmente
-          dangerous-clean-slate: false
+          # LIMPIAR para eliminar archivos viejos (pero .env está excluido, no se borra)
+          dangerous-clean-slate: true
           
           exclude: |
             **/.git

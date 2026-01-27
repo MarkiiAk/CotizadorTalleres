@@ -141,9 +141,15 @@ export const DetalleOrden = () => {
       await ordenesAPI.update(id, { estado: 'cerrada' });
       console.log('✅ Orden cerrada exitosamente');
       setShowCloseModal(false);
+      // Después de cerrar, recargar la orden para actualizar el estado local
+      const ordenActualizada = await ordenesAPI.getById(id);
+      if (ordenActualizada) {
+        setOrden(ordenActualizada);
+      }
     } catch (error) {
       console.error('Error al cerrar orden:', error);
       setShowLoader(false);
+      setShowCloseModal(false);
       alert('Hubo un error al cerrar la orden. Por favor intenta de nuevo.');
     }
   };

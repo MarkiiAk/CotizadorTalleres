@@ -149,7 +149,7 @@ class OrdenesController {
                 $resumenData['subtotalManoObra'] ?? 0,
                 $resumenData['subtotalRefacciones'] ?? 0,
                 $resumenData['total'] ?? 0,
-                'abierta'
+                'abierta' // Estado inicial siempre es 'abierta'
             ]);
             
             $orden_id = $this->db->lastInsertId();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import { Presupuesto } from '../types';
 
 // Estilos para el PDF
@@ -11,9 +11,20 @@ const styles = StyleSheet.create({
   },
   // Header
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 15,
     borderBottom: '3px solid #10b981',
     paddingBottom: 10,
+    gap: 15,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    objectFit: 'contain',
+  },
+  headerText: {
+    flex: 1,
   },
   title: {
     fontSize: 24,
@@ -200,10 +211,13 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>SAG GARAGE</Text>
-          <Text style={styles.subtitle}>Orden de Servicio y Presupuesto</Text>
-          <Text style={styles.smallText}>Folio: {presupuesto.folio}</Text>
-          <Text style={styles.smallText}>Fecha de emisión: {formatDate(presupuesto.fecha)}</Text>
+          <Image src="/logo.png" style={styles.logo} />
+          <View style={styles.headerText}>
+            <Text style={styles.title}>SAG GARAGE</Text>
+            <Text style={styles.subtitle}>Orden de Servicio y Presupuesto</Text>
+            <Text style={styles.smallText}>Folio: {presupuesto.folio}</Text>
+            <Text style={styles.smallText}>Fecha de emisión: {formatDate(presupuesto.fecha)}</Text>
+          </View>
         </View>
 
         {/* Información del Cliente y Vehículo */}

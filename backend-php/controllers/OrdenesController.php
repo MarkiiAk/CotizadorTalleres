@@ -235,6 +235,19 @@ class OrdenesController {
                 $updateValues[] = $data['resumen']['total'];
             }
             
+            // Actualizar kilometrajes si vienen en vehiculo
+            if (isset($data['vehiculo']['kilometrajeEntrada'])) {
+                $updateFields[] = 'kilometraje_entrada = ?';
+                $updateValues[] = $data['vehiculo']['kilometrajeEntrada'];
+                error_log('Kilometraje entrada a actualizar: ' . $data['vehiculo']['kilometrajeEntrada']);
+            }
+            
+            if (isset($data['vehiculo']['kilometrajeSalida'])) {
+                $updateFields[] = 'kilometraje_salida = ?';
+                $updateValues[] = $data['vehiculo']['kilometrajeSalida'];
+                error_log('Kilometraje salida a actualizar: ' . $data['vehiculo']['kilometrajeSalida']);
+            }
+            
             // Siempre actualizar ultima_modificacion
             $updateFields[] = 'ultima_modificacion = NOW()';
             

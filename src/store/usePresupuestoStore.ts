@@ -534,6 +534,7 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
     
     const folio = ordenAny.numero_orden || orden.folio || '';
     const fechaCreacion = ordenAny.fecha_ingreso || orden.fechaCreacion;
+    const fechaSalida = orden.fechaSalida || ordenAny.fecha_promesa_entrega;
     
     set({
       presupuesto: {
@@ -541,6 +542,7 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
         folio: folio,
         fecha: new Date(fechaCreacion),
         fechaEntrada: orden.fechaEntrada ? new Date(orden.fechaEntrada) : new Date(fechaCreacion),
+        fechaSalida: fechaSalida ? new Date(fechaSalida) : undefined,
         taller: taller,
         cliente: cliente,
         vehiculo: vehiculo,

@@ -50,10 +50,11 @@ jobs:
           echo "📁 Creando estructura de deploy..."
           mkdir -p deploy-temp
           
-          # Copiar el sitio público (index.html + logo) a la raíz
+          # Copiar el sitio público (index.html + logos) a la raíz
           echo "📄 Copiando sitio público..."
           cp public-site/index.html deploy-temp/
           cp public-site/logo.jpg deploy-temp/
+          cp public-site/logo.png deploy-temp/
           
           # Copiar la aplicación React a la carpeta gestion/
           echo "⚛️  Copiando aplicación React..."

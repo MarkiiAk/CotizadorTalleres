@@ -118,13 +118,14 @@ class OrdenesController {
                 INSERT INTO ordenes_servicio (
                     numero_orden, cliente_id, vehiculo_id, usuario_id,
                     problema_reportado, diagnostico,
+                    kilometraje_entrada, kilometraje_salida,
                     nivel_combustible,
                     tiene_radio, tiene_encendedor, tiene_gato,
                     tiene_llanta_refaccion, tiene_herramienta, tiene_antena,
                     tiene_tapetes, tiene_extinguidor, tiene_documentos,
                     subtotal_mano_obra, subtotal_refacciones, total,
                     estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $vehiculoData = $data['vehiculo'] ?? [];
@@ -136,7 +137,9 @@ class OrdenesController {
                 $vehiculo_id,
                 $userData['userId'],
                 $data['problemaReportado'] ?? '',
-                $data['diagnosticoTecnico'] ?? '',  // ✅ AGREGAR DIAGNÓSTICO TÉCNICO
+                $data['diagnosticoTecnico'] ?? '',
+                $vehiculoData['kilometrajeEntrada'] ?? '',
+                $vehiculoData['kilometrajeSalida'] ?? '',
                 $vehiculoData['nivelGasolina'] ?? 0,
                 isset($interiores['radio']) && $interiores['radio'] ? 1 : 0,
                 isset($interiores['encendedor']) && $interiores['encendedor'] ? 1 : 0,
@@ -352,6 +355,17 @@ class OrdenesController {
         // Mapear problema_reportado a problemaReportado
         if (isset($orden['problema_reportado'])) {
             $orden['problemaReportado'] = $orden['problema_reportado'];
+        }
+        
+        // Mapear kilometrajes para el frontend
+        if (!isset($orden['vehiculo'])) {
+            $orden['vehiculo'] = [];
+        }
+        if (isset($orden['kilometraje_entrada'])) {
+            $orden['vehiculo']['kilometrajeEntrada'] = $orden['kilometraje_entrada'];
+        }
+        if (isset($orden['kilometraje_salida'])) {
+            $orden['vehiculo']['kilometrajeSalida'] = $orden['kilometraje_salida'];
         }
         
         return $orden;

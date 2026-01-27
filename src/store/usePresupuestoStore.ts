@@ -509,6 +509,7 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
       direccion: ordenAny.taller_direccion || '',
     } : orden.taller;
     
+    // Asegurar que siempre tengamos un objeto resumen válido
     const resumen = ordenAny.subtotal !== undefined ? {
       servicios: parseFloat(ordenAny.total_servicios || '0'),
       refacciones: parseFloat(ordenAny.total_refacciones || '0'),
@@ -519,7 +520,17 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
       total: parseFloat(ordenAny.total || '0'),
       anticipo: parseFloat(ordenAny.anticipo || '0'),
       restante: parseFloat(ordenAny.restante || '0'),
-    } : orden.resumen;
+    } : (orden.resumen || {
+      servicios: 0,
+      refacciones: 0,
+      manoDeObra: 0,
+      subtotal: 0,
+      incluirIVA: false,
+      iva: 0,
+      total: 0,
+      anticipo: 0,
+      restante: 0,
+    });
     
     const folio = ordenAny.numero_orden || orden.folio || '';
     const fechaCreacion = ordenAny.fecha_ingreso || orden.fechaCreacion;

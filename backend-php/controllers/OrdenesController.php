@@ -24,7 +24,7 @@ class OrdenesController {
                        c.nombre as cliente_nombre,
                        c.telefono as cliente_telefono,
                        v.marca, v.modelo, v.anio, v.placas
-                FROM ordenes o
+                FROM ordenes_servicio o
                 LEFT JOIN clientes c ON o.cliente_id = c.id
                 LEFT JOIN vehiculos v ON o.vehiculo_id = v.id
                 ORDER BY o.fecha_ingreso DESC
@@ -62,7 +62,7 @@ class OrdenesController {
                        c.email as cliente_email,
                        c.direccion as cliente_direccion,
                        v.marca, v.modelo, v.anio, v.placas, v.color
-                FROM ordenes o
+                FROM ordenes_servicio o
                 LEFT JOIN clientes c ON o.cliente_id = c.id
                 LEFT JOIN vehiculos v ON o.vehiculo_id = v.id
                 WHERE o.id = ?
@@ -116,7 +116,7 @@ class OrdenesController {
             
             // 5. Insertar orden
             $stmt = $this->db->prepare('
-                INSERT INTO ordenes (
+                INSERT INTO ordenes_servicio (
                     folio, cliente_id, vehiculo_id, fecha_ingreso,
                     kilometraje, nivel_gasolina, problema_reportado,
                     observaciones_iniciales, estado, created_by
@@ -160,7 +160,7 @@ class OrdenesController {
             
             // 10. Calcular y actualizar total
             if (isset($data['resumen']['total'])) {
-                $this->db->prepare('UPDATE ordenes SET total = ? WHERE id = ?')
+                $this->db->prepare('UPDATE ordenes_servicio SET total = ? WHERE id = ?')
                          ->execute([$data['resumen']['total'], $orden_id]);
             }
             
@@ -190,7 +190,7 @@ class OrdenesController {
             $data = json_decode(file_get_contents('php://input'), true);
             
             // Verificar que la orden existe
-            $stmt = $this->db->prepare('SELECT id FROM ordenes WHERE id = ?');
+            $stmt = $this->db->prepare('SELECT id FROM ordenes_servicio WHERE id = ?');
             $stmt->execute([$id]);
             if (!$stmt->fetch()) {
                 http_response_code(404);
@@ -223,7 +223,7 @@ class OrdenesController {
                 $updateValues[] = $userData['userId'];
                 $updateValues[] = $id;
                 
-                $sql = 'UPDATE ordenes SET ' . implode(', ', $updateFields) . 
+                $sql = 'UPDATE ordenes_servicio SET ' . implode(', ', $updateFields) . 
                        ', updated_by = ? WHERE id = ?';
                        
                 $stmt = $this->db->prepare($sql);
@@ -281,7 +281,7 @@ class OrdenesController {
         try {
             requireAuth();
             
-            $stmt = $this->db->prepare('DELETE FROM ordenes WHERE id = ?');
+            $stmt = $this->db->prepare('DELETE FROM ordenes_servicio WHERE id = ?');
             $stmt->execute([$id]);
             
             if ($stmt->rowCount() === 0) {
@@ -497,7 +497,7 @@ class OrdenesController {
         
         // Obtener el último folio del día
         $stmt = $this->db->prepare("
-            SELECT folio FROM ordenes 
+            SELECT folio FROM ordenes_servicio 
             WHERE folio LIKE ? 
             ORDER BY id DESC 
             LIMIT 1

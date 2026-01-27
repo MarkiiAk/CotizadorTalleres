@@ -19,18 +19,12 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   logo: {
-    width: 80,
-    height: 80,
+    width: 120,
+    height: 120,
     objectFit: 'contain',
   },
   headerText: {
     flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#10b981',
-    marginBottom: 5,
   },
   subtitle: {
     fontSize: 12,
@@ -213,7 +207,6 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         <View style={styles.header}>
           <Image src="/logo.png" style={styles.logo} />
           <View style={styles.headerText}>
-            <Text style={styles.title}>SAG GARAGE</Text>
             <Text style={styles.subtitle}>Orden de Servicio y Presupuesto</Text>
             <Text style={styles.smallText}>Folio: {presupuesto.folio}</Text>
             <Text style={styles.smallText}>Fecha de emisión: {formatDate(presupuesto.fecha)}</Text>

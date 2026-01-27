@@ -84,6 +84,9 @@ export const Dashboard = () => {
   };
 
   const getEstadoBadge = (estado: string) => {
+    // Mapear "pendiente" a "abierta" para órdenes existentes
+    const normalizedEstado = (estado === 'pendiente' ? 'abierta' : estado) as 'abierta' | 'cerrada';
+    
     const badges = {
       abierta: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
       cerrada: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
@@ -95,8 +98,8 @@ export const Dashboard = () => {
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${badges[estado as keyof typeof badges]}`}>
-        {labels[estado as keyof typeof labels]}
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${badges[normalizedEstado]}`}>
+        {labels[normalizedEstado]}
       </span>
     );
   };
@@ -111,7 +114,8 @@ export const Dashboard = () => {
     abiertas: ordenes.filter((o) => {
       const ordenAny = o as any;
       const estado = ordenAny.estado || o.estado;
-      return estado === 'abierta';
+      // Mapear "pendiente" a "abierta" para órdenes existentes
+      return estado === 'abierta' || estado === 'pendiente';
     }).length,
     cerradas: ordenes.filter((o) => {
       const ordenAny = o as any;

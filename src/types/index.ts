@@ -143,7 +143,7 @@ export interface AppState {
 export interface Orden {
   id: string;
   folio: string;
-  estado: 'abierta' | 'cerrada';
+  estado: 'abierta' | 'cerrada' | 'pendiente'; // 'pendiente' para compatibilidad con datos antiguos
   fechaCreacion: string;
   fechaActualizacion: string;
   fechaCierre?: string;

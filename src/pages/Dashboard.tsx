@@ -55,12 +55,23 @@ export const Dashboard = () => {
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(
-        (orden) =>
-          orden.folio.toLowerCase().includes(term) ||
-          orden.cliente.nombreCompleto.toLowerCase().includes(term) ||
-          orden.vehiculo.placas.toLowerCase().includes(term) ||
-          orden.vehiculo.marca.toLowerCase().includes(term) ||
-          orden.vehiculo.modelo.toLowerCase().includes(term)
+        (orden) => {
+          // Soportar ambos formatos: cliente_nombre (backend PHP) y cliente.nombreCompleto (frontend)
+          const ordenAny = orden as any;
+          const clienteNombre = ordenAny.cliente_nombre || orden.cliente?.nombreCompleto || '';
+          const placas = ordenAny.placas || orden.vehiculo?.placas || '';
+          const marca = ordenAny.marca || orden.vehiculo?.marca || '';
+          const modelo = ordenAny.modelo || orden.vehiculo?.modelo || '';
+          const folio = ordenAny.numero_orden || orden.folio || '';
+          
+          return (
+            folio.toLowerCase().includes(term) ||
+            clienteNombre.toLowerCase().includes(term) ||
+            placas.toLowerCase().includes(term) ||
+            marca.toLowerCase().includes(term) ||
+            modelo.toLowerCase().includes(term)
+          );
+        }
       );
     }
 
@@ -296,29 +307,39 @@ export const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {filteredOrdenes.map((orden) => (
+                  {filteredOrdenes.map((orden) => {
+                    // Soportar ambos formatos: backend PHP y frontend
+                    const ordenAny = orden as any;
+                    const folio = ordenAny.numero_orden || orden.folio || '';
+                    const clienteNombre = ordenAny.cliente_nombre || orden.cliente?.nombreCompleto || '';
+                    const marca = ordenAny.marca || orden.vehiculo?.marca || '';
+                    const modelo = ordenAny.modelo || orden.vehiculo?.modelo || '';
+                    const placas = ordenAny.placas || orden.vehiculo?.placas || '';
+                    const fecha = ordenAny.fecha_ingreso || orden.fechaCreacion || '';
+                    
+                    return (
                     <tr
                       key={orden.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm font-medium text-gray-900 dark:text-white">
-                          {orden.folio}
+                          {folio}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm text-gray-900 dark:text-white">
-                          {orden.cliente.nombreCompleto}
+                          {clienteNombre}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm text-gray-900 dark:text-white">
-                          {orden.vehiculo.marca} {orden.vehiculo.modelo}
+                          {marca} {modelo}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm text-gray-900 dark:text-white">
-                          {orden.vehiculo.placas}
+                          {placas}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -326,7 +347,7 @@ export const Dashboard = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm text-gray-900 dark:text-white">
-                          {new Date(orden.fechaCreacion).toLocaleDateString('es-MX')}
+                          {new Date(fecha).toLocaleDateString('es-MX')}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -339,7 +360,8 @@ export const Dashboard = () => {
                     </Button>
                       </td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

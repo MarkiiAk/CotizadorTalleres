@@ -108,25 +108,32 @@ class OrdenesController {
             // 3. Generar numero_orden
             $numero_orden = $this->generateNumeroOrden();
             
-            // 4. Preparar datos de inspección desde frontend
+            // 4. Preparar datos de inspección desde frontend - TODOS los campos
             $inspeccionData = $data['inspeccion'] ?? [];
             $exteriores = $inspeccionData['exteriores'] ?? [];
             $interiores = $inspeccionData['interiores'] ?? [];
             
-            // 5. Insertar orden con TODOS los campos del schema
+            // 5. Insertar orden con TODOS los campos del schema (COMPLETO con 20+ checkboxes)
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes_servicio (
                     numero_orden, cliente_id, vehiculo_id, usuario_id,
                     problema_reportado, diagnostico,
                     kilometraje_entrada, kilometraje_salida,
                     nivel_combustible,
-                    tiene_radio, tiene_encendedor, tiene_gato,
-                    tiene_llanta_refaccion, tiene_herramienta, tiene_antena,
-                    tiene_tapetes, tiene_extinguidor, tiene_documentos,
+                    tiene_luces_frontales, tiene_cuarto_luces, tiene_antena,
+                    tiene_espejos_laterales, tiene_cristales, tiene_emblemas,
+                    tiene_llantas, tiene_llanta_refaccion, tiene_tapon_ruedas,
+                    tiene_molduras_completas, tiene_tapon_gasolina, tiene_limpiadores,
+                    tiene_gato, tiene_herramienta, tiene_extinguidor,
+                    tiene_instrumento_tablero, tiene_calefaccion, tiene_sistema_sonido,
+                    tiene_bocinas, tiene_espejo_retrovisor, tiene_cinturones,
+                    tiene_botonia_general, tiene_manijas, tiene_tapetes,
+                    tiene_vestiduras, tiene_otros,
+                    tiene_radio, tiene_encendedor, tiene_documentos,
                     subtotal_mano_obra, subtotal_refacciones, total,
                     fecha_promesa_entrega,
                     estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $vehiculoData = $data['vehiculo'] ?? [];
@@ -148,15 +155,39 @@ class OrdenesController {
                 $vehiculoData['kilometrajeEntrada'] ?? '',
                 $vehiculoData['kilometrajeSalida'] ?? '',
                 $vehiculoData['nivelCombustible'] ?? 0,
+                // EXTERIORES (22 checkboxes)
+                isset($exteriores['lucesFrontales']) && $exteriores['lucesFrontales'] ? 1 : 0,
+                isset($exteriores['cuartoLuces']) && $exteriores['cuartoLuces'] ? 1 : 0,
+                isset($exteriores['antena']) && $exteriores['antena'] ? 1 : 0,
+                isset($exteriores['espejosLaterales']) && $exteriores['espejosLaterales'] ? 1 : 0,
+                isset($exteriores['cristales']) && $exteriores['cristales'] ? 1 : 0,
+                isset($exteriores['emblemas']) && $exteriores['emblemas'] ? 1 : 0,
+                isset($exteriores['llantas']) && $exteriores['llantas'] ? 1 : 0,
+                isset($exteriores['llantaRefaccion']) && $exteriores['llantaRefaccion'] ? 1 : 0,
+                isset($exteriores['taponRuedas']) && $exteriores['taponRuedas'] ? 1 : 0,
+                isset($exteriores['moldurasCompletas']) && $exteriores['moldurasCompletas'] ? 1 : 0,
+                isset($exteriores['taponGasolina']) && $exteriores['taponGasolina'] ? 1 : 0,
+                isset($exteriores['limpiadores']) && $exteriores['limpiadores'] ? 1 : 0,
+                isset($exteriores['gato']) && $exteriores['gato'] ? 1 : 0,
+                isset($exteriores['herramienta']) && $exteriores['herramienta'] ? 1 : 0,
+                isset($exteriores['extinguidor']) && $exteriores['extinguidor'] ? 1 : 0,
+                // INTERIORES (20 checkboxes)
+                isset($interiores['instrumentoTablero']) && $interiores['instrumentoTablero'] ? 1 : 0,
+                isset($interiores['calefaccion']) && $interiores['calefaccion'] ? 1 : 0,
+                isset($interiores['sistemaSonido']) && $interiores['sistemaSonido'] ? 1 : 0,
+                isset($interiores['bocinas']) && $interiores['bocinas'] ? 1 : 0,
+                isset($interiores['espejoRetrovisor']) && $interiores['espejoRetrovisor'] ? 1 : 0,
+                isset($interiores['cinturones']) && $interiores['cinturones'] ? 1 : 0,
+                isset($interiores['botoniaGeneral']) && $interiores['botoniaGeneral'] ? 1 : 0,
+                isset($interiores['manijas']) && $interiores['manijas'] ? 1 : 0,
+                isset($interiores['tapetes']) && $interiores['tapetes'] ? 1 : 0,
+                isset($interiores['vestiduras']) && $interiores['vestiduras'] ? 1 : 0,
+                isset($interiores['otros']) && $interiores['otros'] ? 1 : 0,
+                // Originales que siguen existiendo
                 isset($interiores['radio']) && $interiores['radio'] ? 1 : 0,
                 isset($interiores['encendedor']) && $interiores['encendedor'] ? 1 : 0,
-                isset($exteriores['gato']) && $exteriores['gato'] ? 1 : 0,
-                isset($exteriores['llantaRefaccion']) && $exteriores['llantaRefaccion'] ? 1 : 0,
-                isset($exteriores['herramienta']) && $exteriores['herramienta'] ? 1 : 0,
-                isset($exteriores['antena']) && $exteriores['antena'] ? 1 : 0,
-                isset($interiores['tapetes']) && $interiores['tapetes'] ? 1 : 0,
-                isset($exteriores['extinguidor']) && $exteriores['extinguidor'] ? 1 : 0,
                 isset($interiores['documentos']) && $interiores['documentos'] ? 1 : 0,
+                // Totales
                 $resumenData['manoDeObra'] ?? 0,
                 $resumenData['refacciones'] ?? 0,
                 $resumenData['total'] ?? 0,
@@ -289,34 +320,118 @@ class OrdenesController {
                 $updateValues[] = $data['resumen']['total'];
             }
             
-            // Actualizar checkboxes de inspección si se enviaron
+            // Actualizar checkboxes de inspección si se enviaron - TODOS LOS 20+ CAMPOS
             if (isset($data['inspeccion'])) {
                 $exteriores = $data['inspeccion']['exteriores'] ?? [];
                 $interiores = $data['inspeccion']['interiores'] ?? [];
                 
-                // Exteriores
-                if (isset($exteriores['gato'])) {
-                    $updateFields[] = 'tiene_gato = ?';
-                    $updateValues[] = $exteriores['gato'] ? 1 : 0;
+                // EXTERIORES - TODOS
+                if (isset($exteriores['lucesFrontales'])) {
+                    $updateFields[] = 'tiene_luces_frontales = ?';
+                    $updateValues[] = $exteriores['lucesFrontales'] ? 1 : 0;
+                }
+                if (isset($exteriores['cuartoLuces'])) {
+                    $updateFields[] = 'tiene_cuarto_luces = ?';
+                    $updateValues[] = $exteriores['cuartoLuces'] ? 1 : 0;
+                }
+                if (isset($exteriores['antena'])) {
+                    $updateFields[] = 'tiene_antena = ?';
+                    $updateValues[] = $exteriores['antena'] ? 1 : 0;
+                }
+                if (isset($exteriores['espejosLaterales'])) {
+                    $updateFields[] = 'tiene_espejos_laterales = ?';
+                    $updateValues[] = $exteriores['espejosLaterales'] ? 1 : 0;
+                }
+                if (isset($exteriores['cristales'])) {
+                    $updateFields[] = 'tiene_cristales = ?';
+                    $updateValues[] = $exteriores['cristales'] ? 1 : 0;
+                }
+                if (isset($exteriores['emblemas'])) {
+                    $updateFields[] = 'tiene_emblemas = ?';
+                    $updateValues[] = $exteriores['emblemas'] ? 1 : 0;
+                }
+                if (isset($exteriores['llantas'])) {
+                    $updateFields[] = 'tiene_llantas = ?';
+                    $updateValues[] = $exteriores['llantas'] ? 1 : 0;
                 }
                 if (isset($exteriores['llantaRefaccion'])) {
                     $updateFields[] = 'tiene_llanta_refaccion = ?';
                     $updateValues[] = $exteriores['llantaRefaccion'] ? 1 : 0;
                 }
+                if (isset($exteriores['taponRuedas'])) {
+                    $updateFields[] = 'tiene_tapon_ruedas = ?';
+                    $updateValues[] = $exteriores['taponRuedas'] ? 1 : 0;
+                }
+                if (isset($exteriores['moldurasCompletas'])) {
+                    $updateFields[] = 'tiene_molduras_completas = ?';
+                    $updateValues[] = $exteriores['moldurasCompletas'] ? 1 : 0;
+                }
+                if (isset($exteriores['taponGasolina'])) {
+                    $updateFields[] = 'tiene_tapon_gasolina = ?';
+                    $updateValues[] = $exteriores['taponGasolina'] ? 1 : 0;
+                }
+                if (isset($exteriores['limpiadores'])) {
+                    $updateFields[] = 'tiene_limpiadores = ?';
+                    $updateValues[] = $exteriores['limpiadores'] ? 1 : 0;
+                }
+                if (isset($exteriores['gato'])) {
+                    $updateFields[] = 'tiene_gato = ?';
+                    $updateValues[] = $exteriores['gato'] ? 1 : 0;
+                }
                 if (isset($exteriores['herramienta'])) {
                     $updateFields[] = 'tiene_herramienta = ?';
                     $updateValues[] = $exteriores['herramienta'] ? 1 : 0;
-                }
-                if (isset($exteriores['antena'])) {
-                    $updateFields[] = 'tiene_antena = ?';
-                    $updateValues[] = $exteriores['antena'] ? 1 : 0;
                 }
                 if (isset($exteriores['extinguidor'])) {
                     $updateFields[] = 'tiene_extinguidor = ?';
                     $updateValues[] = $exteriores['extinguidor'] ? 1 : 0;
                 }
                 
-                // Interiores
+                // INTERIORES - TODOS
+                if (isset($interiores['instrumentoTablero'])) {
+                    $updateFields[] = 'tiene_instrumento_tablero = ?';
+                    $updateValues[] = $interiores['instrumentoTablero'] ? 1 : 0;
+                }
+                if (isset($interiores['calefaccion'])) {
+                    $updateFields[] = 'tiene_calefaccion = ?';
+                    $updateValues[] = $interiores['calefaccion'] ? 1 : 0;
+                }
+                if (isset($interiores['sistemaSonido'])) {
+                    $updateFields[] = 'tiene_sistema_sonido = ?';
+                    $updateValues[] = $interiores['sistemaSonido'] ? 1 : 0;
+                }
+                if (isset($interiores['bocinas'])) {
+                    $updateFields[] = 'tiene_bocinas = ?';
+                    $updateValues[] = $interiores['bocinas'] ? 1 : 0;
+                }
+                if (isset($interiores['espejoRetrovisor'])) {
+                    $updateFields[] = 'tiene_espejo_retrovisor = ?';
+                    $updateValues[] = $interiores['espejoRetrovisor'] ? 1 : 0;
+                }
+                if (isset($interiores['cinturones'])) {
+                    $updateFields[] = 'tiene_cinturones = ?';
+                    $updateValues[] = $interiores['cinturones'] ? 1 : 0;
+                }
+                if (isset($interiores['botoniaGeneral'])) {
+                    $updateFields[] = 'tiene_botonia_general = ?';
+                    $updateValues[] = $interiores['botoniaGeneral'] ? 1 : 0;
+                }
+                if (isset($interiores['manijas'])) {
+                    $updateFields[] = 'tiene_manijas = ?';
+                    $updateValues[] = $interiores['manijas'] ? 1 : 0;
+                }
+                if (isset($interiores['tapetes'])) {
+                    $updateFields[] = 'tiene_tapetes = ?';
+                    $updateValues[] = $interiores['tapetes'] ? 1 : 0;
+                }
+                if (isset($interiores['vestiduras'])) {
+                    $updateFields[] = 'tiene_vestiduras = ?';
+                    $updateValues[] = $interiores['vestiduras'] ? 1 : 0;
+                }
+                if (isset($interiores['otros'])) {
+                    $updateFields[] = 'tiene_otros = ?';
+                    $updateValues[] = $interiores['otros'] ? 1 : 0;
+                }
                 if (isset($interiores['radio'])) {
                     $updateFields[] = 'tiene_radio = ?';
                     $updateValues[] = $interiores['radio'] ? 1 : 0;
@@ -325,16 +440,12 @@ class OrdenesController {
                     $updateFields[] = 'tiene_encendedor = ?';
                     $updateValues[] = $interiores['encendedor'] ? 1 : 0;
                 }
-                if (isset($interiores['tapetes'])) {
-                    $updateFields[] = 'tiene_tapetes = ?';
-                    $updateValues[] = $interiores['tapetes'] ? 1 : 0;
-                }
                 if (isset($interiores['documentos'])) {
                     $updateFields[] = 'tiene_documentos = ?';
                     $updateValues[] = $interiores['documentos'] ? 1 : 0;
                 }
                 
-                error_log('Checkboxes de inspección a actualizar');
+                error_log('Checkboxes de inspección a actualizar: ' . count($updateFields));
             }
             
             // Actualizar kilometrajes si vienen en vehiculo
@@ -513,20 +624,40 @@ class OrdenesController {
         // Mapear fecha_promesa_entrega a fechaSalida (SIEMPRE, incluso si es null)
         $orden['fechaSalida'] = $orden['fecha_promesa_entrega'] ?? null;
         
-        // Mapear checkboxes de inspección para el frontend
+        // Mapear TODOS los checkboxes de inspección para el frontend (20+ campos)
         $orden['inspeccion'] = [
             'exteriores' => [
-                'gato' => (bool)($orden['tiene_gato'] ?? 0),
-                'llantaRefaccion' => (bool)($orden['tiene_llanta_refaccion'] ?? 0),
-                'herramienta' => (bool)($orden['tiene_herramienta'] ?? 0),
-                'antena' => (bool)($orden['tiene_antena'] ?? 0),
-                'extinguidor' => (bool)($orden['tiene_extinguidor'] ?? 0),
+                'lucesFrontales' => (bool)($orden['tiene_luces_frontales'] ?? 1),
+                'cuartoLuces' => (bool)($orden['tiene_cuarto_luces'] ?? 1),
+                'antena' => (bool)($orden['tiene_antena'] ?? 1),
+                'espejosLaterales' => (bool)($orden['tiene_espejos_laterales'] ?? 1),
+                'cristales' => (bool)($orden['tiene_cristales'] ?? 1),
+                'emblemas' => (bool)($orden['tiene_emblemas'] ?? 1),
+                'llantas' => (bool)($orden['tiene_llantas'] ?? 1),
+                'llantaRefaccion' => (bool)($orden['tiene_llanta_refaccion'] ?? 1),
+                'taponRuedas' => (bool)($orden['tiene_tapon_ruedas'] ?? 1),
+                'moldurasCompletas' => (bool)($orden['tiene_molduras_completas'] ?? 1),
+                'taponGasolina' => (bool)($orden['tiene_tapon_gasolina'] ?? 1),
+                'limpiadores' => (bool)($orden['tiene_limpiadores'] ?? 1),
+                'gato' => (bool)($orden['tiene_gato'] ?? 1),
+                'herramienta' => (bool)($orden['tiene_herramienta'] ?? 1),
+                'extinguidor' => (bool)($orden['tiene_extinguidor'] ?? 1),
             ],
             'interiores' => [
-                'radio' => (bool)($orden['tiene_radio'] ?? 0),
-                'encendedor' => (bool)($orden['tiene_encendedor'] ?? 0),
-                'tapetes' => (bool)($orden['tiene_tapetes'] ?? 0),
-                'documentos' => (bool)($orden['tiene_documentos'] ?? 0),
+                'instrumentoTablero' => (bool)($orden['tiene_instrumento_tablero'] ?? 1),
+                'calefaccion' => (bool)($orden['tiene_calefaccion'] ?? 1),
+                'sistemaSonido' => (bool)($orden['tiene_sistema_sonido'] ?? 1),
+                'bocinas' => (bool)($orden['tiene_bocinas'] ?? 1),
+                'espejoRetrovisor' => (bool)($orden['tiene_espejo_retrovisor'] ?? 1),
+                'cinturones' => (bool)($orden['tiene_cinturones'] ?? 1),
+                'botoniaGeneral' => (bool)($orden['tiene_botonia_general'] ?? 1),
+                'manijas' => (bool)($orden['tiene_manijas'] ?? 1),
+                'tapetes' => (bool)($orden['tiene_tapetes'] ?? 1),
+                'vestiduras' => (bool)($orden['tiene_vestiduras'] ?? 1),
+                'otros' => (bool)($orden['tiene_otros'] ?? 1),
+                'radio' => (bool)($orden['tiene_radio'] ?? 1),
+                'encendedor' => (bool)($orden['tiene_encendedor'] ?? 1),
+                'documentos' => (bool)($orden['tiene_documentos'] ?? 1),
             ]
         ];
         

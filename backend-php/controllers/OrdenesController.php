@@ -524,10 +524,24 @@ class OrdenesController {
             }
             
             // Actualizar servicios y refacciones si se enviaron
-            if (isset($data['manoDeObra'])) {
+            // IMPORTANTE: Verificar si vienen servicios O manoDeObra (o ambos)
+            $shouldUpdateServicios = isset($data['servicios']) || isset($data['manoDeObra']);
+            
+            if ($shouldUpdateServicios) {
+                // Eliminar todos los servicios existentes
                 $this->db->prepare('DELETE FROM servicios_orden WHERE orden_id = ?')->execute([$id]);
-                if (!empty($data['manoDeObra'])) {
+                error_log('Servicios eliminados para orden: ' . $id);
+                
+                // Insertar servicios si hay
+                if (isset($data['servicios']) && !empty($data['servicios'])) {
+                    $this->insertServiciosOrden($id, $data['servicios']);
+                    error_log('Servicios insertados: ' . count($data['servicios']));
+                }
+                
+                // Insertar mano de obra si hay
+                if (isset($data['manoDeObra']) && !empty($data['manoDeObra'])) {
                     $this->insertServiciosOrden($id, $data['manoDeObra']);
+                    error_log('Mano de obra insertada: ' . count($data['manoDeObra']));
                 }
             }
             
@@ -535,6 +549,7 @@ class OrdenesController {
                 $this->db->prepare('DELETE FROM refacciones_orden WHERE orden_id = ?')->execute([$id]);
                 if (!empty($data['refacciones'])) {
                     $this->insertRefaccionesOrden($id, $data['refacciones']);
+                    error_log('Refacciones insertadas: ' . count($data['refacciones']));
                 }
             }
             

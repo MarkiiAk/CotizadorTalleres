@@ -212,6 +212,11 @@ class OrdenesController {
                 $this->insertRefaccionesOrden($orden_id, $data['refacciones']);
             }
             
+            // 8. Insertar daños adicionales del vehículo
+            if (isset($data['inspeccion']['danosAdicionales']) && !empty($data['inspeccion']['danosAdicionales'])) {
+                $this->insertDanosVehiculo($orden_id, $data['inspeccion']['danosAdicionales']);
+            }
+            
             // Commit transacción
             $this->db->commit();
             
@@ -518,6 +523,15 @@ class OrdenesController {
                 }
             }
             
+            // Actualizar daños adicionales del vehículo si se enviaron
+            if (isset($data['inspeccion']['danosAdicionales'])) {
+                // Eliminar daños existentes y agregar los nuevos
+                $this->db->prepare('DELETE FROM danos_vehiculo WHERE orden_id = ?')->execute([$id]);
+                if (!empty($data['inspeccion']['danosAdicionales'])) {
+                    $this->insertDanosVehiculo($id, $data['inspeccion']['danosAdicionales']);
+                }
+            }
+            
             $this->db->commit();
             
             // Retornar orden actualizada
@@ -624,6 +638,11 @@ class OrdenesController {
         // Mapear fecha_promesa_entrega a fechaSalida (SIEMPRE, incluso si es null)
         $orden['fechaSalida'] = $orden['fecha_promesa_entrega'] ?? null;
         
+        // Obtener daños adicionales del vehículo
+        $stmt = $this->db->prepare('SELECT * FROM danos_vehiculo WHERE orden_id = ?');
+        $stmt->execute([$orden['id']]);
+        $danosDB = $stmt->fetchAll();
+        
         // Mapear TODOS los checkboxes de inspección para el frontend (20+ campos)
         $orden['inspeccion'] = [
             'exteriores' => [
@@ -658,8 +677,19 @@ class OrdenesController {
                 'radio' => (bool)($orden['tiene_radio'] ?? 1),
                 'encendedor' => (bool)($orden['tiene_encendedor'] ?? 1),
                 'documentos' => (bool)($orden['tiene_documentos'] ?? 1),
-            ]
+            ],
+            'danosAdicionales' => []
         ];
+        
+        // Mapear daños adicionales
+        foreach ($danosDB as $dano) {
+            $orden['inspeccion']['danosAdicionales'][] = [
+                'id' => (string)$dano['id'],
+                'ubicacion' => $dano['ubicacion'],
+                'tipo' => $dano['tipo'],
+                'descripcion' => $dano['descripcion'] ?? ''
+            ];
+        }
         
         return $orden;
     }
@@ -772,6 +802,22 @@ class OrdenesController {
                 $cantidad,
                 $precioUnitario,
                 $subtotal
+            ]);
+        }
+    }
+    
+    private function insertDanosVehiculo($orden_id, $danos) {
+        $stmt = $this->db->prepare('
+            INSERT INTO danos_vehiculo (orden_id, ubicacion, tipo, descripcion)
+            VALUES (?, ?, ?, ?)
+        ');
+        
+        foreach ($danos as $dano) {
+            $stmt->execute([
+                $orden_id,
+                $dano['ubicacion'] ?? '',
+                $dano['tipo'] ?? '',
+                $dano['descripcion'] ?? ''
             ]);
         }
     }

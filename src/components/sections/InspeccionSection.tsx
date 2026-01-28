@@ -117,8 +117,20 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
         ...nuevoDano,
         id: Math.random().toString(36).substring(2, 11),
       };
-      store.presupuesto.inspeccion.danosAdicionales.push(newDano);
-      usePresupuestoStore.setState({ presupuesto: store.presupuesto });
+      
+      // Crear nuevo array inmutable en lugar de mutar
+      const nuevosDanos = [...(store.presupuesto.inspeccion.danosAdicionales || []), newDano];
+      
+      usePresupuestoStore.setState({ 
+        presupuesto: {
+          ...store.presupuesto,
+          inspeccion: {
+            ...store.presupuesto.inspeccion,
+            danosAdicionales: nuevosDanos
+          }
+        }
+      });
+      
       setNuevoDano({ ubicacion: '', tipo: '', descripcion: '' });
     }
   };
@@ -135,9 +147,18 @@ export const InspeccionSection: React.FC<InspeccionSectionProps> = ({ disabled =
       };
     }
     
-    store.presupuesto.inspeccion.danosAdicionales = 
-      store.presupuesto.inspeccion.danosAdicionales.filter(d => d.id !== id);
-    usePresupuestoStore.setState({ presupuesto: store.presupuesto });
+    // Crear nuevo array inmutable filtrado
+    const danosFiltrados = (store.presupuesto.inspeccion.danosAdicionales || []).filter(d => d.id !== id);
+    
+    usePresupuestoStore.setState({ 
+      presupuesto: {
+        ...store.presupuesto,
+        inspeccion: {
+          ...store.presupuesto.inspeccion,
+          danosAdicionales: danosFiltrados
+        }
+      }
+    });
   };
 
   const ChecklistItem: React.FC<{ label: string; checked: boolean; onChange: () => void }> = 

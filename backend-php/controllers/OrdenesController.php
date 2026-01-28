@@ -218,7 +218,53 @@ class OrdenesController {
             // Iniciar transacción
             $this->db->beginTransaction();
             
-            // Actualizar campos si se enviaron
+            // 1. Actualizar datos del cliente si se enviaron
+            if (isset($data['cliente'])) {
+                $stmt = $this->db->prepare('SELECT cliente_id FROM ordenes_servicio WHERE id = ?');
+                $stmt->execute([$id]);
+                $orden = $stmt->fetch();
+                
+                if ($orden && isset($data['cliente']['nombreCompleto'])) {
+                    $stmt = $this->db->prepare('
+                        UPDATE clientes 
+                        SET nombre = ?, telefono = ?, email = ?, direccion = ?
+                        WHERE id = ?
+                    ');
+                    $stmt->execute([
+                        $data['cliente']['nombreCompleto'],
+                        $data['cliente']['telefono'] ?? '',
+                        $data['cliente']['email'] ?? '',
+                        $data['cliente']['domicilio'] ?? '',
+                        $orden['cliente_id']
+                    ]);
+                    error_log('Cliente actualizado: ' . $data['cliente']['nombreCompleto']);
+                }
+            }
+            
+            // 2. Actualizar datos del vehículo si se enviaron
+            if (isset($data['vehiculo'])) {
+                $stmt = $this->db->prepare('SELECT vehiculo_id FROM ordenes_servicio WHERE id = ?');
+                $stmt->execute([$id]);
+                $orden = $stmt->fetch();
+                
+                if ($orden && isset($data['vehiculo']['marca'])) {
+                    $stmt = $this->db->prepare('
+                        UPDATE vehiculos 
+                        SET marca = ?, modelo = ?, color = ?, placas = ?
+                        WHERE id = ?
+                    ');
+                    $stmt->execute([
+                        $data['vehiculo']['marca'],
+                        $data['vehiculo']['modelo'] ?? '',
+                        $data['vehiculo']['color'] ?? '',
+                        $data['vehiculo']['placas'] ?? '',
+                        $orden['vehiculo_id']
+                    ]);
+                    error_log('Vehículo actualizado: ' . $data['vehiculo']['marca']);
+                }
+            }
+            
+            // 3. Actualizar campos de la orden
             $updateFields = [];
             $updateValues = [];
             
@@ -261,6 +307,15 @@ class OrdenesController {
                 $updateFields[] = 'nivel_combustible = ?';
                 $updateValues[] = $data['vehiculo']['nivelCombustible'];
                 error_log('Nivel combustible a actualizar: ' . $data['vehiculo']['nivelCombustible']);
+            }
+            
+            // Actualizar fecha de entrada
+            if (isset($data['fechaEntrada'])) {
+                if ($data['fechaEntrada']) {
+                    $updateFields[] = 'fecha_ingreso = ?';
+                    $updateValues[] = date('Y-m-d H:i:s', strtotime($data['fechaEntrada']));
+                    error_log('Fecha entrada a actualizar: ' . $data['fechaEntrada']);
+                }
             }
             
             // Actualizar fecha de salida/promesa

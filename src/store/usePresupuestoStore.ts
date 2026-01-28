@@ -509,18 +509,19 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
       direccion: ordenAny.taller_direccion || '',
     } : orden.taller;
     
-    // Asegurar que siempre tengamos un objeto resumen válido
-    const resumen = ordenAny.subtotal !== undefined ? {
-      servicios: parseFloat(ordenAny.total_servicios || '0'),
-      refacciones: parseFloat(ordenAny.total_refacciones || '0'),
-      manoDeObra: parseFloat(ordenAny.total_mano_obra || '0'),
-      subtotal: parseFloat(ordenAny.subtotal || '0'),
-      incluirIVA: ordenAny.incluir_iva === 1 || ordenAny.incluir_iva === true,
-      iva: parseFloat(ordenAny.iva || '0'),
-      total: parseFloat(ordenAny.total || '0'),
-      anticipo: parseFloat(ordenAny.anticipo || '0'),
-      restante: parseFloat(ordenAny.restante || '0'),
-    } : (orden.resumen || {
+    // Si viene el objeto resumen del backend, usarlo directamente
+    // De lo contrario, crear un resumen vacío
+    const resumen = orden.resumen ? {
+      servicios: parseFloat(orden.resumen.servicios || '0'),
+      refacciones: parseFloat(orden.resumen.refacciones || '0'),
+      manoDeObra: parseFloat(orden.resumen.manoDeObra || '0'),
+      subtotal: parseFloat(orden.resumen.subtotal || '0'),
+      incluirIVA: Boolean(orden.resumen.incluirIVA),
+      iva: parseFloat(orden.resumen.iva || '0'),
+      total: parseFloat(orden.resumen.total || '0'),
+      anticipo: parseFloat(orden.resumen.anticipo || '0'),
+      restante: parseFloat(orden.resumen.restante || '0'),
+    } : {
       servicios: 0,
       refacciones: 0,
       manoDeObra: 0,
@@ -530,7 +531,7 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
       total: 0,
       anticipo: 0,
       restante: 0,
-    });
+    };
     
     const folio = ordenAny.numero_orden || orden.folio || '';
     const fechaCreacion = ordenAny.fecha_ingreso || orden.fechaCreacion;

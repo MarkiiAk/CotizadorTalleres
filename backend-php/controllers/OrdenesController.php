@@ -147,7 +147,7 @@ class OrdenesController {
                 $data['diagnosticoTecnico'] ?? '',
                 $vehiculoData['kilometrajeEntrada'] ?? '',
                 $vehiculoData['kilometrajeSalida'] ?? '',
-                $vehiculoData['nivelGasolina'] ?? 0,
+                $vehiculoData['nivelCombustible'] ?? 0,
                 isset($interiores['radio']) && $interiores['radio'] ? 1 : 0,
                 isset($interiores['encendedor']) && $interiores['encendedor'] ? 1 : 0,
                 isset($exteriores['gato']) && $exteriores['gato'] ? 1 : 0,
@@ -254,6 +254,13 @@ class OrdenesController {
                 $updateFields[] = 'kilometraje_salida = ?';
                 $updateValues[] = $data['vehiculo']['kilometrajeSalida'];
                 error_log('Kilometraje salida a actualizar: ' . $data['vehiculo']['kilometrajeSalida']);
+            }
+            
+            // Actualizar nivel de combustible si viene en vehiculo
+            if (isset($data['vehiculo']['nivelCombustible'])) {
+                $updateFields[] = 'nivel_combustible = ?';
+                $updateValues[] = $data['vehiculo']['nivelCombustible'];
+                error_log('Nivel combustible a actualizar: ' . $data['vehiculo']['nivelCombustible']);
             }
             
             // Actualizar fecha de salida/promesa

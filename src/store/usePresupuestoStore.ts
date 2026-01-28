@@ -142,7 +142,7 @@ const initialPresupuesto: Presupuesto = {
 
 export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
   presupuesto: initialPresupuesto,
-  themeMode: 'light',
+  themeMode: 'dark',
   hasUnsavedChanges: false,
   lastSaved: null,
 

@@ -113,7 +113,7 @@ class OrdenesController {
             $exteriores = $inspeccionData['exteriores'] ?? [];
             $interiores = $inspeccionData['interiores'] ?? [];
             
-            // 5. Insertar orden con TODOS los campos del schema (COMPLETO con 20+ checkboxes + IVA)
+            // 5. Insertar orden con TODOS los campos del schema (COMPLETO con 20+ checkboxes + IVA + ANTICIPO)
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes_servicio (
                     numero_orden, cliente_id, vehiculo_id, usuario_id,
@@ -131,10 +131,10 @@ class OrdenesController {
                     tiene_vestiduras, tiene_otros,
                     tiene_radio, tiene_encendedor, tiene_documentos,
                     subtotal_servicios, subtotal_mano_obra, subtotal_refacciones, 
-                    incluir_iva, iva, total,
+                    incluir_iva, iva, total, anticipo,
                     fecha_promesa_entrega,
                     estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $vehiculoData = $data['vehiculo'] ?? [];
@@ -195,6 +195,7 @@ class OrdenesController {
                 isset($resumenData['incluirIVA']) && $resumenData['incluirIVA'] ? 1 : 0,
                 $resumenData['iva'] ?? 0,
                 $resumenData['total'] ?? 0,
+                $resumenData['anticipo'] ?? 0,
                 $fechaSalida,
                 'abierta' // Estado inicial siempre es 'abierta'
             ]);
@@ -365,6 +366,11 @@ class OrdenesController {
                 if (isset($data['resumen']['total'])) {
                     $updateFields[] = 'total = ?';
                     $updateValues[] = $data['resumen']['total'];
+                }
+                if (isset($data['resumen']['anticipo'])) {
+                    $updateFields[] = 'anticipo = ?';
+                    $updateValues[] = $data['resumen']['anticipo'];
+                    error_log('Anticipo a actualizar: ' . $data['resumen']['anticipo']);
                 }
             }
             
@@ -755,7 +761,10 @@ class OrdenesController {
             ];
         }
         
-        // Agregar resumen completo con incluirIVA
+        // Agregar resumen completo con incluirIVA y anticipo
+        $anticipo = (float)($orden['anticipo'] ?? 0);
+        $total = (float)($orden['total'] ?? 0);
+        
         $orden['resumen'] = [
             'servicios' => (float)($orden['subtotal_servicios'] ?? 0),
             'manoDeObra' => (float)($orden['subtotal_mano_obra'] ?? 0),
@@ -763,9 +772,9 @@ class OrdenesController {
             'subtotal' => (float)($orden['subtotal_servicios'] ?? 0) + (float)($orden['subtotal_mano_obra'] ?? 0) + (float)($orden['subtotal_refacciones'] ?? 0),
             'incluirIVA' => (bool)($orden['incluir_iva'] ?? false),
             'iva' => (float)($orden['iva'] ?? 0),
-            'total' => (float)($orden['total'] ?? 0),
-            'anticipo' => 0, // Por ahora siempre 0
-            'restante' => (float)($orden['total'] ?? 0)
+            'total' => $total,
+            'anticipo' => $anticipo,
+            'restante' => $total - $anticipo
         ];
         
         return $orden;

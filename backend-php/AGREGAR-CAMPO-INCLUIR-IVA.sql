@@ -18,6 +18,11 @@ ALTER TABLE ordenes_servicio
 ADD COLUMN subtotal_servicios DECIMAL(10,2) DEFAULT 0.00 
 AFTER subtotal_mano_obra;
 
+-- 3. Agregar campo para anticipo
+ALTER TABLE ordenes_servicio 
+ADD COLUMN anticipo DECIMAL(10,2) DEFAULT 0.00 
+AFTER total;
+
 -- Verificar que se agregaron correctamente
 DESCRIBE ordenes_servicio;
 

@@ -309,6 +309,21 @@ class OrdenesController {
             error_log('ID: ' . $id);
             error_log('Data recibida: ' . json_encode($data));
             
+            // AGREGAR: Actualizar problema reportado
+            if (isset($data['problemaReportado'])) {
+                $updateFields[] = 'problema_reportado = ?';
+                $updateValues[] = $data['problemaReportado'];
+                error_log('Problema reportado a actualizar: ' . $data['problemaReportado']);
+            }
+            
+            // AGREGAR: Actualizar diagnóstico técnico
+            if (isset($data['diagnosticoTecnico'])) {
+                $updateFields[] = 'diagnostico = ?';
+                $updateValues[] = $data['diagnosticoTecnico'];
+                error_log('Diagnóstico técnico a actualizar: ' . $data['diagnosticoTecnico']);
+            }
+            
+            // LEGACY: Mantener compatibilidad con 'diagnostico' directo
             if (isset($data['diagnostico'])) {
                 $updateFields[] = 'diagnostico = ?';
                 $updateValues[] = $data['diagnostico'];

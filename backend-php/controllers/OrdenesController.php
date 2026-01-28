@@ -197,14 +197,14 @@ class OrdenesController {
             
             $orden_id = $this->db->lastInsertId();
             
-            // 6. Insertar SERVICIOS en servicios_orden
+            // 6. Insertar SERVICIOS en servicios_orden (tipo='servicio')
             if (isset($data['servicios']) && !empty($data['servicios'])) {
-                $this->insertServiciosOrden($orden_id, $data['servicios']);
+                $this->insertServiciosOrden($orden_id, $data['servicios'], 'servicio');
             }
             
-            // 6b. Insertar MANO DE OBRA en servicios_orden
+            // 6b. Insertar MANO DE OBRA en servicios_orden (tipo='mano_obra')
             if (isset($data['manoDeObra']) && !empty($data['manoDeObra'])) {
-                $this->insertServiciosOrden($orden_id, $data['manoDeObra']);
+                $this->insertServiciosOrden($orden_id, $data['manoDeObra'], 'mano_obra');
             }
             
             // 7. Insertar refacciones en refacciones_orden
@@ -532,15 +532,15 @@ class OrdenesController {
                 $this->db->prepare('DELETE FROM servicios_orden WHERE orden_id = ?')->execute([$id]);
                 error_log('Servicios eliminados para orden: ' . $id);
                 
-                // Insertar servicios si hay
+                // Insertar servicios si hay (tipo='servicio')
                 if (isset($data['servicios']) && !empty($data['servicios'])) {
-                    $this->insertServiciosOrden($id, $data['servicios']);
+                    $this->insertServiciosOrden($id, $data['servicios'], 'servicio');
                     error_log('Servicios insertados: ' . count($data['servicios']));
                 }
                 
-                // Insertar mano de obra si hay
+                // Insertar mano de obra si hay (tipo='mano_obra')
                 if (isset($data['manoDeObra']) && !empty($data['manoDeObra'])) {
-                    $this->insertServiciosOrden($id, $data['manoDeObra']);
+                    $this->insertServiciosOrden($id, $data['manoDeObra'], 'mano_obra');
                     error_log('Mano de obra insertada: ' . count($data['manoDeObra']));
                 }
             }
@@ -612,7 +612,7 @@ class OrdenesController {
         $stmt->execute([$orden['id']]);
         $serviciosOrden = $stmt->fetchAll();
         
-        // Convertir formato BD a frontend
+        // Convertir formato BD a frontend - SEPARAR por tipo
         $orden['servicios'] = [];
         $orden['manoDeObra'] = [];
         foreach ($serviciosOrden as $servicio) {
@@ -623,8 +623,14 @@ class OrdenesController {
                 'cantidad' => (float)$servicio['cantidad'],
                 'subtotal' => (float)$servicio['subtotal']
             ];
-            // Por ahora, todos van a manoDeObra (servicios y mano de obra se guardan ahí)
-            $orden['manoDeObra'][] = $item;
+            
+            // Separar según el campo 'tipo'
+            $tipo = $servicio['tipo'] ?? 'mano_obra'; // Default a mano_obra si no existe el campo
+            if ($tipo === 'servicio') {
+                $orden['servicios'][] = $item;
+            } else {
+                $orden['manoDeObra'][] = $item;
+            }
         }
         
         // Obtener refacciones
@@ -794,10 +800,10 @@ class OrdenesController {
         }
     }
     
-    private function insertServiciosOrden($orden_id, $servicios) {
+    private function insertServiciosOrden($orden_id, $servicios, $tipo = 'mano_obra') {
         $stmt = $this->db->prepare('
-            INSERT INTO servicios_orden (orden_id, descripcion, precio_unitario, cantidad, subtotal)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO servicios_orden (orden_id, tipo, descripcion, precio_unitario, cantidad, subtotal)
+            VALUES (?, ?, ?, ?, ?, ?)
         ');
         
         foreach ($servicios as $servicio) {
@@ -807,6 +813,7 @@ class OrdenesController {
             
             $stmt->execute([
                 $orden_id,
+                $tipo,
                 $servicio['descripcion'],
                 $precioUnitario,
                 $cantidad,

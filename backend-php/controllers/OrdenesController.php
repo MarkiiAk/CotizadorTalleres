@@ -289,6 +289,54 @@ class OrdenesController {
                 $updateValues[] = $data['resumen']['total'];
             }
             
+            // Actualizar checkboxes de inspección si se enviaron
+            if (isset($data['inspeccion'])) {
+                $exteriores = $data['inspeccion']['exteriores'] ?? [];
+                $interiores = $data['inspeccion']['interiores'] ?? [];
+                
+                // Exteriores
+                if (isset($exteriores['gato'])) {
+                    $updateFields[] = 'tiene_gato = ?';
+                    $updateValues[] = $exteriores['gato'] ? 1 : 0;
+                }
+                if (isset($exteriores['llantaRefaccion'])) {
+                    $updateFields[] = 'tiene_llanta_refaccion = ?';
+                    $updateValues[] = $exteriores['llantaRefaccion'] ? 1 : 0;
+                }
+                if (isset($exteriores['herramienta'])) {
+                    $updateFields[] = 'tiene_herramienta = ?';
+                    $updateValues[] = $exteriores['herramienta'] ? 1 : 0;
+                }
+                if (isset($exteriores['antena'])) {
+                    $updateFields[] = 'tiene_antena = ?';
+                    $updateValues[] = $exteriores['antena'] ? 1 : 0;
+                }
+                if (isset($exteriores['extinguidor'])) {
+                    $updateFields[] = 'tiene_extinguidor = ?';
+                    $updateValues[] = $exteriores['extinguidor'] ? 1 : 0;
+                }
+                
+                // Interiores
+                if (isset($interiores['radio'])) {
+                    $updateFields[] = 'tiene_radio = ?';
+                    $updateValues[] = $interiores['radio'] ? 1 : 0;
+                }
+                if (isset($interiores['encendedor'])) {
+                    $updateFields[] = 'tiene_encendedor = ?';
+                    $updateValues[] = $interiores['encendedor'] ? 1 : 0;
+                }
+                if (isset($interiores['tapetes'])) {
+                    $updateFields[] = 'tiene_tapetes = ?';
+                    $updateValues[] = $interiores['tapetes'] ? 1 : 0;
+                }
+                if (isset($interiores['documentos'])) {
+                    $updateFields[] = 'tiene_documentos = ?';
+                    $updateValues[] = $interiores['documentos'] ? 1 : 0;
+                }
+                
+                error_log('Checkboxes de inspección a actualizar');
+            }
+            
             // Actualizar kilometrajes si vienen en vehiculo
             if (isset($data['vehiculo']['kilometrajeEntrada'])) {
                 $updateFields[] = 'kilometraje_entrada = ?';
@@ -464,6 +512,23 @@ class OrdenesController {
         
         // Mapear fecha_promesa_entrega a fechaSalida (SIEMPRE, incluso si es null)
         $orden['fechaSalida'] = $orden['fecha_promesa_entrega'] ?? null;
+        
+        // Mapear checkboxes de inspección para el frontend
+        $orden['inspeccion'] = [
+            'exteriores' => [
+                'gato' => (bool)($orden['tiene_gato'] ?? 0),
+                'llantaRefaccion' => (bool)($orden['tiene_llanta_refaccion'] ?? 0),
+                'herramienta' => (bool)($orden['tiene_herramienta'] ?? 0),
+                'antena' => (bool)($orden['tiene_antena'] ?? 0),
+                'extinguidor' => (bool)($orden['tiene_extinguidor'] ?? 0),
+            ],
+            'interiores' => [
+                'radio' => (bool)($orden['tiene_radio'] ?? 0),
+                'encendedor' => (bool)($orden['tiene_encendedor'] ?? 0),
+                'tapetes' => (bool)($orden['tiene_tapetes'] ?? 0),
+                'documentos' => (bool)($orden['tiene_documentos'] ?? 0),
+            ]
+        ];
         
         return $orden;
     }

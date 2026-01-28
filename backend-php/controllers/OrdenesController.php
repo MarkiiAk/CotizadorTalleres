@@ -113,7 +113,7 @@ class OrdenesController {
             $exteriores = $inspeccionData['exteriores'] ?? [];
             $interiores = $inspeccionData['interiores'] ?? [];
             
-            // 5. Insertar orden con TODOS los campos del schema (COMPLETO con 20+ checkboxes)
+            // 5. Insertar orden con TODOS los campos del schema (COMPLETO con 20+ checkboxes + IVA)
             $stmt = $this->db->prepare('
                 INSERT INTO ordenes_servicio (
                     numero_orden, cliente_id, vehiculo_id, usuario_id,
@@ -130,10 +130,11 @@ class OrdenesController {
                     tiene_botonia_general, tiene_manijas, tiene_tapetes,
                     tiene_vestiduras, tiene_otros,
                     tiene_radio, tiene_encendedor, tiene_documentos,
-                    subtotal_mano_obra, subtotal_refacciones, total,
+                    subtotal_servicios, subtotal_mano_obra, subtotal_refacciones, 
+                    incluir_iva, iva, total,
                     fecha_promesa_entrega,
                     estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             
             $vehiculoData = $data['vehiculo'] ?? [];
@@ -187,9 +188,12 @@ class OrdenesController {
                 isset($interiores['radio']) && $interiores['radio'] ? 1 : 0,
                 isset($interiores['encendedor']) && $interiores['encendedor'] ? 1 : 0,
                 isset($interiores['documentos']) && $interiores['documentos'] ? 1 : 0,
-                // Totales
+                // Totales y resumen completo
+                $resumenData['servicios'] ?? 0,
                 $resumenData['manoDeObra'] ?? 0,
                 $resumenData['refacciones'] ?? 0,
+                isset($resumenData['incluirIVA']) && $resumenData['incluirIVA'] ? 1 : 0,
+                $resumenData['iva'] ?? 0,
                 $resumenData['total'] ?? 0,
                 $fechaSalida,
                 'abierta' // Estado inicial siempre es 'abierta'
@@ -335,9 +339,33 @@ class OrdenesController {
                 error_log('Estado a actualizar: ' . $data['estado']);
             }
             
-            if (isset($data['resumen']['total'])) {
-                $updateFields[] = 'total = ?';
-                $updateValues[] = $data['resumen']['total'];
+            // Actualizar campos de resumen si se enviaron
+            if (isset($data['resumen'])) {
+                if (isset($data['resumen']['servicios'])) {
+                    $updateFields[] = 'subtotal_servicios = ?';
+                    $updateValues[] = $data['resumen']['servicios'];
+                }
+                if (isset($data['resumen']['manoDeObra'])) {
+                    $updateFields[] = 'subtotal_mano_obra = ?';
+                    $updateValues[] = $data['resumen']['manoDeObra'];
+                }
+                if (isset($data['resumen']['refacciones'])) {
+                    $updateFields[] = 'subtotal_refacciones = ?';
+                    $updateValues[] = $data['resumen']['refacciones'];
+                }
+                if (isset($data['resumen']['incluirIVA'])) {
+                    $updateFields[] = 'incluir_iva = ?';
+                    $updateValues[] = $data['resumen']['incluirIVA'] ? 1 : 0;
+                    error_log('Incluir IVA: ' . ($data['resumen']['incluirIVA'] ? 'SI' : 'NO'));
+                }
+                if (isset($data['resumen']['iva'])) {
+                    $updateFields[] = 'iva = ?';
+                    $updateValues[] = $data['resumen']['iva'];
+                }
+                if (isset($data['resumen']['total'])) {
+                    $updateFields[] = 'total = ?';
+                    $updateValues[] = $data['resumen']['total'];
+                }
             }
             
             // Actualizar checkboxes de inspección si se enviaron - TODOS LOS 20+ CAMPOS
@@ -726,6 +754,19 @@ class OrdenesController {
                 'descripcion' => $dano['descripcion'] ?? ''
             ];
         }
+        
+        // Agregar resumen completo con incluirIVA
+        $orden['resumen'] = [
+            'servicios' => (float)($orden['subtotal_servicios'] ?? 0),
+            'manoDeObra' => (float)($orden['subtotal_mano_obra'] ?? 0),
+            'refacciones' => (float)($orden['subtotal_refacciones'] ?? 0),
+            'subtotal' => (float)($orden['subtotal_servicios'] ?? 0) + (float)($orden['subtotal_mano_obra'] ?? 0) + (float)($orden['subtotal_refacciones'] ?? 0),
+            'incluirIVA' => (bool)($orden['incluir_iva'] ?? false),
+            'iva' => (float)($orden['iva'] ?? 0),
+            'total' => (float)($orden['total'] ?? 0),
+            'anticipo' => 0, // Por ahora siempre 0
+            'restante' => (float)($orden['total'] ?? 0)
+        ];
         
         return $orden;
     }

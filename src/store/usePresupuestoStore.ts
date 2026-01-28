@@ -499,7 +499,7 @@ export const usePresupuestoStore = create<PresupuestoState>()((set, get) => ({
       placas: ordenAny.placas || '',
       kilometrajeEntrada: ordenAny.kilometraje_entrada || '',
       kilometrajeSalida: ordenAny.kilometraje_salida || '',
-      nivelGasolina: ordenAny.nivel_gasolina || 50,
+      nivelGasolina: parseFloat(ordenAny.nivel_combustible || '50'),
     } : orden.vehiculo;
     
     const taller = ordenAny.taller_encargado ? {

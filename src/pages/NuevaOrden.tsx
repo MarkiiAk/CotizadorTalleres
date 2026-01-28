@@ -70,7 +70,10 @@ export const NuevaOrden = () => {
         folio: presupuesto.folio,
         taller: presupuesto.taller,
         cliente: presupuesto.cliente,
-        vehiculo: presupuesto.vehiculo,
+        vehiculo: {
+          ...presupuesto.vehiculo,
+          nivelCombustible: presupuesto.vehiculo.nivelGasolina, // Mapear para backend
+        },
         inspeccion: presupuesto.inspeccion,
         problemaReportado: presupuesto.problemaReportado,
         diagnosticoTecnico: presupuesto.diagnosticoTecnico,

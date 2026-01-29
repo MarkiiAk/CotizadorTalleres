@@ -198,19 +198,6 @@ export const Login = () => {
               )}
             </Button>
           </form>
-
-          {/* Credenciales por defecto */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
-            <div className="bg-sag-50 dark:bg-sag-900/30 rounded-xl p-4 space-y-2">
-              <p className="text-xs font-medium text-sag-900 dark:text-sag-300">
-                🔐 Credenciales por defecto:
-              </p>
-              <div className="space-y-1 text-xs text-sag-800 dark:text-sag-400">
-                <p>Usuario: <span className="font-mono font-semibold">admin</span></p>
-                <p>Contraseña: <span className="font-mono font-semibold">admin123</span></p>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Footer */}

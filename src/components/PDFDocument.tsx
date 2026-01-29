@@ -51,30 +51,31 @@ const styles = StyleSheet.create({
   logoSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   logo: {
-    width: 50,
-    height: 50,
+    width: 45,
+    height: 45,
   },
   titleSection: {
-    flex: 1,
+    flexDirection: 'column',
   },
   companyName: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.primary,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   ownerName: {
-    fontSize: 9,
+    fontSize: 8,
     color: COLORS.darkGray,
   },
   addressSection: {
     textAlign: 'right',
+    flex: 1,
   },
   addressText: {
-    fontSize: 8,
+    fontSize: 7.5,
     color: COLORS.darkGray,
     marginBottom: 2,
   },

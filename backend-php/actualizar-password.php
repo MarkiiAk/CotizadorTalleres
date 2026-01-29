@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $password_hash = password_hash($new_password, PASSWORD_BCRYPT);
                 
                 // Actualizar contraseña
-                $stmt = $db->prepare('UPDATE usuarios SET password_hash = ?, fecha_actualizacion = NOW() WHERE username = ?');
+                $stmt = $db->prepare('UPDATE usuarios SET password_hash = ?, ultima_modificacion = NOW() WHERE username = ?');
                 $stmt->execute([$password_hash, $username]);
                 
                 echo '<div class="success">';

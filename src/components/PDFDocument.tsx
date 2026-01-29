@@ -1,6 +1,29 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { Presupuesto } from '../types';
+
+// Registrar fuentes Roboto
+Font.register({
+  family: 'Roboto',
+  fonts: [
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf',
+      fontWeight: 300,
+    },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf',
+      fontWeight: 400,
+    },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf',
+      fontWeight: 500,
+    },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
+      fontWeight: 700,
+    },
+  ],
+});
 
 // 🎨 PALETA SAG GARAGE - Basada en diseño de referencia
 const COLORS = {
@@ -34,7 +57,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 0,
     fontSize: 9,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Roboto',
     backgroundColor: COLORS.white,
     color: COLORS.darkGray,
   },
@@ -62,12 +85,15 @@ const styles = StyleSheet.create({
   },
   companyName: {
     fontSize: 20,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.primary,
     letterSpacing: 0.5,
   },
   ownerName: {
     fontSize: 8,
+    fontFamily: 'Roboto',
+    fontWeight: 400,
     color: COLORS.darkGray,
   },
   addressSection: {
@@ -116,7 +142,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.accentBlue,
     marginBottom: 8,
     letterSpacing: 0.5,
@@ -134,7 +161,8 @@ const styles = StyleSheet.create({
   },
   cardValue: {
     fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 500,
     color: COLORS.black,
     flex: 1,
   },
@@ -150,7 +178,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.white,
     letterSpacing: 0.5,
   },
@@ -164,7 +193,8 @@ const styles = StyleSheet.create({
   },
   tableHeaderText: {
     fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.white,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
@@ -186,7 +216,8 @@ const styles = StyleSheet.create({
     color: COLORS.darkGray,
   },
   tableCellBold: {
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.black,
   },
   
@@ -212,7 +243,8 @@ const styles = StyleSheet.create({
   },
   termsTitle: {
     fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.darkGray,
     marginBottom: 5,
     textTransform: 'uppercase',
@@ -240,7 +272,8 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     fontSize: 9,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.black,
   },
   
@@ -272,13 +305,15 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 12,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.white,
     letterSpacing: 2,
   },
   totalValue: {
     fontSize: 20,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.white,
     letterSpacing: -0.5,
   },
@@ -313,13 +348,15 @@ const styles = StyleSheet.create({
   },
   saldoLabel: {
     fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.white,
     letterSpacing: 1.5,
   },
   saldoValue: {
     fontSize: 16,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Roboto',
+    fontWeight: 700,
     color: COLORS.white,
     letterSpacing: -0.5,
   },

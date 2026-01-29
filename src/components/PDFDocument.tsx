@@ -445,6 +445,14 @@ interface PDFDocumentProps {
 }
 
 export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
+  // Valores por defecto para el taller
+  const TALLER_INFO = {
+    nombre: 'SAG GARAGE',
+    encargado: 'José Francisco Gudiño Macías',
+    telefono: '5513422917',
+    direccion: 'Priv. Nicolás Bravo 6, San Mateo Nopala, Naucalpan',
+  };
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
@@ -833,7 +841,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         </View>
 
         <Text style={styles.footer}>
-          SAG Garage • {presupuesto.taller.direccion} • Tel: {presupuesto.taller.telefono}
+          {TALLER_INFO.nombre} • {TALLER_INFO.direccion} • Tel: {TALLER_INFO.telefono}
         </Text>
       </Page>
 

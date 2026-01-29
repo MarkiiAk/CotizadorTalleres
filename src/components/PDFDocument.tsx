@@ -141,9 +141,10 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     backgroundColor: COLORS.ultraLightGray,
-    borderRadius: 2,
-    padding: 10,
+    borderRadius: 8,
+    padding: 12,
     border: `1px solid ${COLORS.lightGray}`,
+    borderLeft: `4px solid ${COLORS.accentBlue}`,
   },
   cardTitle: {
     fontSize: 10,
@@ -151,8 +152,10 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: COLORS.accentBlue,
     marginBottom: 8,
+    paddingBottom: 6,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
+    borderBottom: `2px solid ${COLORS.accentBlue}`,
   },
   cardRow: {
     flexDirection: 'row',

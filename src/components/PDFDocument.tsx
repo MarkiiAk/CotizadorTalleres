@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
   
   // ===== HEADER SAG GARAGE =====
   header: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.white,
     padding: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottom: `3px solid ${COLORS.primaryDark}`,
+    borderBottom: `3px solid ${COLORS.primary}`,
   },
   logoSection: {
     flexDirection: 'row',
@@ -54,32 +54,29 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   logo: {
-    width: 45,
-    height: 45,
+    width: 50,
+    height: 50,
   },
   titleSection: {
     flex: 1,
   },
   companyName: {
-    fontSize: 22,
+    fontSize: 24,
     fontFamily: 'Helvetica-Bold',
-    color: COLORS.white,
+    color: COLORS.primary,
     letterSpacing: 1,
-    marginBottom: 1,
   },
   ownerName: {
-    fontSize: 8,
-    color: COLORS.white,
-    opacity: 0.95,
+    fontSize: 9,
+    color: COLORS.darkGray,
   },
   addressSection: {
     textAlign: 'right',
   },
   addressText: {
-    fontSize: 7,
-    color: COLORS.white,
-    marginBottom: 1,
-    opacity: 0.95,
+    fontSize: 8,
+    color: COLORS.darkGray,
+    marginBottom: 2,
   },
   dateTimeSection: {
     position: 'absolute',
@@ -375,15 +372,15 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
           <View style={styles.logoSection}>
             <Image src="/logo.png" style={styles.logo} />
             <View style={styles.titleSection}>
-              <Text style={styles.companyName}>{TALLER_INFO.nombre}</Text>
-              <Text style={styles.ownerName}>{TALLER_INFO.encargado}</Text>
+              <Text style={styles.companyName}>SAG GARAGE</Text>
+              <Text style={styles.ownerName}>JOSÉ FRANCISCO GUDIÑO MACÍAS</Text>
             </View>
           </View>
           <View style={styles.addressSection}>
             <Text style={styles.addressText}>FECHA: {formatDate(presupuesto.fecha)}</Text>
             <Text style={styles.addressText}>HORA: {formatTime(presupuesto.fecha)}</Text>
-            <Text style={styles.addressText}>{TALLER_INFO.direccion}</Text>
-            <Text style={styles.addressText}>{TALLER_INFO.telefono}</Text>
+            <Text style={styles.addressText}>PRIVADA NICOLAS BRAVO 6, SAN MATEO NOPALA, NAUCALPAN.</Text>
+            <Text style={styles.addressText}>5513422917</Text>
           </View>
         </View>
 

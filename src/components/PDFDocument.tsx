@@ -18,7 +18,7 @@ const COLORS = {
 // Estilos ULTRA-PREMIUM
 const styles = StyleSheet.create({
   page: {
-    padding: 50,
+    padding: 35,
     fontSize: 9,
     fontFamily: 'Helvetica',
     backgroundColor: COLORS.white,
@@ -27,76 +27,78 @@ const styles = StyleSheet.create({
   
   // ===== HEADER PREMIUM =====
   header: {
-    marginBottom: 40,
-    paddingBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 25,
+    paddingBottom: 15,
     borderBottom: `0.5px solid ${COLORS.border}`,
   },
   logoContainer: {
-    marginBottom: 15,
+    width: 70,
   },
   logo: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     objectFit: 'contain',
   },
   titleSection: {
-    marginTop: 10,
+    flex: 1,
+    marginLeft: 20,
   },
   mainTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
-    marginBottom: 8,
+    marginBottom: 6,
     letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 10,
+    fontSize: 9,
     color: COLORS.mediumGray,
-    marginBottom: 4,
+    marginBottom: 3,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   headerInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 12,
+    textAlign: 'right',
   },
   folio: {
-    fontSize: 28,
+    fontSize: 24,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.accent,
     letterSpacing: 1,
+    marginBottom: 4,
   },
   date: {
     fontSize: 9,
     color: COLORS.mediumGray,
-    textAlign: 'right',
   },
   
   // ===== CARDS PREMIUM =====
   cardRow: {
     flexDirection: 'row',
-    gap: 20,
-    marginBottom: 25,
+    gap: 15,
+    marginBottom: 20,
   },
   card: {
     flex: 1,
     backgroundColor: COLORS.ultraLightGray,
     borderRadius: 4,
-    padding: 20,
+    padding: 15,
     border: `0.5px solid ${COLORS.border}`,
   },
   cardTitle: {
     fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
-    marginBottom: 15,
+    marginBottom: 12,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
   infoRow: {
     flexDirection: 'row',
-    marginBottom: 8,
+    marginBottom: 7,
     alignItems: 'flex-start',
   },
   infoLabel: {
@@ -114,19 +116,19 @@ const styles = StyleSheet.create({
   
   // ===== SECCIONES AMPLIAS =====
   section: {
-    marginBottom: 30,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 11,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
-    marginBottom: 15,
+    marginBottom: 12,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   problemCard: {
     backgroundColor: COLORS.ultraLightGray,
-    padding: 20,
+    padding: 15,
     borderRadius: 4,
     border: `0.5px solid ${COLORS.border}`,
   },
@@ -134,15 +136,15 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.mediumGray,
-    marginBottom: 8,
+    marginBottom: 7,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   problemText: {
     fontSize: 9,
     color: COLORS.darkGray,
-    lineHeight: 1.6,
-    marginBottom: 15,
+    lineHeight: 1.5,
+    marginBottom: 12,
   },
   
   // ===== TABLAS MINIMALISTAS =====
@@ -189,9 +191,9 @@ const styles = StyleSheet.create({
   
   // ===== RESUMEN FINANCIERO - EL MÁS IMPORTANTE =====
   financialSummary: {
-    marginTop: 30,
-    marginBottom: 30,
-    padding: 25,
+    marginTop: 20,
+    marginBottom: 20,
+    padding: 20,
     backgroundColor: COLORS.white,
     borderRadius: 4,
     border: `1px solid ${COLORS.accent}`,
@@ -305,8 +307,8 @@ const styles = StyleSheet.create({
   signatures: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 50,
-    paddingTop: 30,
+    marginTop: 40,
+    paddingTop: 20,
     gap: 40,
   },
   signatureBox: {
@@ -315,7 +317,7 @@ const styles = StyleSheet.create({
   signatureLine: {
     borderTop: `1px solid ${COLORS.black}`,
     paddingTop: 10,
-    marginTop: 50,
+    marginTop: 40,
   },
   signatureLabel: {
     fontSize: 9,
@@ -330,54 +332,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   
-  // ===== PÁGINA DE GARANTÍAS =====
-  garantiaHeader: {
-    marginBottom: 30,
-    paddingBottom: 15,
-    borderBottom: `0.5px solid ${COLORS.border}`,
-  },
-  garantiaTitle: {
-    fontSize: 24,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    marginBottom: 8,
-    letterSpacing: -0.5,
-  },
-  garantiaSubtitle: {
-    fontSize: 10,
-    color: COLORS.mediumGray,
-    letterSpacing: 0.5,
-  },
-  garantiaCard: {
-    backgroundColor: COLORS.ultraLightGray,
-    padding: 20,
-    marginBottom: 15,
-    borderRadius: 4,
-    border: `0.5px solid ${COLORS.border}`,
-  },
-  garantiaCardTitle: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    marginBottom: 12,
-    letterSpacing: 0.5,
-  },
-  garantiaText: {
-    fontSize: 9,
-    color: COLORS.darkGray,
-    lineHeight: 1.6,
-    marginBottom: 8,
-  },
-  garantiaList: {
-    marginLeft: 15,
-    marginTop: 8,
-  },
-  garantiaListItem: {
-    fontSize: 8,
-    color: COLORS.darkGray,
-    marginBottom: 6,
-    lineHeight: 1.5,
-  },
   footer: {
     textAlign: 'center',
     fontSize: 7,
@@ -646,123 +600,6 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         </Text>
       </Page>
 
-      {/* ========== PÁGINA 2: GARANTÍAS ========== */}
-      <Page size="A4" style={styles.page}>
-        <View style={styles.garantiaHeader}>
-          <Text style={styles.garantiaTitle}>Póliza de Garantía</Text>
-          <Text style={styles.garantiaSubtitle}>SAG GARAGE</Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>1. Cobertura de la Garantía</Text>
-          <Text style={styles.garantiaText}>
-            Todas las reparaciones y servicios realizados en SAG Garage cuentan con garantía de 30 días naturales 
-            a partir de la fecha de entrega del vehículo. En partes eléctricas en ningún caso hay garantía.
-          </Text>
-          <Text style={styles.garantiaText}>
-            La garantía cubre únicamente las piezas y mano de obra relacionadas con la reparación realizada.
-          </Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>2. Lugar de la Garantía</Text>
-          <Text style={styles.garantiaText}>
-            La garantía se hará válida únicamente en las instalaciones de SAG Garage. El cliente deberá presentar 
-            esta póliza junto con la factura o comprobante del servicio.
-          </Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>3. Exclusiones</Text>
-          <Text style={styles.garantiaText}>La garantía quedará sin efecto en los siguientes casos:</Text>
-          <View style={styles.garantiaList}>
-            <Text style={styles.garantiaListItem}>
-              • Si el vehículo es manipulado por terceros después del servicio realizado
-            </Text>
-            <Text style={styles.garantiaListItem}>
-              • Si el daño proviene de mal uso, accidentes, modificaciones no autorizadas o falta de mantenimiento
-            </Text>
-            <Text style={styles.garantiaListItem}>
-              • Si el cliente no respeta las recomendaciones de uso y cuidado emitidas por el taller
-            </Text>
-            <Text style={styles.garantiaListItem}>
-              • Daños ocasionados por condiciones externas (inundaciones, sobrecalentamiento, combustible adulterado, etc.)
-            </Text>
-            <Text style={styles.garantiaListItem}>
-              • Reparaciones, modificaciones o alteraciones posteriores realizadas por talleres ajenos
-            </Text>
-            <Text style={styles.garantiaListItem}>
-              • Falta de mantenimiento preventivo recomendado por el Taller
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>4. Responsabilidad del Cliente</Text>
-          <Text style={styles.garantiaText}>
-            El cliente deberá notificar cualquier anomalía inmediatamente y dentro del plazo de la garantía. 
-            El vehículo deberá entregarse en las instalaciones del taller para su revisión.
-          </Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>5. Tiempo de Revisión</Text>
-          <Text style={styles.garantiaText}>
-            El taller contará con un plazo razonable de hasta 5 días hábiles para revisar y diagnosticar el vehículo 
-            antes de determinar la procedencia de la garantía.
-          </Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>6. Alcance de la Garantía</Text>
-          <Text style={styles.garantiaText}>
-            La garantía aplica únicamente a la reparación realizada y no cubre daños colaterales o piezas no 
-            intervenidas por SAG Garage.
-          </Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>7. Horarios de Atención</Text>
-          <Text style={styles.garantiaText}>Las garantías solo podrán hacerse válidas dentro de los horarios de atención del taller:</Text>
-          <View style={styles.garantiaList}>
-            <Text style={styles.garantiaListItem}>• Lunes a viernes de 9:00 a.m. a 6:00 p.m.</Text>
-            <Text style={styles.garantiaListItem}>• Sábados de 10:00 a.m. a 2:00 p.m.</Text>
-            <Text style={styles.garantiaListItem}>• No se atenderán reclamaciones fuera de este horario</Text>
-          </View>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>8. Traslado del Vehículo</Text>
-          <Text style={styles.garantiaText}>
-            La póliza de garantía no incluye de ninguna manera el traslado del vehículo desde el lugar donde se 
-            presente la falla hasta el taller. El cliente es responsable de llevar el vehículo a las instalaciones 
-            de SAG Garage.
-          </Text>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>9. Responsabilidad Limitada</Text>
-          <Text style={styles.garantiaText}>
-            La garantía se limita a la reparación o reposición del trabajo realizado.
-          </Text>
-          <Text style={styles.garantiaText}>El Taller no será responsable por:</Text>
-          <View style={styles.garantiaList}>
-            <Text style={styles.garantiaListItem}>• Daños indirectos, o en consecuencia de pérdidas económicas</Text>
-            <Text style={styles.garantiaListItem}>• Gastos de traslado, grúa, hospedaje o similares</Text>
-          </View>
-        </View>
-
-        <View style={styles.garantiaCard}>
-          <Text style={styles.garantiaCardTitle}>10. Aceptación</Text>
-          <Text style={styles.garantiaText}>
-            Al firmar la orden de servicio y recibir el vehículo, el Cliente acepta los presentes términos y condiciones.
-          </Text>
-        </View>
-
-        <Text style={styles.footer}>
-          SAG Garage • Términos y Condiciones de Garantía
-        </Text>
-      </Page>
     </Document>
   );
 };

@@ -22,6 +22,11 @@ Font.register({
       src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf',
       fontWeight: 700,
     },
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-italic-webfont.ttf',
+      fontWeight: 400,
+      fontStyle: 'italic',
+    },
   ],
 });
 
@@ -408,7 +413,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         {/* HEADER SAG GARAGE */}
         <View style={styles.header}>
           <View style={styles.logoSection}>
-            <Image src="/logo.png" style={styles.logo} />
+            <Image src={`${window.location.origin}/logo.png`} style={styles.logo} />
             <View style={styles.titleSection}>
               <Text style={styles.companyName}>SAG GARAGE</Text>
               <Text style={styles.ownerName}>JOSÉ FRANCISCO GUDIÑO MACÍAS</Text>

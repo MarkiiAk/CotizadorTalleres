@@ -18,6 +18,7 @@ export interface ClienteInfo {
 export interface VehiculoInfo {
   marca: string;
   modelo: string;
+  year?: string;
   color: string;
   placas: string;
   kilometrajeEntrada: string;

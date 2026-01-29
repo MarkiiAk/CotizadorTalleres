@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   // ===== HEADER SAG GARAGE =====
   header: {
     backgroundColor: COLORS.primary,
-    padding: 20,
+    padding: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -51,24 +51,24 @@ const styles = StyleSheet.create({
   logoSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15,
+    gap: 10,
   },
   logo: {
-    width: 60,
-    height: 60,
+    width: 45,
+    height: 45,
   },
   titleSection: {
     flex: 1,
   },
   companyName: {
-    fontSize: 28,
+    fontSize: 22,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     letterSpacing: 1,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   ownerName: {
-    fontSize: 10,
+    fontSize: 8,
     color: COLORS.white,
     opacity: 0.95,
   },
@@ -76,9 +76,9 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   addressText: {
-    fontSize: 8,
+    fontSize: 7,
     color: COLORS.white,
-    marginBottom: 2,
+    marginBottom: 1,
     opacity: 0.95,
   },
   dateTimeSection: {
@@ -100,41 +100,42 @@ const styles = StyleSheet.create({
   
   // ===== CONTENIDO =====
   content: {
-    padding: 30,
+    padding: 20,
   },
   
   // ===== CARDS CLIENTE Y VEHÍCULO =====
   cardsRow: {
     flexDirection: 'row',
-    gap: 20,
-    marginBottom: 25,
+    gap: 15,
+    marginBottom: 15,
   },
   card: {
     flex: 1,
     backgroundColor: COLORS.ultraLightGray,
-    borderRadius: 3,
-    padding: 15,
+    borderRadius: 2,
+    padding: 10,
     border: `1px solid ${COLORS.lightGray}`,
   },
   cardTitle: {
-    fontSize: 11,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.accentBlue,
-    marginBottom: 12,
+    marginBottom: 8,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   cardRow: {
     flexDirection: 'row',
-    marginBottom: 6,
+    marginBottom: 4,
+    alignItems: 'center',
   },
   cardLabel: {
-    fontSize: 9,
+    fontSize: 8,
     color: COLORS.darkGray,
-    width: '35%',
+    marginRight: 5,
   },
   cardValue: {
-    fontSize: 9,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
     flex: 1,
@@ -142,15 +143,15 @@ const styles = StyleSheet.create({
   
   // ===== TABLAS =====
   section: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   sectionHeader: {
     backgroundColor: COLORS.headerDark,
-    padding: 10,
+    padding: 6,
     marginBottom: 1,
   },
   sectionTitle: {
-    fontSize: 11,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     letterSpacing: 0.5,
@@ -160,11 +161,11 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
     backgroundColor: COLORS.accentBlue,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
   },
   tableHeaderText: {
-    fontSize: 9,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     textTransform: 'uppercase',
@@ -174,8 +175,8 @@ const styles = StyleSheet.create({
   // Filas de tabla
   tableRow: {
     flexDirection: 'row',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
     borderBottom: `1px solid ${COLORS.lightGray}`,
     backgroundColor: COLORS.white,
   },
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.ultraLightGray,
   },
   tableCell: {
-    fontSize: 9,
+    fontSize: 8,
     color: COLORS.darkGray,
   },
   tableCellBold: {
@@ -205,23 +206,23 @@ const styles = StyleSheet.create({
   // ===== TÉRMINOS Y RESUMEN =====
   bottomSection: {
     flexDirection: 'row',
-    gap: 20,
-    marginTop: 10,
+    gap: 15,
+    marginTop: 8,
   },
   termsSection: {
     flex: 1,
   },
   termsTitle: {
-    fontSize: 9,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.darkGray,
-    marginBottom: 8,
+    marginBottom: 5,
     textTransform: 'uppercase',
   },
   termsText: {
-    fontSize: 8,
+    fontSize: 7,
     color: COLORS.mediumGray,
-    lineHeight: 1.4,
+    lineHeight: 1.3,
   },
   
   // ===== RESUMEN FINANCIERO =====
@@ -231,18 +232,34 @@ const styles = StyleSheet.create({
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderBottom: `1px solid ${COLORS.lightGray}`,
   },
   summaryLabel: {
-    fontSize: 9,
+    fontSize: 8,
     color: COLORS.darkGray,
   },
   summaryValue: {
-    fontSize: 10,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
+  },
+  
+  // Subtotal + IVA
+  subtotalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    backgroundColor: COLORS.ultraLightGray,
+  },
+  ivaRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderBottom: `2px solid ${COLORS.mediumGray}`,
   },
   
   // Total
@@ -250,19 +267,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
     backgroundColor: COLORS.black,
-    marginTop: 2,
+    marginTop: 1,
   },
   totalLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     letterSpacing: 2,
   },
   totalValue: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     letterSpacing: -0.5,
@@ -272,17 +289,17 @@ const styles = StyleSheet.create({
   proyectoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderBottom: `1px solid ${COLORS.lightGray}`,
     fontStyle: 'italic',
   },
   proyectoLabel: {
-    fontSize: 9,
+    fontSize: 8,
     color: COLORS.mediumGray,
   },
   proyectoValue: {
-    fontSize: 10,
+    fontSize: 8,
     color: COLORS.mediumGray,
   },
   
@@ -291,19 +308,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     backgroundColor: COLORS.accentBlue,
-    marginTop: 2,
+    marginTop: 1,
   },
   saldoLabel: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     letterSpacing: 1.5,
   },
   saldoValue: {
-    fontSize: 20,
+    fontSize: 16,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
     letterSpacing: -0.5,
@@ -395,7 +412,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
               <Text style={styles.cardTitle}>VEHÍCULO</Text>
               <View style={styles.cardRow}>
                 <Text style={styles.cardValue}>
-                  {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo}
+                  {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo} {presupuesto.vehiculo.year || ''}
                 </Text>
               </View>
               <View style={styles.cardRow}>
@@ -404,7 +421,9 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
               </View>
               <View style={styles.cardRow}>
                 <Text style={styles.cardLabel}>Color:</Text>
-                <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'} I Km:</Text>
+                <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'}</Text>
+                <Text style={styles.cardLabel}> | Km:</Text>
+                <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
               </View>
             </View>
           </View>
@@ -507,9 +526,23 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.manoDeObra || 0)}</Text>
               </View>
 
+              {/* SUBTOTAL si incluye IVA */}
+              {presupuesto.resumen?.incluirIVA && (
+                <>
+                  <View style={styles.subtotalRow}>
+                    <Text style={styles.summaryLabel}>Subtotal:</Text>
+                    <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen.subtotal || 0)}</Text>
+                  </View>
+                  <View style={styles.ivaRow}>
+                    <Text style={styles.summaryLabel}>IVA (16%):</Text>
+                    <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen.iva || 0)}</Text>
+                  </View>
+                </>
+              )}
+
               {/* TOTAL */}
               <View style={styles.totalRow}>
-                <Text style={styles.totalLabel}>TOTAL</Text>
+                <Text style={styles.totalLabel}>TOTAL{presupuesto.resumen?.incluirIVA ? '' : ' (SIN IVA)'}</Text>
                 <Text style={styles.totalValue}>
                   {formatCurrency(presupuesto.resumen?.incluirIVA ? presupuesto.resumen.total : presupuesto.resumen?.subtotal || 0)}
                 </Text>

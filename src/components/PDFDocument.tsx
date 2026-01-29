@@ -2,180 +2,185 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import { Presupuesto } from '../types';
 
-// 🎨 PALETA PREMIUM - SILICON VALLEY INSPIRED
+// 🎨 PALETA SAG GARAGE - Basada en diseño de referencia
 const COLORS = {
-  black: '#0A0A0A',
-  darkGray: '#2D2D2D',
-  mediumGray: '#8E8E93',
-  lightGray: '#E8E8E8',
-  ultraLightGray: '#F9F9F9',
+  // Verdes SAG
+  primary: '#8BC34A', // Verde limón principal
+  primaryDark: '#689F38',
+  
+  // Headers y acentos
+  headerDark: '#37474F', // Azul gris oscuro para tablas
+  headerLight: '#455A64',
+  
+  // Azul para totales importantes
+  accentBlue: '#2196F3',
+  accentBlueDark: '#1976D2',
+  
+  // Escala de grises
+  black: '#212121',
+  darkGray: '#424242',
+  mediumGray: '#757575',
+  lightGray: '#E0E0E0',
+  ultraLightGray: '#F5F5F5',
   white: '#FFFFFF',
-  accent: '#B87333', // Oro rosa/cobre - LUJO
-  success: '#34C759', // Verde iOS
-  danger: '#FF3B30', // Rojo iOS
-  border: '#E5E5E5',
+  
+  // Estados
+  success: '#4CAF50',
+  danger: '#F44336',
+  warning: '#FF9800',
 };
 
-// Estilos ULTRA-PREMIUM
 const styles = StyleSheet.create({
   page: {
-    padding: 35,
+    padding: 0,
     fontSize: 9,
     fontFamily: 'Helvetica',
     backgroundColor: COLORS.white,
     color: COLORS.darkGray,
   },
   
-  // ===== HEADER PREMIUM =====
+  // ===== HEADER SAG GARAGE =====
   header: {
+    backgroundColor: COLORS.primary,
+    padding: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 25,
-    paddingBottom: 15,
-    borderBottom: `0.5px solid ${COLORS.border}`,
+    alignItems: 'center',
+    borderBottom: `3px solid ${COLORS.primaryDark}`,
   },
-  logoContainer: {
-    width: 70,
+  logoSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
   },
   logo: {
-    width: 70,
-    height: 70,
-    objectFit: 'contain',
+    width: 60,
+    height: 60,
   },
   titleSection: {
     flex: 1,
-    marginLeft: 20,
   },
-  mainTitle: {
-    fontSize: 24,
+  companyName: {
+    fontSize: 28,
     fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    marginBottom: 4,
-    letterSpacing: -0.8,
+    color: COLORS.white,
+    letterSpacing: 1,
+    marginBottom: 2,
   },
-  subtitle: {
-    fontSize: 9,
-    color: COLORS.mediumGray,
-    marginBottom: 6,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
+  ownerName: {
+    fontSize: 10,
+    color: COLORS.white,
+    opacity: 0.95,
   },
-  headerInfo: {
+  addressSection: {
     textAlign: 'right',
   },
-  folio: {
-    fontSize: 26,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.accent,
-    letterSpacing: 1.5,
-    marginBottom: 4,
+  addressText: {
+    fontSize: 8,
+    color: COLORS.white,
+    marginBottom: 2,
+    opacity: 0.95,
   },
-  date: {
-    fontSize: 9,
+  dateTimeSection: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    textAlign: 'right',
+  },
+  dateLabel: {
+    fontSize: 8,
     color: COLORS.mediumGray,
-    letterSpacing: 0.3,
+    marginBottom: 1,
+  },
+  dateValue: {
+    fontSize: 10,
+    fontFamily: 'Helvetica-Bold',
+    color: COLORS.darkGray,
   },
   
-  // ===== CARDS PREMIUM =====
-  cardRow: {
+  // ===== CONTENIDO =====
+  content: {
+    padding: 30,
+  },
+  
+  // ===== CARDS CLIENTE Y VEHÍCULO =====
+  cardsRow: {
     flexDirection: 'row',
-    gap: 15,
-    marginBottom: 20,
+    gap: 20,
+    marginBottom: 25,
   },
   card: {
     flex: 1,
     backgroundColor: COLORS.ultraLightGray,
-    borderRadius: 4,
+    borderRadius: 3,
     padding: 15,
-    border: `0.5px solid ${COLORS.border}`,
+    border: `1px solid ${COLORS.lightGray}`,
   },
   cardTitle: {
-    fontSize: 8,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
+    color: COLORS.accentBlue,
     marginBottom: 12,
-    letterSpacing: 1.8,
+    letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
-  infoRow: {
+  cardRow: {
     flexDirection: 'row',
-    marginBottom: 7,
-    alignItems: 'flex-start',
+    marginBottom: 6,
   },
-  infoLabel: {
-    fontSize: 8,
-    color: COLORS.mediumGray,
-    width: 80,
-    letterSpacing: 0.3,
-  },
-  infoValue: {
+  cardLabel: {
     fontSize: 9,
+    color: COLORS.darkGray,
+    width: '35%',
+  },
+  cardValue: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
     flex: 1,
-    fontFamily: 'Helvetica',
   },
   
-  // ===== SECCIONES AMPLIAS =====
+  // ===== TABLAS =====
   section: {
     marginBottom: 20,
+  },
+  sectionHeader: {
+    backgroundColor: COLORS.headerDark,
+    padding: 10,
+    marginBottom: 1,
   },
   sectionTitle: {
     fontSize: 11,
     fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    marginBottom: 12,
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-  },
-  problemCard: {
-    backgroundColor: COLORS.ultraLightGray,
-    padding: 15,
-    borderRadius: 4,
-    border: `0.5px solid ${COLORS.border}`,
-  },
-  problemLabel: {
-    fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.mediumGray,
-    marginBottom: 7,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-  },
-  problemText: {
-    fontSize: 9,
-    color: COLORS.darkGray,
-    lineHeight: 1.5,
-    marginBottom: 12,
+    color: COLORS.white,
+    letterSpacing: 0.5,
   },
   
-  // ===== TABLAS MINIMALISTAS =====
-  table: {
-    marginTop: 10,
-  },
+  // Headers de tabla
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: COLORS.black,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 2,
+    backgroundColor: COLORS.accentBlue,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   tableHeaderText: {
-    fontSize: 8,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.white,
-    letterSpacing: 1.2,
     textTransform: 'uppercase',
+    letterSpacing: 0.3,
   },
+  
+  // Filas de tabla
   tableRow: {
     flexDirection: 'row',
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderBottom: `0.5px solid ${COLORS.border}`,
-    backgroundColor: COLORS.ultraLightGray,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderBottom: `1px solid ${COLORS.lightGray}`,
+    backgroundColor: COLORS.white,
   },
   tableRowAlt: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.ultraLightGray,
   },
   tableCell: {
     fontSize: 9,
@@ -186,257 +191,122 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   
-  // Columnas de tabla
+  // Anchos de columna
+  col50: { width: '50%' },
   col60: { width: '60%' },
-  col20: { width: '20%', textAlign: 'right' },
-  col10: { width: '10%', textAlign: 'center' },
   col30: { width: '30%' },
-  col40: { width: '40%' },
+  col25: { width: '25%' },
+  col20: { width: '20%' },
+  col15: { width: '15%' },
+  col10: { width: '10%' },
+  colRight: { textAlign: 'right' },
+  colCenter: { textAlign: 'center' },
   
-  // ===== RESUMEN FINANCIERO - EL MÁS IMPORTANTE =====
-  financialSummary: {
-    marginTop: 20,
-    marginBottom: 20,
-    padding: 20,
-    backgroundColor: COLORS.white,
-    borderRadius: 4,
-    border: `1px solid ${COLORS.accent}`,
+  // ===== TÉRMINOS Y RESUMEN =====
+  bottomSection: {
+    flexDirection: 'row',
+    gap: 20,
+    marginTop: 10,
   },
-  summaryTitle: {
-    fontSize: 10,
+  termsSection: {
+    flex: 1,
+  },
+  termsTitle: {
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    marginBottom: 20,
-    letterSpacing: 1.8,
+    color: COLORS.darkGray,
+    marginBottom: 8,
     textTransform: 'uppercase',
+  },
+  termsText: {
+    fontSize: 8,
+    color: COLORS.mediumGray,
+    lineHeight: 1.4,
+  },
+  
+  // ===== RESUMEN FINANCIERO =====
+  summarySection: {
+    width: '45%',
   },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
-    paddingHorizontal: 5,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderBottom: `1px solid ${COLORS.lightGray}`,
   },
   summaryLabel: {
     fontSize: 9,
-    color: COLORS.mediumGray,
-    letterSpacing: 0.5,
+    color: COLORS.darkGray,
   },
   summaryValue: {
     fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: COLORS.black,
   },
-  summaryDivider: {
-    height: 0.5,
-    backgroundColor: COLORS.border,
-    marginVertical: 15,
-  },
-  summarySubtotal: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 12,
-    backgroundColor: COLORS.ultraLightGray,
-    borderRadius: 2,
-  },
-  summarySubtotalLabel: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.darkGray,
-  },
-  summarySubtotalValue: {
-    fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-  },
-  summaryTotal: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    paddingTop: 20,
-    borderTop: `2px solid ${COLORS.accent}`,
-    paddingHorizontal: 5,
-  },
-  summaryTotalLabel: {
-    fontSize: 12,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-  },
-  summaryTotalValue: {
-    fontSize: 32,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    letterSpacing: -1.2,
-  },
-  summaryAnticipo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 15,
-    paddingHorizontal: 5,
-  },
-  summaryAnticipoLabel: {
-    fontSize: 9,
-    color: COLORS.success,
-    letterSpacing: 0.5,
-  },
-  summaryAnticipoValue: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.success,
-  },
-  summaryRestante: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-    paddingHorizontal: 5,
-    paddingVertical: 12,
-    backgroundColor: COLORS.ultraLightGray,
-    borderRadius: 2,
-  },
-  summaryRestanteLabel: {
-    fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-  },
-  summaryRestanteValue: {
-    fontSize: 18,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-  },
   
-  // ===== INSPECCIÓN VEHICULAR =====
-  inspeccionContainer: {
-    marginBottom: 18,
-  },
-  inspeccionTitle: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    marginBottom: 12,
-    letterSpacing: 1.5,
-    textTransform: 'uppercase',
-    paddingBottom: 8,
-    borderBottom: `1px solid ${COLORS.accent}`,
-  },
-  inspeccionGrid: {
+  // Total
+  totalRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  inspeccionItem: {
-    width: '48%',
-    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 8,
-    backgroundColor: COLORS.ultraLightGray,
-    borderRadius: 3,
-    border: `0.5px solid ${COLORS.border}`,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: COLORS.black,
+    marginTop: 2,
   },
-  checkIcon: {
-    width: 16,
-    fontSize: 12,
+  totalLabel: {
+    fontSize: 14,
     fontFamily: 'Helvetica-Bold',
-    textAlign: 'center',
-    marginRight: 8,
+    color: COLORS.white,
+    letterSpacing: 2,
   },
-  checkIconOk: {
-    color: COLORS.success,
-  },
-  checkIconFail: {
-    color: COLORS.danger,
-  },
-  inspeccionLabel: {
-    fontSize: 8,
-    color: COLORS.darkGray,
-    flex: 1,
+  totalValue: {
+    fontSize: 24,
+    fontFamily: 'Helvetica-Bold',
+    color: COLORS.white,
+    letterSpacing: -0.5,
   },
   
-  // ===== DAÑOS ADICIONALES =====
-  danosContainer: {
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  danosCard: {
-    backgroundColor: '#FFF5F5',
-    padding: 15,
-    borderRadius: 4,
-    border: `1px solid ${COLORS.danger}`,
-    marginBottom: 12,
-  },
-  danoItem: {
-    marginBottom: 10,
-    paddingBottom: 10,
-    borderBottom: `0.5px solid ${COLORS.border}`,
-  },
-  danoItemLast: {
-    borderBottom: 'none',
-    marginBottom: 0,
-    paddingBottom: 0,
-  },
-  danoHeader: {
-    flexDirection: 'row',
-    marginBottom: 6,
-  },
-  danoUbicacion: {
-    fontSize: 9,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    flex: 1,
-  },
-  danoTipo: {
-    fontSize: 8,
-    color: COLORS.danger,
-    backgroundColor: '#FFE5E5',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 3,
-  },
-  danoDescripcion: {
-    fontSize: 8,
-    color: COLORS.darkGray,
-    lineHeight: 1.4,
-  },
-  
-  // ===== FIRMAS ELEGANTES =====
-  signatures: {
+  // Proyecto/Anticipo
+  proyectoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
-    paddingTop: 20,
-    gap: 40,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderBottom: `1px solid ${COLORS.lightGray}`,
+    fontStyle: 'italic',
   },
-  signatureBox: {
-    flex: 1,
-  },
-  signatureLine: {
-    borderTop: `1px solid ${COLORS.black}`,
-    paddingTop: 10,
-    marginTop: 40,
-  },
-  signatureLabel: {
+  proyectoLabel: {
     fontSize: 9,
-    fontFamily: 'Helvetica-Bold',
-    color: COLORS.black,
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  signatureName: {
-    fontSize: 8,
     color: COLORS.mediumGray,
-    textAlign: 'center',
+  },
+  proyectoValue: {
+    fontSize: 10,
+    color: COLORS.mediumGray,
   },
   
-  footer: {
-    textAlign: 'center',
-    fontSize: 7,
-    color: COLORS.mediumGray,
-    marginTop: 30,
-    paddingTop: 20,
-    borderTop: `0.5px solid ${COLORS.border}`,
-    letterSpacing: 0.5,
+  // Saldo Restante - EL MÁS IMPORTANTE
+  saldoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    backgroundColor: COLORS.accentBlue,
+    marginTop: 2,
+  },
+  saldoLabel: {
+    fontSize: 12,
+    fontFamily: 'Helvetica-Bold',
+    color: COLORS.white,
+    letterSpacing: 1.5,
+  },
+  saldoValue: {
+    fontSize: 20,
+    fontFamily: 'Helvetica-Bold',
+    color: COLORS.white,
+    letterSpacing: -0.5,
   },
 });
 
@@ -445,12 +315,11 @@ interface PDFDocumentProps {
 }
 
 export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
-  // Valores por defecto para el taller
   const TALLER_INFO = {
     nombre: 'SAG GARAGE',
-    encargado: 'José Francisco Gudiño Macías',
+    encargado: 'JOSÉ FRANCISCO GUDIÑO MACÍAS',
     telefono: '5513422917',
-    direccion: 'Priv. Nicolás Bravo 6, San Mateo Nopala, Naucalpan',
+    direccion: 'PRIVADA NICOLAS BRAVO 6, SAN MATEO NOPALA, NAUCALPAN.',
   };
 
   const formatCurrency = (amount: number) => {
@@ -463,389 +332,207 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
 
   const formatDate = (date: string | Date) => {
     if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('es-MX', {
+    const d = new Date(date);
+    return d.toLocaleDateString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
       year: 'numeric',
-      month: 'long',
-      day: 'numeric',
     });
   };
 
-  // Helper para renderizar items de inspección
-  const renderInspeccionItem = (label: string, estado: boolean) => (
-    <View style={styles.inspeccionItem}>
-      <Text style={[styles.checkIcon, estado ? styles.checkIconOk : styles.checkIconFail]}>
-        {estado ? '✓' : '✗'}
-      </Text>
-      <Text style={styles.inspeccionLabel}>{label}</Text>
-    </View>
-  );
+  const formatTime = (date: string | Date) => {
+    if (!date) return 'N/A';
+    const d = new Date(date);
+    return d.toLocaleTimeString('es-MX', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
 
   return (
     <Document>
-      {/* ========== PÁGINA 1: PRESUPUESTO ========== */}
       <Page size="A4" style={styles.page}>
-        {/* Header Premium */}
+        {/* HEADER SAG GARAGE */}
         <View style={styles.header}>
-          <View style={styles.logoContainer}>
+          <View style={styles.logoSection}>
             <Image src="/logo.png" style={styles.logo} />
-          </View>
-          <View style={styles.titleSection}>
-            <Text style={styles.subtitle}>Orden de Servicio</Text>
-            <Text style={styles.mainTitle}>Presupuesto</Text>
-          </View>
-          <View style={styles.headerInfo}>
-            <Text style={styles.folio}>#{presupuesto.folio}</Text>
-            <Text style={styles.date}>{formatDate(presupuesto.fecha)}</Text>
-          </View>
-        </View>
-
-        {/* Cliente y Vehículo - Cards Premium */}
-        <View style={styles.cardRow}>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Cliente</Text>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Nombre</Text>
-              <Text style={styles.infoValue}>{presupuesto.cliente.nombreCompleto || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Teléfono</Text>
-              <Text style={styles.infoValue}>{presupuesto.cliente.telefono || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Email</Text>
-              <Text style={styles.infoValue}>{presupuesto.cliente.email || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Domicilio</Text>
-              <Text style={styles.infoValue}>{presupuesto.cliente.domicilio || '—'}</Text>
+            <View style={styles.titleSection}>
+              <Text style={styles.companyName}>{TALLER_INFO.nombre}</Text>
+              <Text style={styles.ownerName}>{TALLER_INFO.encargado}</Text>
             </View>
           </View>
-
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Vehículo</Text>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Marca</Text>
-              <Text style={styles.infoValue}>{presupuesto.vehiculo.marca || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Modelo</Text>
-              <Text style={styles.infoValue}>{presupuesto.vehiculo.modelo || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Color</Text>
-              <Text style={styles.infoValue}>{presupuesto.vehiculo.color || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Placas</Text>
-              <Text style={styles.infoValue}>{presupuesto.vehiculo.placas || '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Kilometraje</Text>
-              <Text style={styles.infoValue}>{presupuesto.vehiculo.kilometrajeEntrada ? `${presupuesto.vehiculo.kilometrajeEntrada} km` : '—'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Combustible</Text>
-              <Text style={styles.infoValue}>{presupuesto.vehiculo.nivelGasolina}%</Text>
-            </View>
+          <View style={styles.addressSection}>
+            <Text style={styles.addressText}>FECHA: {formatDate(presupuesto.fecha)}</Text>
+            <Text style={styles.addressText}>HORA: {formatTime(presupuesto.fecha)}</Text>
+            <Text style={styles.addressText}>{TALLER_INFO.direccion}</Text>
+            <Text style={styles.addressText}>{TALLER_INFO.telefono}</Text>
           </View>
         </View>
 
-        {/* Problema y Diagnóstico */}
-        {(presupuesto.problemaReportado || presupuesto.diagnosticoTecnico) && (
-          <View style={styles.section}>
-            <View style={styles.problemCard}>
-              {presupuesto.problemaReportado && (
-                <View style={{ marginBottom: 15 }}>
-                  <Text style={styles.problemLabel}>Problema Reportado</Text>
-                  <Text style={styles.problemText}>{presupuesto.problemaReportado}</Text>
-                </View>
-              )}
-              {presupuesto.diagnosticoTecnico && (
-                <View>
-                  <Text style={styles.problemLabel}>Diagnóstico Técnico</Text>
-                  <Text style={styles.problemText}>{presupuesto.diagnosticoTecnico}</Text>
+        {/* CONTENIDO */}
+        <View style={styles.content}>
+          {/* CARDS CLIENTE Y VEHÍCULO */}
+          <View style={styles.cardsRow}>
+            {/* CLIENTE */}
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>CLIENTE</Text>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>SR. {presupuesto.cliente.nombreCompleto?.toUpperCase() || 'N/A'}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardValue}>{presupuesto.cliente.telefono || 'N/A'}</Text>
+              </View>
+              {presupuesto.cliente.domicilio && (
+                <View style={styles.cardRow}>
+                  <Text style={styles.cardLabel}>{presupuesto.cliente.domicilio}</Text>
                 </View>
               )}
             </View>
-          </View>
-        )}
 
-        {/* Servicios - Tabla Premium */}
-        {presupuesto.servicios && presupuesto.servicios.length > 0 && (
-          <View style={styles.section} wrap={false}>
-            <Text style={styles.sectionTitle}>Servicios</Text>
-            <View style={styles.table}>
+            {/* VEHÍCULO */}
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>VEHÍCULO</Text>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardValue}>
+                  {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo}
+                </Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Placas:</Text>
+                <Text style={styles.cardValue}>{presupuesto.vehiculo.placas || 'N/A'}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Color:</Text>
+                <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'} I Km:</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* 1. SERVICIOS */}
+          {presupuesto.servicios && presupuesto.servicios.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>1. SERVICIOS</Text>
+              </View>
               <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, styles.col60]}>Descripción</Text>
-                <Text style={[styles.tableHeaderText, styles.col20]}>Precio</Text>
+                <Text style={[styles.tableHeaderText, styles.col60]}>DESCRIPCIÓN</Text>
+                <Text style={[styles.tableHeaderText, styles.col20, styles.colRight]}>IMPORTE</Text>
               </View>
               {presupuesto.servicios.map((servicio, idx) => (
-                <View key={idx} style={idx % 2 === 1 ? [styles.tableRow, styles.tableRowAlt] : styles.tableRow}>
-                  <Text style={[styles.tableCell, styles.col60]}>{servicio.descripcion}</Text>
-                  <Text style={[styles.tableCell, styles.tableCellBold, styles.col20]}>
+                <View key={idx} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                  <Text style={[styles.tableCell, styles.col60]}>{servicio.descripcion.toUpperCase()}</Text>
+                  <Text style={[styles.tableCell, styles.tableCellBold, styles.col20, styles.colRight]}>
                     {formatCurrency(servicio.precio)}
                   </Text>
                 </View>
               ))}
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Refacciones - Tabla Premium */}
-        {presupuesto.refacciones && presupuesto.refacciones.length > 0 && (
-          <View style={styles.section} wrap={false}>
-            <Text style={styles.sectionTitle}>Refacciones</Text>
-            <View style={styles.table}>
+          {/* 2. REFACCIONES */}
+          {presupuesto.refacciones && presupuesto.refacciones.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>2. REFACCIONES</Text>
+              </View>
               <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, styles.col60]}>Descripción</Text>
-                <Text style={[styles.tableHeaderText, styles.col10]}>Cant.</Text>
-                <Text style={[styles.tableHeaderText, styles.col20]}>P. Unit.</Text>
-                <Text style={[styles.tableHeaderText, styles.col20]}>Total</Text>
+                <Text style={[styles.tableHeaderText, styles.col50]}>DESCRIPCIÓN</Text>
+                <Text style={[styles.tableHeaderText, styles.col15, styles.colCenter]}>CANT.</Text>
+                <Text style={[styles.tableHeaderText, styles.col20, styles.colRight]}>P. UNITARIO</Text>
+                <Text style={[styles.tableHeaderText, styles.col20, styles.colRight]}>TOTAL</Text>
               </View>
               {presupuesto.refacciones.map((refaccion, idx) => {
                 const precioUnitario = refaccion.total / refaccion.cantidad;
                 return (
-                  <View key={idx} style={idx % 2 === 1 ? [styles.tableRow, styles.tableRowAlt] : styles.tableRow}>
-                    <Text style={[styles.tableCell, styles.col60]}>{refaccion.nombre}</Text>
-                    <Text style={[styles.tableCell, styles.col10]}>{refaccion.cantidad}</Text>
-                    <Text style={[styles.tableCell, styles.col20]}>{formatCurrency(precioUnitario)}</Text>
-                    <Text style={[styles.tableCell, styles.tableCellBold, styles.col20]}>
+                  <View key={idx} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                    <Text style={[styles.tableCell, styles.col50]}>{refaccion.nombre.toUpperCase()}</Text>
+                    <Text style={[styles.tableCell, styles.col15, styles.colCenter]}>{refaccion.cantidad}</Text>
+                    <Text style={[styles.tableCell, styles.col20, styles.colRight]}>{formatCurrency(precioUnitario)}</Text>
+                    <Text style={[styles.tableCell, styles.tableCellBold, styles.col20, styles.colRight]}>
                       {formatCurrency(refaccion.total)}
                     </Text>
                   </View>
                 );
               })}
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Mano de Obra - Tabla Premium */}
-        {presupuesto.manoDeObra && presupuesto.manoDeObra.length > 0 && (
-          <View style={styles.section} wrap={false}>
-            <Text style={styles.sectionTitle}>Mano de Obra</Text>
-            <View style={styles.table}>
+          {/* 3. MANO DE OBRA */}
+          {presupuesto.manoDeObra && presupuesto.manoDeObra.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>3. MANO DE OBRA</Text>
+              </View>
               <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, styles.col60]}>Descripción</Text>
-                <Text style={[styles.tableHeaderText, styles.col20]}>Precio</Text>
+                <Text style={[styles.tableHeaderText, styles.col60]}>DESCRIPCIÓN</Text>
+                <Text style={[styles.tableHeaderText, styles.col20, styles.colRight]}>IMPORTE</Text>
               </View>
               {presupuesto.manoDeObra.map((trabajo, idx) => (
-                <View key={idx} style={idx % 2 === 1 ? [styles.tableRow, styles.tableRowAlt] : styles.tableRow}>
-                  <Text style={[styles.tableCell, styles.col60]}>{trabajo.descripcion}</Text>
-                  <Text style={[styles.tableCell, styles.tableCellBold, styles.col20]}>
+                <View key={idx} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                  <Text style={[styles.tableCell, styles.col60]}>{trabajo.descripcion.toUpperCase()}</Text>
+                  <Text style={[styles.tableCell, styles.tableCellBold, styles.col20, styles.colRight]}>
                     {formatCurrency(trabajo.precio)}
                   </Text>
                 </View>
               ))}
             </View>
-          </View>
-        )}
-
-        {/* RESUMEN FINANCIERO - LA ESTRELLA DEL SHOW */}
-        <View style={styles.financialSummary} wrap={false}>
-          <Text style={styles.summaryTitle}>Resumen Financiero</Text>
-          
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Servicios</Text>
-            <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.servicios || 0)}</Text>
-          </View>
-          
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Refacciones</Text>
-            <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.refacciones || 0)}</Text>
-          </View>
-          
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Mano de Obra</Text>
-            <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.manoDeObra || 0)}</Text>
-          </View>
-
-          <View style={styles.summaryDivider} />
-
-          <View style={styles.summarySubtotal}>
-            <Text style={styles.summarySubtotalLabel}>Subtotal</Text>
-            <Text style={styles.summarySubtotalValue}>{formatCurrency(presupuesto.resumen?.subtotal || 0)}</Text>
-          </View>
-
-          {presupuesto.resumen?.incluirIVA && (
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>IVA (16%)</Text>
-              <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen.iva || 0)}</Text>
-            </View>
           )}
 
-          <View style={styles.summaryTotal}>
-            <Text style={styles.summaryTotalLabel}>Total</Text>
-            <Text style={styles.summaryTotalValue}>
-              {formatCurrency(presupuesto.resumen?.incluirIVA ? presupuesto.resumen.total : presupuesto.resumen?.subtotal || 0)}
-            </Text>
-          </View>
+          {/* TÉRMINOS Y RESUMEN */}
+          <View style={styles.bottomSection}>
+            {/* TÉRMINOS Y CONDICIONES */}
+            <View style={styles.termsSection}>
+              <Text style={styles.termsTitle}>TÉRMINOS Y CONDICIONES:</Text>
+              <Text style={styles.termsText}>
+                Este documento es un presupuesto informativo y tiene una vigencia de 15 días. Los
+                precios de refacciones están sujetos a cambio sin previo aviso. Toda reparación requiere
+                un anticipo del 50%. La garantía en mano de obra es de 30 días naturales. No nos
+                hacemos responsables por objetos de valor dejados dentro del vehículo.
+              </Text>
+            </View>
 
-          {presupuesto.resumen?.anticipo > 0 && (
-            <>
-              <View style={styles.summaryAnticipo}>
-                <Text style={styles.summaryAnticipoLabel}>Anticipo Recibido</Text>
-                <Text style={styles.summaryAnticipoValue}>{formatCurrency(presupuesto.resumen.anticipo)}</Text>
+            {/* RESUMEN FINANCIERO */}
+            <View style={styles.summarySection}>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Total Servicios:</Text>
+                <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.servicios || 0)}</Text>
               </View>
-              
-              <View style={styles.summaryRestante}>
-                <Text style={styles.summaryRestanteLabel}>Saldo Pendiente</Text>
-                <Text style={styles.summaryRestanteValue}>{formatCurrency(presupuesto.resumen.restante)}</Text>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Total Refacciones:</Text>
+                <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.refacciones || 0)}</Text>
               </View>
-            </>
-          )}
-        </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Total Mano de Obra:</Text>
+                <Text style={styles.summaryValue}>{formatCurrency(presupuesto.resumen?.manoDeObra || 0)}</Text>
+              </View>
 
-        {/* Firmas Elegantes */}
-        <View style={styles.signatures}>
-          <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}>
-              <Text style={styles.signatureLabel}>Cliente</Text>
-              <Text style={styles.signatureName}>{presupuesto.cliente.nombreCompleto}</Text>
+              {/* TOTAL */}
+              <View style={styles.totalRow}>
+                <Text style={styles.totalLabel}>TOTAL</Text>
+                <Text style={styles.totalValue}>
+                  {formatCurrency(presupuesto.resumen?.incluirIVA ? presupuesto.resumen.total : presupuesto.resumen?.subtotal || 0)}
+                </Text>
+              </View>
+
+              {/* PROYECTO (Anticipo) */}
+              <View style={styles.proyectoRow}>
+                <Text style={styles.proyectoLabel}>PROYECTO:</Text>
+              </View>
+              <View style={styles.proyectoRow}>
+                <Text style={styles.proyectoLabel}>(-) Anticipo recibido:</Text>
+                <Text style={styles.proyectoValue}>{formatCurrency(presupuesto.resumen?.anticipo || 0)}</Text>
+              </View>
+
+              {/* SALDO RESTANTE - LA ESTRELLA */}
+              <View style={styles.saldoRow}>
+                <Text style={styles.saldoLabel}>SALDO RESTANTE:</Text>
+                <Text style={styles.saldoValue}>{formatCurrency(presupuesto.resumen?.restante || 0)}</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}>
-              <Text style={styles.signatureLabel}>SAG Garage</Text>
-              <Text style={styles.signatureName}>Autorización del Servicio</Text>
-            </View>
-          </View>
         </View>
-
-        <Text style={styles.footer}>
-          SAG Garage • Servicio Automotriz de Alta Calidad
-        </Text>
       </Page>
-
-      {/* ========== PÁGINA 2: ORDEN DE SERVICIO (INSPECCIÓN VEHICULAR) ========== */}
-      <Page size="A4" style={styles.page}>
-        {/* Header Premium - Idéntico a página 1 */}
-        <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Image src="/logo.png" style={styles.logo} />
-          </View>
-          <View style={styles.titleSection}>
-            <Text style={styles.subtitle}>Orden de Servicio</Text>
-            <Text style={styles.mainTitle}>Inspección Vehicular</Text>
-          </View>
-          <View style={styles.headerInfo}>
-            <Text style={styles.folio}>#{presupuesto.folio}</Text>
-            <Text style={styles.date}>{formatDate(presupuesto.fecha)}</Text>
-          </View>
-        </View>
-
-        {/* Info rápida del vehículo */}
-        <View style={[styles.card, { marginBottom: 20 }]}>
-          <View style={{ flexDirection: 'row', gap: 20 }}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.cardTitle}>Datos del Vehículo</Text>
-              <Text style={[styles.infoValue, { fontSize: 11, marginBottom: 4 }]}>
-                {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo}
-              </Text>
-              <Text style={[styles.infoLabel, { marginBottom: 0 }]}>
-                {presupuesto.vehiculo.color} • Placas: {presupuesto.vehiculo.placas}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.cardTitle}>Estado al Ingreso</Text>
-              <Text style={[styles.infoValue, { marginBottom: 4 }]}>
-                Kilometraje: {presupuesto.vehiculo.kilometrajeEntrada} km
-              </Text>
-              <Text style={styles.infoValue}>
-                Combustible: {presupuesto.vehiculo.nivelGasolina}%
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Inspección Visual Exterior */}
-        <View style={styles.inspeccionContainer}>
-          <Text style={styles.inspeccionTitle}>Inspección Visual Exterior</Text>
-          <View style={styles.inspeccionGrid}>
-            {renderInspeccionItem('Luces Frontales', presupuesto.inspeccion.exteriores.lucesFrontales)}
-            {renderInspeccionItem('Cuarto de Luces', presupuesto.inspeccion.exteriores.cuartoLuces)}
-            {renderInspeccionItem('Antena', presupuesto.inspeccion.exteriores.antena)}
-            {renderInspeccionItem('Espejos Laterales', presupuesto.inspeccion.exteriores.espejosLaterales)}
-            {renderInspeccionItem('Cristales', presupuesto.inspeccion.exteriores.cristales)}
-            {renderInspeccionItem('Emblemas', presupuesto.inspeccion.exteriores.emblemas)}
-            {renderInspeccionItem('Llantas', presupuesto.inspeccion.exteriores.llantas)}
-            {renderInspeccionItem('Tapón de Ruedas', presupuesto.inspeccion.exteriores.taponRuedas)}
-            {renderInspeccionItem('Molduras Completas', presupuesto.inspeccion.exteriores.moldurasCompletas)}
-            {renderInspeccionItem('Tapón de Gasolina', presupuesto.inspeccion.exteriores.taponGasolina)}
-            {renderInspeccionItem('Limpiadores', presupuesto.inspeccion.exteriores.limpiadores)}
-          </View>
-        </View>
-
-        {/* Inspección Visual Interior */}
-        <View style={styles.inspeccionContainer}>
-          <Text style={styles.inspeccionTitle}>Inspección Visual Interior</Text>
-          <View style={styles.inspeccionGrid}>
-            {renderInspeccionItem('Instrumentos del Tablero', presupuesto.inspeccion.interiores.instrumentoTablero)}
-            {renderInspeccionItem('Calefacción', presupuesto.inspeccion.interiores.calefaccion)}
-            {renderInspeccionItem('Sistema de Sonido', presupuesto.inspeccion.interiores.sistemaSonido)}
-            {renderInspeccionItem('Bocinas', presupuesto.inspeccion.interiores.bocinas)}
-            {renderInspeccionItem('Espejo Retrovisor', presupuesto.inspeccion.interiores.espejoRetrovisor)}
-            {renderInspeccionItem('Cinturones', presupuesto.inspeccion.interiores.cinturones)}
-            {renderInspeccionItem('Botonería General', presupuesto.inspeccion.interiores.botoniaGeneral)}
-            {renderInspeccionItem('Manijas', presupuesto.inspeccion.interiores.manijas)}
-            {renderInspeccionItem('Tapetes', presupuesto.inspeccion.interiores.tapetes)}
-            {renderInspeccionItem('Vestiduras', presupuesto.inspeccion.interiores.vestiduras)}
-            {renderInspeccionItem('Otros', presupuesto.inspeccion.interiores.otros)}
-          </View>
-        </View>
-
-        {/* Daños Adicionales Identificados */}
-        {presupuesto.inspeccion.danosAdicionales && presupuesto.inspeccion.danosAdicionales.length > 0 && (
-          <View style={styles.danosContainer} wrap={false}>
-            <Text style={styles.inspeccionTitle}>⚠️  Daños Adicionales Identificados</Text>
-            <View style={styles.danosCard}>
-              {presupuesto.inspeccion.danosAdicionales.map((dano, idx) => (
-                <View 
-                  key={dano.id} 
-                  style={idx === presupuesto.inspeccion.danosAdicionales.length - 1 ? styles.danoItemLast : styles.danoItem}
-                >
-                  <View style={styles.danoHeader}>
-                    <Text style={styles.danoUbicacion}>{dano.ubicacion}</Text>
-                    <Text style={styles.danoTipo}>{dano.tipo}</Text>
-                  </View>
-                  <Text style={styles.danoDescripcion}>{dano.descripcion}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {/* Observaciones Importantes */}
-        <View style={[styles.problemCard, { marginTop: 20, marginBottom: 30 }]}>
-          <Text style={styles.problemLabel}>Observaciones Importantes</Text>
-          <Text style={styles.problemText}>
-            {presupuesto.diagnosticoTecnico || 'El vehículo fue inspeccionado completamente. Los elementos marcados con (✓) se encuentran en buen estado. Los elementos marcados con (✗) requieren atención o no están presentes.'}
-          </Text>
-        </View>
-
-        {/* Firmas de Entrega/Recepción */}
-        <View style={styles.signatures}>
-          <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}>
-              <Text style={styles.signatureLabel}>Entregado por</Text>
-              <Text style={styles.signatureName}>{presupuesto.cliente.nombreCompleto}</Text>
-              <Text style={[styles.signatureName, { marginTop: 4 }]}>Cliente</Text>
-            </View>
-          </View>
-          <View style={styles.signatureBox}>
-            <View style={styles.signatureLine}>
-              <Text style={styles.signatureLabel}>Recibido por</Text>
-              <Text style={styles.signatureName}>SAG Garage</Text>
-              <Text style={[styles.signatureName, { marginTop: 4 }]}>Recepción de Vehículo</Text>
-            </View>
-          </View>
-        </View>
-
-        <Text style={styles.footer}>
-          {TALLER_INFO.nombre} • {TALLER_INFO.direccion} • Tel: {TALLER_INFO.telefono}
-        </Text>
-      </Page>
-
-      {/* PÁGINA 3: Se adjunta externamente el PDF de Garantía mediante pdfMerger.ts */}
     </Document>
   );
 };

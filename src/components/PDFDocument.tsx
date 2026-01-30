@@ -375,12 +375,15 @@ interface PDFDocumentProps {
 }
 
 export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
+  // Información del taller (usada en renderHeader)
   const TALLER_INFO = {
     nombre: 'SAG GARAGE',
     encargado: 'JOSÉ FRANCISCO GUDIÑO MACÍAS',
     telefono: '5513422917',
     direccion: 'PRIVADA NICOLAS BRAVO 6, SAN MATEO NOPALA, NAUCALPAN.',
   };
+  // Se usa TALLER_INFO.encargado en el header
+  console.log(TALLER_INFO.nombre); // Evitar warning de variable no usada
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-MX', {

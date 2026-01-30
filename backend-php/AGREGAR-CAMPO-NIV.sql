@@ -1,32 +1,20 @@
--- ================================================================
--- Script para agregar campo NIV (Número de Identificación Vehicular)
--- a la tabla ordenes_servicio
--- ================================================================
--- Fecha: 2026-01-30
--- Descripción: Agrega columna 'niv' para almacenar el VIN del vehículo
--- ================================================================
+-- =====================================================
+-- AGREGAR CAMPO NIV A TABLA VEHICULOS
+-- =====================================================
 
--- Agregar columna NIV a la tabla ordenes_servicio
-ALTER TABLE ordenes_servicio
-ADD COLUMN niv VARCHAR(17) NULL COMMENT 'Número de Identificación Vehicular (VIN)' AFTER placas;
+-- Este script agrega el campo NIV (VIN) a la tabla vehiculos
+-- Ejecutar en phpMyAdmin de cPanel
+
+USE saggarag_GestionPresupuestos;
+
+-- Agregar columna niv a la tabla vehiculos
+ALTER TABLE vehiculos 
+ADD COLUMN IF NOT EXISTS niv VARCHAR(50) NULL 
+AFTER placas;
 
 -- Verificar que se agregó correctamente
-SELECT 
-    COLUMN_NAME,
-    DATA_TYPE,
-    IS_NULLABLE,
-    COLUMN_COMMENT
-FROM 
-    INFORMATION_SCHEMA.COLUMNS
-WHERE 
-    TABLE_SCHEMA = DATABASE()
-    AND TABLE_NAME = 'ordenes_servicio'
-    AND COLUMN_NAME = 'niv';
+DESCRIBE vehiculos;
 
--- ================================================================
--- NOTAS:
--- - El VIN estándar tiene 17 caracteres
--- - Campo opcional (NULL permitido)
--- - Posicionado después del campo 'placas' para mantener
---   agrupados todos los datos del vehículo
--- ================================================================
+-- =====================================================
+-- ✅ COLUMNA NIV AGREGADA A TABLA VEHICULOS
+-- =====================================================

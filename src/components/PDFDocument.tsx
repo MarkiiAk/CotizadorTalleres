@@ -647,75 +647,80 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
             </View>
           )}
 
-          {/* INSPECCIÓN VEHICULAR - EXTERIORES */}
+          {/* INSPECCIÓN VEHICULAR - LADO A LADO */}
           {presupuesto.inspeccion && (
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>INSPECCIÓN VEHICULAR - EXTERIORES</Text>
+            <View style={{ flexDirection: 'row', gap: 10, marginBottom: 12 }}>
+              {/* EXTERIORES */}
+              <View style={{ flex: 1 }}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>EXTERIORES</Text>
+                </View>
+                <View style={styles.tableHeader}>
+                  <Text style={[styles.tableHeaderText, { width: '60%' }]}>COMPONENTE</Text>
+                  <Text style={[styles.tableHeaderText, { width: '40%' }, styles.colCenter]}>ESTADO</Text>
+                </View>
+                {Object.entries(presupuesto.inspeccion.exteriores)
+                  .filter(([_, value]) => value !== undefined)
+                  .map(([key, value], idx) => {
+                    const labels: { [key: string]: string } = {
+                      lucesFrontales: 'Luces Frontales',
+                      cuartoLuces: 'Cuarto Luces',
+                      antena: 'Antena',
+                      espejosLaterales: 'Espejos Laterales',
+                      cristales: 'Cristales',
+                      emblemas: 'Emblemas',
+                      llantas: 'Llantas',
+                      taponRuedas: 'Tapón Ruedas',
+                      moldurasCompletas: 'Molduras',
+                      taponGasolina: 'Tapón Gasolina',
+                      limpiadores: 'Limpiadores',
+                    };
+                    return (
+                      <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                        <Text style={[styles.tableCell, { width: '60%' }]}>{labels[key]}</Text>
+                        <Text style={[styles.tableCell, styles.tableCellBold, { width: '40%' }, styles.colCenter]}>
+                          {value ? '✓' : '✗'}
+                        </Text>
+                      </View>
+                    );
+                  })}
               </View>
-              <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, styles.col50]}>COMPONENTE</Text>
-                <Text style={[styles.tableHeaderText, styles.col25, styles.colCenter]}>ESTADO</Text>
-              </View>
-              {Object.entries(presupuesto.inspeccion.exteriores).map(([key, value], idx) => {
-                const labels: { [key: string]: string } = {
-                  lucesFrontales: 'Luces Frontales',
-                  cuartoLuces: 'Cuarto Luces',
-                  antena: 'Antena',
-                  espejosLaterales: 'Espejos Laterales',
-                  cristales: 'Cristales',
-                  emblemas: 'Emblemas',
-                  llantas: 'Llantas',
-                  taponRuedas: 'Tapón Ruedas',
-                  moldurasCompletas: 'Molduras Completas',
-                  taponGasolina: 'Tapón Gasolina',
-                  limpiadores: 'Limpiadores',
-                };
-                return (
-                  <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
-                    <Text style={[styles.tableCell, styles.col50]}>{labels[key]}</Text>
-                    <Text style={[styles.tableCell, styles.tableCellBold, styles.col25, styles.colCenter]}>
-                      {value ? '✓ OK' : '✗ FALTA'}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          )}
 
-          {/* INSPECCIÓN VEHICULAR - INTERIORES */}
-          {presupuesto.inspeccion && (
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>INSPECCIÓN VEHICULAR - INTERIORES</Text>
+              {/* INTERIORES */}
+              <View style={{ flex: 1 }}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>INTERIORES</Text>
+                </View>
+                <View style={styles.tableHeader}>
+                  <Text style={[styles.tableHeaderText, { width: '60%' }]}>COMPONENTE</Text>
+                  <Text style={[styles.tableHeaderText, { width: '40%' }, styles.colCenter]}>ESTADO</Text>
+                </View>
+                {Object.entries(presupuesto.inspeccion.interiores)
+                  .filter(([_, value]) => value !== undefined)
+                  .map(([key, value], idx) => {
+                    const labels: { [key: string]: string } = {
+                      instrumentoTablero: 'Tablero',
+                      calefaccion: 'Calefacción',
+                      sistemaSonido: 'Sonido',
+                      bocinas: 'Bocinas',
+                      espejoRetrovisor: 'Retrovisor',
+                      cinturones: 'Cinturones',
+                      botoniaGeneral: 'Botonía',
+                      manijas: 'Manijas',
+                      tapetes: 'Tapetes',
+                      vestiduras: 'Vestiduras',
+                      otros: 'Otros',
+                    };
+                    return (
+                      <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                        <Text style={[styles.tableCell, { width: '60%' }]}>{labels[key]}</Text>
+                        <Text style={[styles.tableCell, styles.tableCellBold, { width: '40%' }, styles.colCenter]}>
+                          {value ? '✓' : '✗'}
+                        </Text>
+                      </View>
+                    );
+                  })}
               </View>
-              <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, styles.col50]}>COMPONENTE</Text>
-                <Text style={[styles.tableHeaderText, styles.col25, styles.colCenter]}>ESTADO</Text>
-              </View>
-              {Object.entries(presupuesto.inspeccion.interiores).map(([key, value], idx) => {
-                const labels: { [key: string]: string } = {
-                  instrumentoTablero: 'Instrumento Tablero',
-                  calefaccion: 'Calefacción',
-                  sistemaSonido: 'Sistema Sonido',
-                  bocinas: 'Bocinas',
-                  espejoRetrovisor: 'Espejo Retrovisor',
-                  cinturones: 'Cinturones',
-                  botoniaGeneral: 'Botonía General',
-                  manijas: 'Manijas',
-                  tapetes: 'Tapetes',
-                  vestiduras: 'Vestiduras',
-                  otros: 'Otros',
-                };
-                return (
-                  <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
-                    <Text style={[styles.tableCell, styles.col50]}>{labels[key]}</Text>
-                    <Text style={[styles.tableCell, styles.tableCellBold, styles.col25, styles.colCenter]}>
-                      {value ? '✓ OK' : '✗ FALTA'}
-                    </Text>
-                  </View>
-                );
-              })}
             </View>
           )}
 
@@ -740,10 +745,10 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
             </View>
           )}
 
-          {/* NIVEL DE GASOLINA */}
+          {/* NIVEL DE GASOLINA Y KILOMETRAJE */}
           <View style={styles.cardsRow}>
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>NIVEL DE GASOLINA AL INGRESO</Text>
+              <Text style={styles.cardTitle}>NIVEL GASOLINA</Text>
               <View style={styles.cardRow}>
                 <Text style={[styles.cardValue, styles.tableCellBold]}>
                   {presupuesto.vehiculo.nivelGasolina}%
@@ -759,6 +764,88 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
               <View style={styles.cardRow}>
                 <Text style={styles.cardLabel}>Salida:</Text>
                 <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeSalida || 'Pendiente'}</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* SECCIÓN INFERIOR: SERVICIOS, RESUMEN Y FIRMAS */}
+          <View style={{ flexDirection: 'row', gap: 15, marginTop: 10 }}>
+            {/* SERVICIOS A REALIZAR */}
+            <View style={{ flex: 1 }}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>SERVICIOS A REALIZAR</Text>
+              </View>
+              {presupuesto.servicios && presupuesto.servicios.length > 0 && (
+                <View style={{ backgroundColor: COLORS.ultraLightGray, padding: 6 }}>
+                  {presupuesto.servicios.slice(0, 5).map((servicio, idx) => (
+                    <Text key={idx} style={{ fontSize: 7, marginBottom: 2, color: COLORS.darkGray }}>
+                      • {servicio.descripcion}
+                    </Text>
+                  ))}
+                  {presupuesto.servicios.length > 5 && (
+                    <Text style={{ fontSize: 7, color: COLORS.mediumGray, fontStyle: 'italic' }}>
+                      ...y {presupuesto.servicios.length - 5} más
+                    </Text>
+                  )}
+                </View>
+              )}
+            </View>
+
+            {/* RESUMEN Y FIRMAS */}
+            <View style={{ flex: 1 }}>
+              {/* RESUMEN FINANCIERO COMPACTO */}
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>PRESUPUESTO</Text>
+              </View>
+              <View style={{ backgroundColor: COLORS.ultraLightGray, padding: 6, marginBottom: 8 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <Text style={{ fontSize: 8, color: COLORS.darkGray }}>Presupuesto:</Text>
+                  <Text style={{ fontSize: 8, fontFamily: 'Roboto', fontWeight: 700 }}>
+                    {formatCurrency(presupuesto.resumen?.total || 0)}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <Text style={{ fontSize: 8, color: COLORS.darkGray }}>Anticipo:</Text>
+                  <Text style={{ fontSize: 8, fontFamily: 'Roboto', fontWeight: 700 }}>
+                    {formatCurrency(presupuesto.resumen?.anticipo || 0)}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderTop: `2px solid ${COLORS.accentBlue}`,
+                    paddingTop: 3,
+                  }}
+                >
+                  <Text style={{ fontSize: 9, fontFamily: 'Roboto', fontWeight: 700, color: COLORS.accentBlue }}>
+                    Saldo:
+                  </Text>
+                  <Text style={{ fontSize: 10, fontFamily: 'Roboto', fontWeight: 700, color: COLORS.accentBlue }}>
+                    {formatCurrency(presupuesto.resumen?.restante || 0)}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 6,
+                    color: COLORS.danger,
+                    fontStyle: 'italic',
+                    marginTop: 3,
+                    textAlign: 'center',
+                  }}
+                >
+                  Todo trabajo autorizado requiere de un anticipo del 35%
+                </Text>
+              </View>
+
+              {/* FIRMAS */}
+              <View style={{ flexDirection: 'row', gap: 10 }}>
+                <View style={{ flex: 1, borderTop: `1px solid ${COLORS.darkGray}`, paddingTop: 2 }}>
+                  <Text style={{ fontSize: 7, textAlign: 'center', color: COLORS.darkGray }}>Firma Encargado</Text>
+                </View>
+                <View style={{ flex: 1, borderTop: `1px solid ${COLORS.darkGray}`, paddingTop: 2 }}>
+                  <Text style={{ fontSize: 7, textAlign: 'center', color: COLORS.darkGray }}>Firma Cliente</Text>
+                </View>
               </View>
             </View>
           </View>

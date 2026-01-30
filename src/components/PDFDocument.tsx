@@ -410,66 +410,74 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
     });
   };
 
+  // Renderizar header (reutilizable)
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.logoSection}>
+        <Image src={`${window.location.origin}/logo.png`} style={styles.logo} />
+        <View style={styles.titleSection}>
+          <Text style={styles.companyName}>SAG GARAGE</Text>
+          <Text style={styles.ownerName}>JOSÉ FRANCISCO GUDIÑO MACÍAS</Text>
+        </View>
+      </View>
+      <View style={styles.addressSection}>
+        <Text style={styles.addressText}>FECHA: {formatDate(presupuesto.fecha)}</Text>
+        <Text style={styles.addressText}>HORA: {formatTime(presupuesto.fecha)}</Text>
+        <Text style={styles.addressText}>PRIVADA NICOLAS BRAVO 6, SAN MATEO NOPALA, NAUCALPAN.</Text>
+        <Text style={styles.addressText}>5513422917</Text>
+      </View>
+    </View>
+  );
+
+  // Renderizar cards Cliente y Vehículo (reutilizable)
+  const renderClienteVehiculoCards = () => (
+    <View style={styles.cardsRow}>
+      {/* CLIENTE */}
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>CLIENTE</Text>
+        <View style={styles.cardRow}>
+          <Text style={styles.cardLabel}>SR. {presupuesto.cliente.nombreCompleto?.toUpperCase() || 'N/A'}</Text>
+        </View>
+        <View style={styles.cardRow}>
+          <Text style={styles.cardValue}>{presupuesto.cliente.telefono || 'N/A'}</Text>
+        </View>
+        {presupuesto.cliente.domicilio && (
+          <View style={styles.cardRow}>
+            <Text style={styles.cardLabel}>{presupuesto.cliente.domicilio}</Text>
+          </View>
+        )}
+      </View>
+
+      {/* VEHÍCULO */}
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>VEHÍCULO</Text>
+        <View style={styles.cardRow}>
+          <Text style={styles.cardValue}>
+            {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo} {presupuesto.vehiculo.year || ''}
+          </Text>
+        </View>
+        <View style={styles.cardRow}>
+          <Text style={styles.cardLabel}>Placas:</Text>
+          <Text style={styles.cardValue}>{presupuesto.vehiculo.placas || 'N/A'}</Text>
+        </View>
+        <View style={styles.cardRow}>
+          <Text style={styles.cardLabel}>Color:</Text>
+          <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'}</Text>
+          <Text style={styles.cardLabel}> | Km:</Text>
+          <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
     <Document>
+      {/* ============= PÁGINA 1: PRESUPUESTO ============= */}
       <Page size="A4" style={styles.page}>
-        {/* HEADER SAG GARAGE */}
-        <View style={styles.header}>
-          <View style={styles.logoSection}>
-            <Image src={`${window.location.origin}/logo.png`} style={styles.logo} />
-            <View style={styles.titleSection}>
-              <Text style={styles.companyName}>SAG GARAGE</Text>
-              <Text style={styles.ownerName}>JOSÉ FRANCISCO GUDIÑO MACÍAS</Text>
-            </View>
-          </View>
-          <View style={styles.addressSection}>
-            <Text style={styles.addressText}>FECHA: {formatDate(presupuesto.fecha)}</Text>
-            <Text style={styles.addressText}>HORA: {formatTime(presupuesto.fecha)}</Text>
-            <Text style={styles.addressText}>PRIVADA NICOLAS BRAVO 6, SAN MATEO NOPALA, NAUCALPAN.</Text>
-            <Text style={styles.addressText}>5513422917</Text>
-          </View>
-        </View>
+        {renderHeader()}
 
-        {/* CONTENIDO */}
         <View style={styles.content}>
-          {/* CARDS CLIENTE Y VEHÍCULO */}
-          <View style={styles.cardsRow}>
-            {/* CLIENTE */}
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>CLIENTE</Text>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>SR. {presupuesto.cliente.nombreCompleto?.toUpperCase() || 'N/A'}</Text>
-              </View>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardValue}>{presupuesto.cliente.telefono || 'N/A'}</Text>
-              </View>
-              {presupuesto.cliente.domicilio && (
-                <View style={styles.cardRow}>
-                  <Text style={styles.cardLabel}>{presupuesto.cliente.domicilio}</Text>
-                </View>
-              )}
-            </View>
-
-            {/* VEHÍCULO */}
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>VEHÍCULO</Text>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardValue}>
-                  {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo} {presupuesto.vehiculo.year || ''}
-                </Text>
-              </View>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>Placas:</Text>
-                <Text style={styles.cardValue}>{presupuesto.vehiculo.placas || 'N/A'}</Text>
-              </View>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>Color:</Text>
-                <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'}</Text>
-                <Text style={styles.cardLabel}> | Km:</Text>
-                <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
-              </View>
-            </View>
-          </View>
+          {renderClienteVehiculoCards()}
 
           {/* 1. SERVICIOS */}
           {presupuesto.servicios && presupuesto.servicios.length > 0 && (
@@ -604,6 +612,149 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
               <View style={styles.saldoRow}>
                 <Text style={styles.saldoLabel}>SALDO RESTANTE:</Text>
                 <Text style={styles.saldoValue}>{formatCurrency(presupuesto.resumen?.restante || 0)}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Page>
+
+      {/* ============= PÁGINA 2: ORDEN DE TRABAJO ============= */}
+      <Page size="A4" style={styles.page}>
+        {renderHeader()}
+
+        <View style={styles.content}>
+          {renderClienteVehiculoCards()}
+
+          {/* PROBLEMA REPORTADO Y DIAGNÓSTICO */}
+          {(presupuesto.problemaReportado || presupuesto.diagnosticoTecnico) && (
+            <View style={styles.cardsRow}>
+              {presupuesto.problemaReportado && (
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>PROBLEMA REPORTADO</Text>
+                  <Text style={styles.cardValue}>{presupuesto.problemaReportado}</Text>
+                </View>
+              )}
+              {presupuesto.diagnosticoTecnico && (
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>DIAGNÓSTICO TÉCNICO</Text>
+                  <Text style={styles.cardValue}>{presupuesto.diagnosticoTecnico}</Text>
+                </View>
+              )}
+            </View>
+          )}
+
+          {/* INSPECCIÓN VEHICULAR - EXTERIORES */}
+          {presupuesto.inspeccion && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>INSPECCIÓN VEHICULAR - EXTERIORES</Text>
+              </View>
+              <View style={styles.tableHeader}>
+                <Text style={[styles.tableHeaderText, styles.col50]}>COMPONENTE</Text>
+                <Text style={[styles.tableHeaderText, styles.col25, styles.colCenter]}>ESTADO</Text>
+              </View>
+              {Object.entries(presupuesto.inspeccion.exteriores).map(([key, value], idx) => {
+                const labels: { [key: string]: string } = {
+                  lucesFrontales: 'Luces Frontales',
+                  cuartoLuces: 'Cuarto Luces',
+                  antena: 'Antena',
+                  espejosLaterales: 'Espejos Laterales',
+                  cristales: 'Cristales',
+                  emblemas: 'Emblemas',
+                  llantas: 'Llantas',
+                  taponRuedas: 'Tapón Ruedas',
+                  moldurasCompletas: 'Molduras Completas',
+                  taponGasolina: 'Tapón Gasolina',
+                  limpiadores: 'Limpiadores',
+                };
+                return (
+                  <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                    <Text style={[styles.tableCell, styles.col50]}>{labels[key]}</Text>
+                    <Text style={[styles.tableCell, styles.tableCellBold, styles.col25, styles.colCenter]}>
+                      {value ? '✓ OK' : '✗ FALTA'}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          )}
+
+          {/* INSPECCIÓN VEHICULAR - INTERIORES */}
+          {presupuesto.inspeccion && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>INSPECCIÓN VEHICULAR - INTERIORES</Text>
+              </View>
+              <View style={styles.tableHeader}>
+                <Text style={[styles.tableHeaderText, styles.col50]}>COMPONENTE</Text>
+                <Text style={[styles.tableHeaderText, styles.col25, styles.colCenter]}>ESTADO</Text>
+              </View>
+              {Object.entries(presupuesto.inspeccion.interiores).map(([key, value], idx) => {
+                const labels: { [key: string]: string } = {
+                  instrumentoTablero: 'Instrumento Tablero',
+                  calefaccion: 'Calefacción',
+                  sistemaSonido: 'Sistema Sonido',
+                  bocinas: 'Bocinas',
+                  espejoRetrovisor: 'Espejo Retrovisor',
+                  cinturones: 'Cinturones',
+                  botoniaGeneral: 'Botonía General',
+                  manijas: 'Manijas',
+                  tapetes: 'Tapetes',
+                  vestiduras: 'Vestiduras',
+                  otros: 'Otros',
+                };
+                return (
+                  <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                    <Text style={[styles.tableCell, styles.col50]}>{labels[key]}</Text>
+                    <Text style={[styles.tableCell, styles.tableCellBold, styles.col25, styles.colCenter]}>
+                      {value ? '✓ OK' : '✗ FALTA'}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          )}
+
+          {/* DAÑOS ADICIONALES */}
+          {presupuesto.inspeccion?.danosAdicionales && presupuesto.inspeccion.danosAdicionales.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>DAÑOS ADICIONALES</Text>
+              </View>
+              <View style={styles.tableHeader}>
+                <Text style={[styles.tableHeaderText, styles.col30]}>UBICACIÓN</Text>
+                <Text style={[styles.tableHeaderText, styles.col20]}>TIPO</Text>
+                <Text style={[styles.tableHeaderText, styles.col50]}>DESCRIPCIÓN</Text>
+              </View>
+              {presupuesto.inspeccion.danosAdicionales.map((dano, idx) => (
+                <View key={dano.id} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
+                  <Text style={[styles.tableCell, styles.col30]}>{dano.ubicacion}</Text>
+                  <Text style={[styles.tableCell, styles.col20]}>{dano.tipo}</Text>
+                  <Text style={[styles.tableCell, styles.col50]}>{dano.descripcion}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* NIVEL DE GASOLINA */}
+          <View style={styles.cardsRow}>
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>NIVEL DE GASOLINA AL INGRESO</Text>
+              <View style={styles.cardRow}>
+                <Text style={[styles.cardValue, styles.tableCellBold]}>
+                  {presupuesto.vehiculo.nivelGasolina}%
+                </Text>
+              </View>
+            </View>
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>KILOMETRAJE</Text>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Entrada:</Text>
+                <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Salida:</Text>
+                <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeSalida || 'Pendiente'}</Text>
               </View>
             </View>
           </View>

@@ -23,6 +23,10 @@ dist-ssr
 ordenes-db.json
 backend/data/ordenes.json
 
+# SQL files - Never commit database schemas or migrations
+*.sql
+*.SQL
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

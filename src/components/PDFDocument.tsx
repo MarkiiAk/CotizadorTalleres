@@ -851,7 +851,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                       FIRMA ENCARGADO
                     </Text>
                     <Text style={{ fontSize: 7, textAlign: 'center', color: COLORS.mediumGray, marginTop: 2 }}>
-                      {TALLER_INFO.encargado}
+                      ENCARGADO
                     </Text>
                   </View>
                 </View>

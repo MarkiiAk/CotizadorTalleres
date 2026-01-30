@@ -1,5 +1,5 @@
 import React from 'react';
-import { Car, Palette, CreditCard, Gauge } from 'lucide-react';
+import { Car, Palette, CreditCard, Gauge, Hash } from 'lucide-react';
 import { Card, Input, FuelGauge } from '../ui';
 import { usePresupuestoStore } from '../../store/usePresupuestoStore';
 
@@ -34,7 +34,7 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
             <Car size={20} className="text-sag-600" />
             Datos del Vehículo
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Input
               label="Marca"
               placeholder="Ej: Toyota, Honda, Ford"
@@ -63,7 +63,9 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
               icon={<Palette size={20} />}
               disabled={disabled}
             />
-            
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <Input
               label="Placas"
               placeholder="Ej: ABC-123-D"
@@ -71,6 +73,15 @@ export const VehiculoSection: React.FC<VehiculoSectionProps> = ({ disabled = fal
               onChange={handleChange('placas')}
               icon={<CreditCard size={20} />}
               required
+              disabled={disabled}
+            />
+            
+            <Input
+              label="NIV (VIN)"
+              placeholder="Número de Identificación Vehicular"
+              value={vehiculo.niv}
+              onChange={handleChange('niv')}
+              icon={<Hash size={20} />}
               disabled={disabled}
             />
           </div>

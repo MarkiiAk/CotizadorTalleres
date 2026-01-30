@@ -60,7 +60,7 @@ class OrdenesController {
                        c.telefono as cliente_telefono,
                        c.email as cliente_email,
                        c.direccion as cliente_direccion,
-                       v.marca, v.modelo, v.anio, v.placas, v.color
+                       v.marca, v.modelo, v.anio, v.placas, v.color, v.niv
                 FROM ordenes_servicio o
                 LEFT JOIN clientes c ON o.cliente_id = c.id
                 LEFT JOIN vehiculos v ON o.vehiculo_id = v.id
@@ -291,7 +291,7 @@ class OrdenesController {
                 if ($orden && isset($data['vehiculo']['marca'])) {
                     $stmt = $this->db->prepare('
                         UPDATE vehiculos 
-                        SET marca = ?, modelo = ?, color = ?, placas = ?
+                        SET marca = ?, modelo = ?, color = ?, placas = ?, niv = ?
                         WHERE id = ?
                     ');
                     $stmt->execute([
@@ -299,6 +299,7 @@ class OrdenesController {
                         $data['vehiculo']['modelo'] ?? '',
                         $data['vehiculo']['color'] ?? '',
                         $data['vehiculo']['placas'] ?? '',
+                        $data['vehiculo']['niv'] ?? '',
                         $orden['vehiculo_id']
                     ]);
                     error_log('Vehículo actualizado: ' . $data['vehiculo']['marca']);
@@ -820,6 +821,7 @@ class OrdenesController {
         $anio = $vehiculoData['anio'] ?? null;
         $color = $vehiculoData['color'] ?? null;
         $placas = $vehiculoData['placas'] ?? null;
+        $niv = $vehiculoData['niv'] ?? null;
         
         if (!$marca || !$modelo || !$placas) {
             throw new Exception('Marca, modelo y placas del vehículo son requeridos');
@@ -834,18 +836,18 @@ class OrdenesController {
             // Actualizar
             $stmt = $this->db->prepare('
                 UPDATE vehiculos SET marca = ?, modelo = ?, anio = ?, 
-                       color = ?, cliente_id = ?
+                       color = ?, niv = ?, cliente_id = ?
                 WHERE id = ?
             ');
-            $stmt->execute([$marca, $modelo, $anio, $color, $cliente_id, $existing['id']]);
+            $stmt->execute([$marca, $modelo, $anio, $color, $niv, $cliente_id, $existing['id']]);
             return $existing['id'];
         } else {
             // Insertar
             $stmt = $this->db->prepare('
-                INSERT INTO vehiculos (marca, modelo, anio, color, placas, cliente_id)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO vehiculos (marca, modelo, anio, color, placas, niv, cliente_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             ');
-            $stmt->execute([$marca, $modelo, $anio, $color, $placas, $cliente_id]);
+            $stmt->execute([$marca, $modelo, $anio, $color, $placas, $niv, $cliente_id]);
             return $this->db->lastInsertId();
         }
     }

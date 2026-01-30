@@ -21,6 +21,7 @@ export interface VehiculoInfo {
   year?: string;
   color: string;
   placas: string;
+  niv: string; // Número de Identificación Vehicular (VIN)
   kilometrajeEntrada: string;
   kilometrajeSalida: string;
   nivelGasolina: number; // 0-100 (porcentaje)

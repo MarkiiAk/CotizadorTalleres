@@ -463,6 +463,14 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
           <Text style={styles.cardLabel}>Placas:</Text>
           <Text style={styles.cardValue}>{presupuesto.vehiculo.placas || 'N/A'}</Text>
         </View>
+        
+        {presupuesto.vehiculo.niv && (
+          <View style={styles.cardRow}>
+            <Text style={styles.cardLabel}>NIV (VIN):</Text>
+            <Text style={styles.cardValue}>{presupuesto.vehiculo.niv}</Text>
+          </View>
+        )}
+        
         <View style={styles.cardRow}>
           <Text style={styles.cardLabel}>Color:</Text>
           <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'}</Text>

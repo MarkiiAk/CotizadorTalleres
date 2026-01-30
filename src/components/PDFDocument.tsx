@@ -659,36 +659,28 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                   <Text style={[styles.tableHeaderText, { width: '60%' }]}>COMPONENTE</Text>
                   <Text style={[styles.tableHeaderText, { width: '40%' }, styles.colCenter]}>ESTADO</Text>
                 </View>
-                {Object.entries(presupuesto.inspeccion.exteriores).map(([key, value], idx) => {
-                  const labels: { [key: string]: string } = {
-                    lucesFrontales: 'Luces Frontales',
-                    cuartoLuces: 'Cuarto Luces',
-                    antena: 'Antena',
-                    espejosLaterales: 'Espejos Laterales',
-                    cristales: 'Cristales',
-                    emblemas: 'Emblemas',
-                    llantas: 'Llantas',
-                    taponRuedas: 'Tapón Ruedas',
-                    moldurasCompletas: 'Molduras',
-                    taponGasolina: 'Tapón Gasolina',
-                    limpiadores: 'Limpiadores',
-                  };
-                  return (
-                    <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
-                      <Text style={[styles.tableCell, { width: '60%' }]}>{labels[key]}</Text>
-                      <Text
-                        style={[
-                          styles.tableCell,
-                          styles.tableCellBold,
-                          { width: '40%', color: value ? COLORS.success : COLORS.danger },
-                          styles.colCenter,
-                        ]}
-                      >
-                        {value ? 'OK' : 'FALTA'}
-                      </Text>
-                    </View>
-                  );
-                })}
+                {Object.entries(presupuesto.inspeccion.exteriores)
+                  .filter(([key]) => {
+                    const validos = ['lucesFrontales', 'cuartoLuces', 'antena', 'espejosLaterales', 'cristales', 'emblemas', 'llantas', 'llantaRefaccion', 'taponRuedas', 'moldurasCompletas', 'taponGasolina', 'limpiadores', 'gato', 'herramienta', 'extinguidor'];
+                    return validos.includes(key);
+                  })
+                  .map(([key, value], idx) => {
+                    const labels: { [key: string]: string } = {
+                      lucesFrontales: 'Luces Frontales', cuartoLuces: 'Cuarto Luces', antena: 'Antena',
+                      espejosLaterales: 'Espejos', cristales: 'Cristales', emblemas: 'Emblemas',
+                      llantas: 'Llantas', llantaRefaccion: 'Llanta Refacción', taponRuedas: 'Tapón Ruedas',
+                      moldurasCompletas: 'Molduras', taponGasolina: 'Tapón Gasolina', limpiadores: 'Limpiadores',
+                      gato: 'Gato', herramienta: 'Herramienta', extinguidor: 'Extinguidor',
+                    };
+                    return (
+                      <View key={key} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 3 }]}>
+                        <Text style={[styles.tableCell, { width: '65%', fontSize: 7 }]}>{labels[key]}</Text>
+                        <Text style={[styles.tableCell, styles.tableCellBold, { width: '35%', fontSize: 7, color: value ? COLORS.success : COLORS.danger }, styles.colCenter]}>
+                          {value ? 'OK' : 'FALTA'}
+                        </Text>
+                      </View>
+                    );
+                  })}
               </View>
 
               {/* INTERIORES */}
@@ -700,36 +692,28 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                   <Text style={[styles.tableHeaderText, { width: '60%' }]}>COMPONENTE</Text>
                   <Text style={[styles.tableHeaderText, { width: '40%' }, styles.colCenter]}>ESTADO</Text>
                 </View>
-                {Object.entries(presupuesto.inspeccion.interiores).map(([key, value], idx) => {
-                  const labels: { [key: string]: string } = {
-                    instrumentoTablero: 'Tablero',
-                    calefaccion: 'Calefacción',
-                    sistemaSonido: 'Sonido',
-                    bocinas: 'Bocinas',
-                    espejoRetrovisor: 'Retrovisor',
-                    cinturones: 'Cinturones',
-                    botoniaGeneral: 'Botonía',
-                    manijas: 'Manijas',
-                    tapetes: 'Tapetes',
-                    vestiduras: 'Vestiduras',
-                    otros: 'Otros',
-                  };
-                  return (
-                    <View key={key} style={idx % 2 === 0 ? styles.tableRow : [styles.tableRow, styles.tableRowAlt]}>
-                      <Text style={[styles.tableCell, { width: '60%' }]}>{labels[key]}</Text>
-                      <Text
-                        style={[
-                          styles.tableCell,
-                          styles.tableCellBold,
-                          { width: '40%', color: value ? COLORS.success : COLORS.danger },
-                          styles.colCenter,
-                        ]}
-                      >
-                        {value ? 'OK' : 'FALTA'}
-                      </Text>
-                    </View>
-                  );
-                })}
+                {Object.entries(presupuesto.inspeccion.interiores)
+                  .filter(([key]) => {
+                    const validos = ['instrumentoTablero', 'calefaccion', 'sistemaSonido', 'bocinas', 'espejoRetrovisor', 'cinturones', 'botoniaGeneral', 'manijas', 'tapetes', 'vestiduras', 'otros', 'radio', 'encendedor', 'documentos'];
+                    return validos.includes(key);
+                  })
+                  .map(([key, value], idx) => {
+                    const labels: { [key: string]: string } = {
+                      instrumentoTablero: 'Tablero', calefaccion: 'Calefacción', sistemaSonido: 'Sonido',
+                      bocinas: 'Bocinas', espejoRetrovisor: 'Retrovisor', cinturones: 'Cinturones',
+                      botoniaGeneral: 'Botonía', manijas: 'Manijas', tapetes: 'Tapetes',
+                      vestiduras: 'Vestiduras', otros: 'Otros', radio: 'Radio',
+                      encendedor: 'Encendedor', documentos: 'Documentos',
+                    };
+                    return (
+                      <View key={key} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 3 }]}>
+                        <Text style={[styles.tableCell, { width: '65%', fontSize: 7 }]}>{labels[key]}</Text>
+                        <Text style={[styles.tableCell, styles.tableCellBold, { width: '35%', fontSize: 7, color: value ? COLORS.success : COLORS.danger }, styles.colCenter]}>
+                          {value ? 'OK' : 'FALTA'}
+                        </Text>
+                      </View>
+                    );
+                  })}
               </View>
             </View>
           )}

@@ -631,13 +631,17 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
               {presupuesto.problemaReportado && (
                 <View style={styles.card}>
                   <Text style={styles.cardTitle}>PROBLEMA REPORTADO</Text>
-                  <Text style={styles.cardValue}>{presupuesto.problemaReportado}</Text>
+                  <View style={styles.cardRow}>
+                    <Text style={styles.cardValue}>{presupuesto.problemaReportado}</Text>
+                  </View>
                 </View>
               )}
               {presupuesto.diagnosticoTecnico && (
                 <View style={styles.card}>
                   <Text style={styles.cardTitle}>DIAGNÓSTICO TÉCNICO</Text>
-                  <Text style={styles.cardValue}>{presupuesto.diagnosticoTecnico}</Text>
+                  <View style={styles.cardRow}>
+                    <Text style={styles.cardValue}>{presupuesto.diagnosticoTecnico}</Text>
+                  </View>
                 </View>
               )}
             </View>

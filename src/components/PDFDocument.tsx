@@ -656,8 +656,8 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                   <Text style={styles.sectionTitle}>EXTERIORES</Text>
                 </View>
                 <View style={styles.tableHeader}>
-                  <Text style={[styles.tableHeaderText, { width: '70%', fontSize: 7 }]}>COMPONENTE</Text>
-                  <Text style={[styles.tableHeaderText, { width: '30%', fontSize: 7 }, styles.colCenter]}>ESTADO</Text>
+                  <Text style={[styles.tableHeaderText, { width: '65%', fontSize: 7, paddingLeft: 4 }]}>COMPONENTE</Text>
+                  <Text style={[styles.tableHeaderText, { width: '35%', fontSize: 7 }, styles.colCenter]}>ESTADO</Text>
                 </View>
                 {[
                   { key: 'lucesFrontales', label: 'Luces Frontales' },
@@ -674,9 +674,9 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 ].map((item, idx) => {
                   const value = presupuesto.inspeccion.exteriores[item.key as keyof typeof presupuesto.inspeccion.exteriores];
                   return (
-                    <View key={item.key} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 2 }]}>
-                      <Text style={[styles.tableCell, { width: '70%', fontSize: 6.5 }]}>{item.label}</Text>
-                      <Text style={[styles.tableCell, styles.tableCellBold, { width: '30%', fontSize: 6.5, color: value ? COLORS.success : COLORS.danger }, styles.colCenter]}>
+                    <View key={item.key} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 2, paddingHorizontal: 4 }]}>
+                      <Text style={[styles.tableCell, { width: '65%', fontSize: 6.5 }]}>{item.label}</Text>
+                      <Text style={[styles.tableCell, styles.tableCellBold, { width: '35%', fontSize: 6.5, color: value ? COLORS.success : COLORS.danger }, styles.colCenter]}>
                         {value ? 'OK' : 'FALTA'}
                       </Text>
                     </View>
@@ -690,8 +690,8 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                   <Text style={styles.sectionTitle}>INTERIORES</Text>
                 </View>
                 <View style={styles.tableHeader}>
-                  <Text style={[styles.tableHeaderText, { width: '70%', fontSize: 7 }]}>COMPONENTE</Text>
-                  <Text style={[styles.tableHeaderText, { width: '30%', fontSize: 7 }, styles.colCenter]}>ESTADO</Text>
+                  <Text style={[styles.tableHeaderText, { width: '65%', fontSize: 7, paddingLeft: 4 }]}>COMPONENTE</Text>
+                  <Text style={[styles.tableHeaderText, { width: '35%', fontSize: 7 }, styles.colCenter]}>ESTADO</Text>
                 </View>
                 {[
                   { key: 'instrumentoTablero', label: 'Instrumento Tablero' },
@@ -708,9 +708,9 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 ].map((item, idx) => {
                   const value = presupuesto.inspeccion.interiores[item.key as keyof typeof presupuesto.inspeccion.interiores];
                   return (
-                    <View key={item.key} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 2 }]}>
-                      <Text style={[styles.tableCell, { width: '70%', fontSize: 6.5 }]}>{item.label}</Text>
-                      <Text style={[styles.tableCell, styles.tableCellBold, { width: '30%', fontSize: 6.5, color: value ? COLORS.success : COLORS.danger }, styles.colCenter]}>
+                    <View key={item.key} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 2, paddingHorizontal: 4 }]}>
+                      <Text style={[styles.tableCell, { width: '65%', fontSize: 6.5 }]}>{item.label}</Text>
+                      <Text style={[styles.tableCell, styles.tableCellBold, { width: '35%', fontSize: 6.5, color: value ? COLORS.success : COLORS.danger }, styles.colCenter]}>
                         {value ? 'OK' : 'FALTA'}
                       </Text>
                     </View>
@@ -726,13 +726,15 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 {presupuesto.inspeccion?.danosAdicionales && presupuesto.inspeccion.danosAdicionales.length > 0 ? (
                   <>
                     <View style={styles.tableHeader}>
-                      <Text style={[styles.tableHeaderText, { width: '35%', fontSize: 7 }]}>UBICACIÓN</Text>
-                      <Text style={[styles.tableHeaderText, { width: '65%', fontSize: 7 }]}>DESCRIPCIÓN</Text>
+                      <Text style={[styles.tableHeaderText, { width: '30%', fontSize: 7, paddingLeft: 4 }]}>UBICACIÓN</Text>
+                      <Text style={[styles.tableHeaderText, { width: '25%', fontSize: 7 }]}>TIPO</Text>
+                      <Text style={[styles.tableHeaderText, { width: '45%', fontSize: 7 }]}>DESCRIPCIÓN</Text>
                     </View>
                     {presupuesto.inspeccion.danosAdicionales.slice(0, 11).map((dano, idx) => (
-                      <View key={dano.id} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 2 }]}>
-                        <Text style={[styles.tableCell, { width: '35%', fontSize: 6.5 }]}>{dano.ubicacion}</Text>
-                        <Text style={[styles.tableCell, { width: '65%', fontSize: 6.5 }]}>{dano.descripcion}</Text>
+                      <View key={dano.id} style={[idx % 2 === 0 ? styles.tableRow : styles.tableRowAlt, { paddingVertical: 2, paddingHorizontal: 4 }]}>
+                        <Text style={[styles.tableCell, { width: '30%', fontSize: 6.5 }]}>{dano.ubicacion}</Text>
+                        <Text style={[styles.tableCell, { width: '25%', fontSize: 6.5 }]}>{dano.tipo}</Text>
+                        <Text style={[styles.tableCell, { width: '45%', fontSize: 6.5 }]}>{dano.descripcion}</Text>
                       </View>
                     ))}
                   </>

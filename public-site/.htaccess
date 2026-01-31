@@ -1,0 +1,95 @@
+# SAG Garage - .htaccess Configuration
+# Asegurar que los archivos estáticos se sirvan correctamente
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Prevenir redirección de archivos estáticos
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Asegurar MIME types correctos
+<IfModule mod_mime.c>
+    # CSS
+    AddType text/css .css
+    
+    # JavaScript
+    AddType application/javascript .js
+    AddType application/x-javascript .js
+    AddType text/javascript .js
+    
+    # HTML
+    AddType text/html .html .htm
+    
+    # Imágenes
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType image/svg+xml .svg
+    AddType image/webp .webp
+    
+    # Fuentes
+    AddType font/woff .woff
+    AddType font/woff2 .woff2
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    AddType application/vnd.ms-fontobject .eot
+    AddType font/ttf .ttf
+    AddType font/otf .otf
+</IfModule>
+
+# Comprimir archivos para mejor rendimiento
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache control para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Imágenes
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    
+    # CSS y JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    
+    # Fuentes
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+</IfModule>
+
+# Seguridad adicional
+<IfModule mod_headers.c>
+    # X-Content-Type-Options
+    Header set X-Content-Type-Options "nosniff"
+    
+    # X-Frame-Options
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # X-XSS-Protection
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# DirectoryIndex
+DirectoryIndex index.html
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Seguir enlaces simbólicos
+Options +FollowSymLinks
+
+# Error pages
+ErrorDocument 404 /index.html

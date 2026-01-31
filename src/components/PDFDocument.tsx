@@ -451,32 +451,42 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         )}
       </View>
 
-      {/* VEHÍCULO */}
-      <View style={styles.card}>
+      {/* VEHÍCULO - LAYOUT COMPACTO EN 2 COLUMNAS */}
+      <View style={[styles.card, { padding: 6 }]}>
         <Text style={styles.cardTitle}>VEHÍCULO</Text>
-        <View style={styles.cardRow}>
-          <Text style={styles.cardValue}>
-            {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo} {presupuesto.vehiculo.year || ''}
-          </Text>
-        </View>
-        <View style={styles.cardRow}>
-          <Text style={styles.cardLabel}>Placas:</Text>
-          <Text style={styles.cardValue}>{presupuesto.vehiculo.placas || 'N/A'}</Text>
+        
+        {/* Fila 1: Marca/Modelo | Color */}
+        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+          <View style={{ width: '60%' }}>
+            <Text style={[styles.cardValue, { fontSize: 8 }]}>
+              {presupuesto.vehiculo.marca} {presupuesto.vehiculo.modelo} {presupuesto.vehiculo.year || ''}
+            </Text>
+          </View>
+          <View style={{ width: '40%', flexDirection: 'row' }}>
+            <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>Color: </Text>
+            <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.color || 'N/A'}</Text>
+          </View>
         </View>
         
+        {/* Fila 2: Placas | Kilómetros */}
+        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+          <View style={{ width: '60%', flexDirection: 'row' }}>
+            <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>Placas: </Text>
+            <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.placas || 'N/A'}</Text>
+          </View>
+          <View style={{ width: '40%', flexDirection: 'row' }}>
+            <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>Kilómetros: </Text>
+            <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
+          </View>
+        </View>
+        
+        {/* Fila 3: NIV (solo si existe) */}
         {presupuesto.vehiculo.niv && (
-          <View style={styles.cardRow}>
-            <Text style={styles.cardLabel}>NIV (VIN):</Text>
-            <Text style={styles.cardValue}>{presupuesto.vehiculo.niv}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>NIV(VIN): </Text>
+            <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.niv}</Text>
           </View>
         )}
-        
-        <View style={styles.cardRow}>
-          <Text style={styles.cardLabel}>Color:</Text>
-          <Text style={styles.cardValue}>{presupuesto.vehiculo.color || 'N/A'}</Text>
-          <Text style={styles.cardLabel}> | Km:</Text>
-          <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
-        </View>
       </View>
     </View>
   );

@@ -90,7 +90,9 @@ export const DetalleOrden = () => {
       const url = URL.createObjectURL(mergedBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `SAG_Garage_Presupuesto_${presupuesto.folio}.pdf`;
+      const nombreCliente = presupuesto.cliente.nombreCompleto.replace(/\s+/g, '_').toUpperCase();
+      const modelo = presupuesto.vehiculo.modelo.replace(/\s+/g, '_').toUpperCase();
+      link.download = `SAG_Garage_${presupuesto.folio}_${modelo}_${nombreCliente}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

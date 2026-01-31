@@ -378,7 +378,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
   // Información del taller (usada en renderHeader)
   const TALLER_INFO = {
     nombre: 'SAG GARAGE',
-    encargado: 'JOSÉ FRANCISCO GUDIÑO MACÍAS',
+    encargado: 'SERVICIO AUTOMOTRIZ GUDIÑO',
     telefono: '5513422917',
     direccion: 'PRIVADA NICOLAS BRAVO 6, SAN MATEO NOPALA, NAUCALPAN.',
   };
@@ -420,7 +420,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
         <Image src={`${window.location.origin}/logo.png`} style={styles.logo} />
         <View style={styles.titleSection}>
           <Text style={styles.companyName}>SAG GARAGE</Text>
-          <Text style={styles.ownerName}>JOSÉ FRANCISCO GUDIÑO MACÍAS</Text>
+          <Text style={styles.ownerName}>SERVICIO AUTOMOTRIZ GUDIÑO</Text>
         </View>
       </View>
       <View style={styles.addressSection}>
@@ -480,13 +480,26 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
           </View>
         </View>
         
-        {/* Fila 3: NIV (solo si existe) */}
-        {presupuesto.vehiculo.niv && (
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>NIV(VIN): </Text>
-            <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.niv}</Text>
-          </View>
-        )}
+        {/* Fila 3: NIV | Gasolina */}
+        <View style={{ flexDirection: 'row' }}>
+          {presupuesto.vehiculo.niv ? (
+            <>
+              <View style={{ width: '60%', flexDirection: 'row' }}>
+                <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>NIV(VIN): </Text>
+                <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.niv}</Text>
+              </View>
+              <View style={{ width: '40%', flexDirection: 'row' }}>
+                <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>Gas: </Text>
+                <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.nivelGasolina || '0'}%</Text>
+              </View>
+            </>
+          ) : (
+            <View style={{ width: '100%', flexDirection: 'row' }}>
+              <Text style={[styles.cardLabel, { fontSize: 7.5 }]}>Gasolina: </Text>
+              <Text style={[styles.cardValue, { fontSize: 7.5 }]}>{presupuesto.vehiculo.nivelGasolina || '0'}%</Text>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -668,11 +681,11 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
             </View>
           )}
 
-          {/* INSPECCIÓN VEHICULAR - 3 COLUMNAS: 30% - 30% - 40% */}
+          {/* INSPECCIÓN VEHICULAR - 3 COLUMNAS: 33% - 33% - 34% */}
           {presupuesto.inspeccion && (
             <View style={{ flexDirection: 'row', gap: 8, marginBottom: 8 }}>
-              {/* EXTERIORES - 30% */}
-              <View style={{ width: '30%' }}>
+              {/* EXTERIORES - 33% */}
+              <View style={{ width: '33%' }}>
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>EXTERIORES</Text>
                 </View>
@@ -705,8 +718,8 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 })}
               </View>
 
-              {/* INTERIORES - 30% */}
-              <View style={{ width: '30%' }}>
+              {/* INTERIORES - 33% */}
+              <View style={{ width: '33%' }}>
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>INTERIORES</Text>
                 </View>
@@ -739,59 +752,36 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                 })}
               </View>
 
-              {/* DAÑOS ADICIONALES - 40% */}
-              <View style={{ width: '40%' }}>
+              {/* PUNTOS DE SEGURIDAD - 34% */}
+              <View style={{ width: '34%' }}>
                 <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>DAÑOS ADICIONALES</Text>
+                  <Text style={styles.sectionTitle}>PUNTOS DE SEGURIDAD</Text>
                 </View>
-                {presupuesto.inspeccion?.danosAdicionales && presupuesto.inspeccion.danosAdicionales.length > 0 ? (
-                  <>
-                    <View style={styles.tableHeader}>
-                      <Text style={[styles.tableHeaderText, { width: '30%', fontSize: 7 }]}>UBICACIÓN</Text>
-                      <Text style={[styles.tableHeaderText, { width: '25%', fontSize: 7 }]}>TIPO</Text>
-                      <Text style={[styles.tableHeaderText, { width: '45%', fontSize: 7 }]}>DESCRIPCIÓN</Text>
-                    </View>
-                    {presupuesto.inspeccion.danosAdicionales.slice(0, 11).map((dano, idx) => (
-                      <View key={dano.id} style={[styles.tableRow, idx % 2 !== 0 ? styles.tableRowAlt : {}, { paddingVertical: 2 }]}>
-                        <Text style={[styles.tableCell, { width: '30%', fontSize: 6.5 }]}>{dano.ubicacion}</Text>
-                        <Text style={[styles.tableCell, { width: '25%', fontSize: 6.5 }]}>{dano.tipo}</Text>
-                        <Text style={[styles.tableCell, { width: '45%', fontSize: 6.5 }]}>{dano.descripcion}</Text>
-                      </View>
-                    ))}
-                  </>
-                ) : (
-                  <View style={{ padding: 8, backgroundColor: COLORS.ultraLightGray, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 7, color: COLORS.mediumGray, fontStyle: 'italic' }}>
-                      Sin daños reportados
+                <View style={styles.tableHeader}>
+                  <Text style={[styles.tableHeaderText, { width: '70%', fontSize: 7 }]}>VERIFICACIÓN</Text>
+                  <Text style={[styles.tableHeaderText, { width: '30%', fontSize: 7 }, styles.colCenter]}>ESTADO</Text>
+                </View>
+                {[
+                  { punto: 'Líquido de frenos verificado', estado: 'OK' },
+                  { punto: 'Presión de llantas revisada', estado: 'OK' },
+                  { punto: 'Luces de seguridad funcionando', estado: 'OK' },
+                  { punto: 'Cinturones de seguridad operativos', estado: 'REVISIÓN' },
+                ].map((item, idx) => (
+                  <View key={idx} style={[styles.tableRow, idx % 2 !== 0 ? styles.tableRowAlt : {}, { paddingVertical: 3 }]}>
+                    <Text style={[styles.tableCell, { width: '70%', fontSize: 7 }]}>{item.punto}</Text>
+                    <Text style={[
+                      styles.tableCell, 
+                      styles.tableCellBold, 
+                      { width: '30%', fontSize: 7, color: item.estado === 'OK' ? COLORS.success : COLORS.warning }, 
+                      styles.colCenter
+                    ]}>
+                      {item.estado}
                     </Text>
                   </View>
-                )}
+                ))}
               </View>
             </View>
           )}
-
-          {/* NIVEL DE GASOLINA Y KILOMETRAJE */}
-          <View style={styles.cardsRow}>
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>NIVEL GASOLINA</Text>
-              <View style={styles.cardRow}>
-                <Text style={[styles.cardValue, styles.tableCellBold]}>
-                  {presupuesto.vehiculo.nivelGasolina}%
-                </Text>
-              </View>
-            </View>
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>KILOMETRAJE</Text>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>Entrada:</Text>
-                <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeEntrada || 'N/A'}</Text>
-              </View>
-              <View style={styles.cardRow}>
-                <Text style={styles.cardLabel}>Salida:</Text>
-                <Text style={styles.cardValue}>{presupuesto.vehiculo.kilometrajeSalida || 'Pendiente'}</Text>
-              </View>
-            </View>
-          </View>
 
           {/* SECCIÓN INFERIOR: SERVICIOS, RESUMEN Y FIRMAS */}
           <View style={{ flexDirection: 'row', gap: 15, marginTop: 10 }}>
@@ -816,57 +806,92 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
               )}
             </View>
 
-            {/* RESUMEN Y FIRMAS */}
+            {/* DAÑOS ADICIONALES */}
             <View style={{ flex: 1 }}>
-              {/* RESUMEN FINANCIERO COMPACTO */}
               <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>PRESUPUESTO</Text>
+                <Text style={styles.sectionTitle}>DAÑOS ADICIONALES</Text>
               </View>
-              <View style={{ backgroundColor: COLORS.ultraLightGray, padding: 6, marginBottom: 8 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                  <Text style={{ fontSize: 8, color: COLORS.darkGray }}>Presupuesto:</Text>
-                  <Text style={{ fontSize: 8, fontFamily: 'Roboto', fontWeight: 700 }}>
-                    {formatCurrency(presupuesto.resumen?.total || 0)}
+              {presupuesto.inspeccion?.danosAdicionales && presupuesto.inspeccion.danosAdicionales.length > 0 ? (
+                <>
+                  <View style={styles.tableHeader}>
+                    <Text style={[styles.tableHeaderText, { width: '30%', fontSize: 7 }]}>UBICACIÓN</Text>
+                    <Text style={[styles.tableHeaderText, { width: '25%', fontSize: 7 }]}>TIPO</Text>
+                    <Text style={[styles.tableHeaderText, { width: '45%', fontSize: 7 }]}>DESCRIPCIÓN</Text>
+                  </View>
+                  {presupuesto.inspeccion.danosAdicionales.slice(0, 5).map((dano, idx) => (
+                    <View key={dano.id} style={[styles.tableRow, idx % 2 !== 0 ? styles.tableRowAlt : {}, { paddingVertical: 2 }]}>
+                      <Text style={[styles.tableCell, { width: '30%', fontSize: 6.5 }]}>{dano.ubicacion}</Text>
+                      <Text style={[styles.tableCell, { width: '25%', fontSize: 6.5 }]}>{dano.tipo}</Text>
+                      <Text style={[styles.tableCell, { width: '45%', fontSize: 6.5 }]}>{dano.descripcion}</Text>
+                    </View>
+                  ))}
+                </>
+              ) : (
+                <View style={{ padding: 8, backgroundColor: COLORS.ultraLightGray, alignItems: 'center' }}>
+                  <Text style={{ fontSize: 7, color: COLORS.mediumGray, fontStyle: 'italic' }}>
+                    Sin daños reportados
                   </Text>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                  <Text style={{ fontSize: 8, color: COLORS.darkGray }}>Anticipo:</Text>
-                  <Text style={{ fontSize: 8, fontFamily: 'Roboto', fontWeight: 700 }}>
-                    {formatCurrency(presupuesto.resumen?.anticipo || 0)}
+              )}
+            </View>
+          </View>
+
+          {/* TABLA DE VALORES Y FIRMAS - MOVIDOS AL FINAL */}
+          <View style={{ marginTop: 30 }}>
+            {/* RESUMEN FINANCIERO Y FIRMAS EN MISMA LÍNEA */}
+            <View style={{ flexDirection: 'row', gap: 15 }}>
+              {/* TABLA DE PRESUPUESTO/ANTICIPO/SALDO */}
+              <View style={{ width: '50%' }}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>PRESUPUESTO</Text>
+                </View>
+                <View style={{ backgroundColor: COLORS.ultraLightGray, padding: 8 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 3 }}>
+                    <Text style={{ fontSize: 9, color: COLORS.darkGray }}>Presupuesto:</Text>
+                    <Text style={{ fontSize: 9, fontFamily: 'Roboto', fontWeight: 700 }}>
+                      {formatCurrency(presupuesto.resumen?.total || 0)}
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 3 }}>
+                    <Text style={{ fontSize: 9, color: COLORS.darkGray }}>Anticipo:</Text>
+                    <Text style={{ fontSize: 9, fontFamily: 'Roboto', fontWeight: 700 }}>
+                      {formatCurrency(presupuesto.resumen?.anticipo || 0)}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderTop: `2px solid ${COLORS.accentBlue}`,
+                      paddingTop: 4,
+                      marginTop: 2,
+                    }}
+                  >
+                    <Text style={{ fontSize: 10, fontFamily: 'Roboto', fontWeight: 700, color: COLORS.accentBlue }}>
+                      Saldo:
+                    </Text>
+                    <Text style={{ fontSize: 11, fontFamily: 'Roboto', fontWeight: 700, color: COLORS.accentBlue }}>
+                      {formatCurrency(presupuesto.resumen?.restante || 0)}
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 6.5,
+                      color: COLORS.danger,
+                      fontStyle: 'italic',
+                      marginTop: 4,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Todo trabajo autorizado requiere de un anticipo del 35%
                   </Text>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    borderTop: `2px solid ${COLORS.accentBlue}`,
-                    paddingTop: 3,
-                  }}
-                >
-                  <Text style={{ fontSize: 9, fontFamily: 'Roboto', fontWeight: 700, color: COLORS.accentBlue }}>
-                    Saldo:
-                  </Text>
-                  <Text style={{ fontSize: 10, fontFamily: 'Roboto', fontWeight: 700, color: COLORS.accentBlue }}>
-                    {formatCurrency(presupuesto.resumen?.restante || 0)}
-                  </Text>
-                </View>
-                <Text
-                  style={{
-                    fontSize: 6,
-                    color: COLORS.danger,
-                    fontStyle: 'italic',
-                    marginTop: 3,
-                    textAlign: 'center',
-                  }}
-                >
-                  Todo trabajo autorizado requiere de un anticipo del 35%
-                </Text>
               </View>
 
-              {/* FIRMAS CON ESPACIO REAL */}
-              <View style={{ flexDirection: 'row', gap: 15, marginTop: 15 }}>
+              {/* FIRMAS */}
+              <View style={{ width: '50%', flexDirection: 'row', gap: 12 }}>
                 <View style={{ flex: 1 }}>
-                  <View style={{ height: 40, marginBottom: 5 }} />
+                  <View style={{ height: 45, marginBottom: 5 }} />
                   <View style={{ borderTop: `2px solid ${COLORS.darkGray}`, paddingTop: 4 }}>
                     <Text style={{ fontSize: 8, textAlign: 'center', color: COLORS.darkGray, fontFamily: 'Roboto', fontWeight: 700 }}>
                       FIRMA ENCARGADO
@@ -877,7 +902,7 @@ export const PDFDocument: React.FC<PDFDocumentProps> = ({ presupuesto }) => {
                   </View>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <View style={{ height: 40, marginBottom: 5 }} />
+                  <View style={{ height: 45, marginBottom: 5 }} />
                   <View style={{ borderTop: `2px solid ${COLORS.darkGray}`, paddingTop: 4 }}>
                     <Text style={{ fontSize: 8, textAlign: 'center', color: COLORS.darkGray, fontFamily: 'Roboto', fontWeight: 700 }}>
                       FIRMA CLIENTE

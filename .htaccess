@@ -1,0 +1,41 @@
+# SAG Garage - Configuración Principal
+RewriteEngine On
+
+# Redirigir CSS y JS a la carpeta public-site
+RewriteRule ^css/(.*)$ public-site/css/$1 [L]
+RewriteRule ^js/(.*)$ public-site/js/$1 [L]
+
+# Servir index.html para la raíz
+DirectoryIndex index.html
+
+# MIME Types
+<IfModule mod_mime.c>
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType text/javascript .js
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType image/svg+xml .svg
+    AddType image/webp .webp
+</IfModule>
+
+# Comprimir archivos
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript
+</IfModule>
+
+# Cache
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+</IfModule>
+
+# Prevenir listado de directorios
+Options -Indexes +FollowSymLinks
+
+# Páginas de error
+ErrorDocument 404 /index.html
